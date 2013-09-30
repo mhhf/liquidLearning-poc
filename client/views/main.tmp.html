@@ -1,0 +1,20 @@
+<template name="home">
+	{{#if typing}}
+		<div class="span4">
+			<select name="insertText" value="none" class="select-block" style="display: none;">
+				<option value="0">none</option>
+				<option value="1">LSD</option>
+			</select>
+		</div>
+		<div id="editor" class="span12"></div>
+		<button name="play" class="btn btn-primary btn-block">Play</button>
+	{{else}}
+		<ul class="processWrapper">
+			<li>a</li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<button name="stop" class="btn btn-primary btn-block">Stop</button>
+	{{/if}}
+</template>
