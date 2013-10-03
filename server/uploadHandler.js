@@ -16,8 +16,15 @@ Meteor.methods({
 	// @return: processed [{ hash, text, mp3Link }]
 	process : function( text ){
 		genObjectSync = Meteor._wrapAsync(genObjectAsync);
-		var result = genObjectSync( text );
-		return TTS.find({ _id: {$in:result}}).fetch();
+		var endResult = [],
+		result = _.sortBy(genObjectSync( text ), function(o){
+			return o.i;
+		});
+
+		for(var i = 0; i< result.length; i++ ){
+			endResult.push(TTS.findOne({ _id: result[i].id }));
+		}
+		return endResult;
 	}
 
 });
@@ -33,13 +40,13 @@ var genObjectAsync = function( text, cb ){
 			if(!tts){
 				queue++;
 				text2tts( text[i], function(ttsId){
-					processed.push( ttsId );
+					processed.push( { id:ttsId, i:i} );
 					if( --queue == 0 ) {
 						cb(null, processed);
 					}
 				});
 			} else {
-				processed.push( tts._id );
+				processed.push( {id:tts._id, i:i} );
 			}
 		}
 		if( queue == 0 ){
@@ -49,13 +56,23 @@ var genObjectAsync = function( text, cb ){
 
 var text2tts = function( text, callback ){
 	var hash = MD5.hash( text ).toString();
-	relocate( "http://tts-api.com/tts.mp3?q="+escape(text), hash+".mp3", function( link ){
-		var id = TTS.insert({
-			text: text,
-			hash: hash,
-			link: link
+	// TODO #tts: change tts synthesizer to acapella
+	if( true ) {
+		getMP3 = getTTS;
+	} else {
+		getMP3 = getAcapella;
+	}
+	getMP3( text , function( error, info ){
+		relocate( info.mp3, hash+".mp3", function( link ){
+			var ttsInfo = {
+				text: text,
+				hash: hash,
+				link: link
+			};
+			if(info.sync) ttsInfo.sync = info.sync;
+			var id = TTS.insert( ttsInfo );
+			callback( id );
 		});
-		callback( id );
 	});
 }
 
@@ -70,4 +87,18 @@ var relocate = function( remoteUrl, filename, callback ){
 		if(result.statusCode != 200) console.log("Relocate", remoteUrl, result.statusCode, err);
 		callback("https://s3-eu-west-1.amazonaws.com/liquidlearning-poc/"+JSON.parse(result.content).key);
 	});
+}
+
+
+var getTTS = function( text, cb ){
+	cb( null, { mp3: "http://tts-api.com/tts.mp3?q="+escape(text) } );
+}
+
+// Acapella vaas api integration
+// XXX: #voice: peter22k,will22k - maybe a better voice
+var getAcapella = function( text, cb ){
+	HTTP.get('http://vaas.acapela-group.com/Services/Synthesizer?prot_vers=2&cl_env=PHP_APACHE_2.2.15_CENTOS&cl_vers=1-30&cl_login=EVAL_VAAS&cl_app=EVAL_2276993&cl_pwd=s15idqvi&req_type=&req_snd_id=&req_voice=heather22k&req_text='+text+'&req_vol=&req_spd=&req_vct=&req_eq1=&req_eq2=&req_eq3=&req_eq4=&req_snd_type=&req_snd_ext=&req_snd_kbps=&req_alt_snd_type=&req_alt_snd_ext=&req_alt_snd_kbps=&req_wp=ON&req_bp=&req_mp=&req_comment=&req_start_time=&req_timeout=&req_asw_type=&req_asw_as_alt_snd=&req_err_as_id3=&req_echo=&req_asw_redirect_url=',{}, function(error,r){
+			var o={};_.each(r.content.split('&'), function(s){ var t = s.split('='); o[t[0]]=t[1];});
+			cb(null, {mp3: o.snd_url, sync: o.wp_url});
+	})
 }

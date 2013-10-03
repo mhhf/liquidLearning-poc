@@ -3,6 +3,7 @@
     "iron-router": {},
     "bootstrap-wysiwyg": {},
     "belt-md5": {},
-    "filepicker": {}
+    "filepicker": {},
+    "spin": {}
   }
 }

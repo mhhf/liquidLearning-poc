@@ -1,11 +1,18 @@
-TTS = new Meteor.Collection('tts');
-TTSSubscribtion = Meteor.subscribe("syncedTTS");
-
 Session.set('typing',true);
+Session.set('tts', null);
+
+
+var context, buffer;
 
 Template.home.helpers({
 	typing: function(){
 		return Session.get('typing');	
+	},
+	loading: function(){
+		return !Session.get('tts');
+	},
+	ttsObject: function(){
+		return Session.get('tts');	
 	}
 });
 
@@ -20,6 +27,17 @@ Template.home.rendered = function(){
 	 // TODO #editor: add button groub for text manipulation > add sync button
 	 // XXX #editor: change editor to CodeMirror?
 	 $('#editor').wysiwyg();
+
+		// GRAB Audio Context
+	 try {
+		 // Fix up for prefixing
+		 window.AudioContext = window.AudioContext||window.webkitAudioContext;
+		 context = new AudioContext();
+	 }
+	 catch(e) {
+		 alert('Web Audio API is not supported in this browser');
+	 }
+
 };
 
 Template.home.events({
@@ -32,8 +50,11 @@ Template.home.events({
 		s = _.map(s, function(str){
 			return str+'.';
 		});
-		Meteor.call("process", s, function( o, a ){
-			console.log(o,a);
+		Meteor.call("process", s, function( err, o ){
+			Session.set('tts',o);
+			loadSounds( context, o, function(err, buffer){
+				startPlay( buffer );
+			});
 		});
 		
 	},
@@ -57,3 +78,31 @@ Template.home.events({
 	 $('#editor').html(val);
 	}
 });
+
+
+
+// TODO #sync: Write a intervall sync cycle routine and an event queue
+// TODO #sync: show transcript, while text is being read.
+startPlay = function( buffer ){
+
+	var tts = Session.get('tts');
+	console.log(tts);
+	var time = 0, cBuffer;
+	for(var i=0; i<tts.length; i++) {
+		cBuffer = findHash(tts[i].hash, buffer );
+		playSound( context, cBuffer.buffer, time );
+		time += cBuffer.buffer.duration;
+	}
+}
+
+var findHash = function( hash, array ){
+	for(var i=0; i< array.length; i++){
+		if( array[i].hash == hash ) { return array[i]; }
+	}
+	return null;
+}
+
+
+
+
+
