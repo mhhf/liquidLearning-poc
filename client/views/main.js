@@ -1,3 +1,6 @@
+TTS = new Meteor.Collection('tts');
+TTSSubscribtion = Meteor.subscribe("syncedTTS");
+
 Session.set('typing',true);
 
 Template.home.helpers({
@@ -29,7 +32,9 @@ Template.home.events({
 		s = _.map(s, function(str){
 			return str+'.';
 		});
-		console.log(s);
+		Meteor.call("process", s, function( o, a ){
+			console.log(o,a);
+		});
 		
 	},
 	"click button[name=stop]" : function(){
