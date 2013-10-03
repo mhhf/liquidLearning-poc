@@ -11,3 +11,6 @@ bootstrap
 iron-router
 less
 bootstrap-wysiwyg
+belt-md5
+filepicker
+http

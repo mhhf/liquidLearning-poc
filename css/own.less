@@ -7,8 +7,17 @@ textarea {
 }
 
 .processWrapper {
+	text-align: center;
+	margin: 0;
+
 	li{
-		display:inline;
+		display:inline-block;
+		div {
+			width: 8px;
+			height: 8px;
+			background: #999999;
+			border-radius: 4px;
+		}
 	}
 	span {
 		width: 10px;
@@ -16,11 +25,11 @@ textarea {
 		border: 5px;
 	}
 }
-#editor {
+#editor{
 	border: 2px solid #bdc3c7;
 	border-radius: 6px;
 	color: #34495e;
-	padding: 8px 12px;
+	padding: 8px 10px;
 	-webkit-appearance: none;
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;

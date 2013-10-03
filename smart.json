@@ -1,6 +1,8 @@
 {
   "packages": {
     "iron-router": {},
-    "bootstrap-wysiwyg": {}
+    "bootstrap-wysiwyg": {},
+    "belt-md5": {},
+    "filepicker": {}
   }
 }

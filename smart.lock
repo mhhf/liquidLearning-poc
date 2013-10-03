@@ -3,7 +3,9 @@
   "dependencies": {
     "basePackages": {
       "iron-router": {},
-      "bootstrap-wysiwyg": {}
+      "bootstrap-wysiwyg": {},
+      "belt-md5": {},
+      "filepicker": {}
     },
     "packages": {
       "iron-router": {
@@ -15,6 +17,16 @@
         "git": "https://github.com/mcrider/meteor-bootstrap-wysiwyg.git",
         "tag": "v0.1.0",
         "commit": "b9b1ffadb42b8bbfade08aaea10e4fbe890d21dd"
+      },
+      "belt-md5": {
+        "git": "https://github.com/meteorbelt/belt-md5.git",
+        "tag": "v0.2.0",
+        "commit": "20890dc42c6866ca826fdf65d14c801164b597cd"
+      },
+      "filepicker": {
+        "git": "https://github.com/Filepicker/meteor.git",
+        "tag": "v0.3.0",
+        "commit": "dcb6f3779e5fc105520ba06b0392e3a79c73a7e6"
       }
     }
   }
