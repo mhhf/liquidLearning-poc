@@ -1,0 +1,13 @@
+<template name="slides">
+	{{#with slide}}
+		{{#each pages}}
+			{{> page}}
+		{{/each}}
+	{{/with}}
+</template>
+
+<template name="page">
+	{{#if image}}
+		<img src="{{url}}" />
+	{{/if}}
+</template>
