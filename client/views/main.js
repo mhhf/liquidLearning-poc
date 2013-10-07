@@ -17,28 +17,34 @@ Template.home.helpers({
 });
 
 Template.home.rendered = function(){
-	 $("select[name='insertText']").selectpicker({
-			 style: 'btn-primary', 
-			 menuStyle: 'dropdown-inverse'
-	 });
-	 // TODO #editor: break sentences on new lines.
-	 // TODO #editor: allow to insert sync informations.
-	 // TODO #editor: parse sentances
-	 // TODO #editor: add button groub for text manipulation > add sync button
-	 // XXX #editor: change editor to CodeMirror?
-	 $('#editor').wysiwyg();
+	$("select[name='insertText']").selectpicker({
+			style: 'btn-primary', 
+			menuStyle: 'dropdown-inverse'
+	});
+	// TODO #editor: break sentences on new lines.
+	// TODO #editor: allow to insert sync informations.
+	// TODO #editor: parse sentances
+	// TODO #editor: add button groub for text manipulation > add sync button
+	// XXX #editor: change editor to CodeMirror?
+	$('#editor').wysiwyg();
 
-		// GRAB Audio Context
-	 try {
-		 // Fix up for prefixing
-		 window.AudioContext = window.AudioContext||window.webkitAudioContext;
-		 context = new AudioContext();
-	 }
-	 catch(e) {
-		 alert('Web Audio API is not supported in this browser');
-	 }
+	// GRAB Audio Context
+	try {
+		// Fix up for prefixing
+		window.AudioContext = window.AudioContext||window.webkitAudioContext;
+		context = new AudioContext();
+	}
+	catch(e) {
+		alert('Web Audio API is not supported in this browser');
+	}
 
-};
+	// Handle the size of the stage
+	var ratio = 3/4;
+	$('.editContainer').height( $('#stage').width() * ratio );
+	$(window).resize( function(e){
+		$('.editContainer').height( $('#stage').width() * ratio );
+	});
+	};
 
 Template.home.events({
 	"click button[name=play]" : function(){
