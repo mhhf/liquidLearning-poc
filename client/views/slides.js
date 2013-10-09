@@ -10,3 +10,8 @@ Template.page.helpers({
 		return this.type == "image";	
 	}
 });
+
+Template.page.rendered = function(){
+	// TODO #slides #interaction: rewrite draggable and resizable to own handlers
+	$('.staged').draggable().resizable();
+}

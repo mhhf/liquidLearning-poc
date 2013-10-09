@@ -9,8 +9,12 @@
 			</div>
 		</div>
 		<div class="editContainer row-fluid">
-			<div id="stage" class="minBorder span9">{{> slides}}</div>
-			<div id="pageSelect" class="span3 minBorder"></div>
+			<div id="stage" class="minBorder span9">
+				<div id="stageWrapper">
+					{{> slides}}
+				</div>
+			</div>
+			<div id="pageSelect" class="span3 minBorder">{{> preview}}</div>
 		</div>
 		<div class="row-fluid">
 			<div id="editor" class="span12"></div>

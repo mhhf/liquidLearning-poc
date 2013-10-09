@@ -1,0 +1,18 @@
+<template name="preview">
+	{{#with slide}}
+		{{#each pages}}
+			{{> previewSlide}}
+		{{/each}}
+	{{/with}}
+	<div class="previewSlideWrapper">
+		<div id="newSlide"></div>
+	</div>
+</template>
+
+<template name="previewSlide">
+	{{#if image}}
+	<div class="previewSlideWrapper">
+		<img src="{{url}}" />
+	</div>
+	{{/if}}
+</template>

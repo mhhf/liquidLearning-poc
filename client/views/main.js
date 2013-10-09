@@ -39,12 +39,30 @@ Template.home.rendered = function(){
 	}
 
 	// Handle the size of the stage
+	handleResize();
+	$(window).resize( function(e){
+		handleResize();
+	});
+};
+
+handleResize = function(){
 	var ratio = 3/4;
 	$('.editContainer').height( $('#stage').width() * ratio );
-	$(window).resize( function(e){
-		$('.editContainer').height( $('#stage').width() * ratio );
-	});
-	};
+	$('#newSlide').height( $('#newSlide').width() * ratio );
+}
+
+snapshotCanvas = function(){
+	// TODO #preview #slides: extend html2canvas to draw absolute values or write own html2canvas renderer
+	html2canvas($('#stage')[0],{
+		onrendered: function(canvas){
+			document.body.appendChild(canvas);
+		},
+		useCORS: true
+	});	
+}
+
+	
+
 
 Template.home.events({
 	"click button[name=play]" : function(){

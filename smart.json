@@ -4,6 +4,7 @@
     "bootstrap-wysiwyg": {},
     "belt-md5": {},
     "filepicker": {},
-    "spin": {}
+    "spin": {},
+    "jquery-ui": {}
   }
 }
