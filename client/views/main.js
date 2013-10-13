@@ -2,6 +2,7 @@ Session.set('typing',true);
 Session.set('tts', null);
 
 
+
 var context, buffer;
 
 Template.home.helpers({

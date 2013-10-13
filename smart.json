@@ -5,6 +5,9 @@
     "belt-md5": {},
     "filepicker": {},
     "spin": {},
-    "jquery-ui": {}
+    "jquery-ui": {},
+		"tts": {
+			"git": "git@bitbucket.org:liquidlearningdev/tts.git"
+		}
   }
 }

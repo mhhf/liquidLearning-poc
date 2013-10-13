@@ -7,7 +7,11 @@
       "belt-md5": {},
       "filepicker": {},
       "spin": {},
-      "jquery-ui": {}
+      "jquery-ui": {},
+      "tts": {
+        "git": "git@bitbucket.org:liquidlearningdev/tts.git",
+        "branch": "master"
+      }
     },
     "packages": {
       "iron-router": {
@@ -39,6 +43,16 @@
         "git": "https://github.com/TimHeckel/meteor-jquery-ui.git",
         "tag": "v1.9.2",
         "commit": "c437d45edcf1367df8d5ffa8bad2867758030bd2"
+      },
+      "tts": {
+        "git": "git@bitbucket.org:liquidlearningdev/tts.git",
+        "branch": "master",
+        "commit": "2e5d854954460e317d0480cc3182a8b58bda9b3c"
+      },
+      "relocator": {
+        "git": "git@bitbucket.org:liquidlearningdev/relocator.git",
+        "branch": "master",
+        "commit": "25ef6974d6d390a29d15ddd3d656df45f7ed4c5d"
       }
     }
   }
