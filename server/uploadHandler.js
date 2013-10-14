@@ -12,11 +12,8 @@ Meteor.startup( function(){
 
 
 // TODO #filepicker #s3: get rid of filepicker as a transit service
-// TODO #promisses #architecture: rewrite callbacks in promises
 Meteor.methods({
-
 	clear: function(){
 		Syncs.remove({});
 	}
-
 });

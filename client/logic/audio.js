@@ -4,6 +4,7 @@ var soundQueue = 0;
 
 // TODO #loading: build a buffer queue - its not wise to pre buffer an unknown length of sound files
 // TODO #garbageCollection: destroy played sounds after a while
+// TODO #sounds: create a sound package and a play queue, handle the audio context, and an sync event queue with function callbacks
 loadSounds = function( context, o, cb ) {
 		soundQueue = o.length;
 

@@ -14,6 +14,11 @@ Template.player.rendered = function(){
 	$(window).resize( function(e){
 		handleResize();
 	});
+
+
+	loadSounds( context, Syncs.find().fetch(), function(err, buffer){
+		startPlay( buffer );
+	});
 }
 
 
@@ -44,13 +49,13 @@ Template.player.events({
 // TODO #sync: show transcript, while text is being read.
 startPlay = function( buffer ){
 
-	var tts = Session.get('tts');
-	console.log(tts);
+
+	var text = Session.get('text');
 	var time = 0, cBuffer;
-	for(var i=0; i<tts.length; i++) {
-		cBuffer = findHash(tts[i].hash, buffer );
+	for(var i=0; i<text.length; i++) {
+		cBuffer = findHash( MD5.hash( text[i] ), buffer );
 		playSound( context, cBuffer.buffer, time );
-		time += cBuffer.buffer.duration;
+		time += cBuffer.buffer.duration + 0.2;
 	}
 }
 
