@@ -1,5 +1,4 @@
 Router.configure({
-
   layout: 'defaultLayout',
 
   notFoundTemplate: 'notFound',

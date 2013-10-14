@@ -2,24 +2,19 @@ Syncs = new Meteor.Collection('tts');
 
 Meteor.startup( function(){
 
+	// Initialize the Text to speach engine
+	// TODO #tts #filepicker: rename key to filepickerKey
 	TtsEngine = new TTS({
 		key: 'A64VCBSSpKplhCYDX8Uvwz',
 		s3bucket: 'liquidlearning-poc',
 		service: "tts"
 	});
 
-	// TtsEngine.synthesize({
-	// 	text : "привет, ты!",
-	// 	lang : "ru"   
-	// },function( i ){ 
-	// 	console.log( i ); 
-	// });
 });
 
 
 // TODO #filepicker #s3: get rid of filepicker as a transit service
 // TODO #promisses #architecture: rewrite callbacks in promises
-
 Meteor.methods({
 
 	clear: function(){
@@ -32,7 +27,9 @@ Meteor.methods({
 	//
 	// @return: processed [{ hash, text, mp3Link }]
 	process : function( text ){
+
 		genObjectSync = Meteor._wrapAsync(genObjectAsync);
+
 		var endResult = [],
 		result = _.sortBy(genObjectSync( text ), function(o){
 			return o.i;
@@ -61,15 +58,14 @@ var genObjectAsync = function( text, cb ){
 				TtsEngine.synthesize({
 					text : text[i],
 					lang : "en"   
-				},function( i ){ 
-					// XXX: insert
-					console.log( i ); 
+				},function( obj ){ 
+					var id = Syncs.insert( obj );
+					processed.push( { id:id, i:i} );
+					if( --queue == 0 ) {
+						cb(null, processed);
+					}
 				});
 
-				// processed.push( { id:ttsId, i:i} );
-				// if( --queue == 0 ) {
-				// 	cb(null, processed);
-				// }
 			} else {
 				processed.push( {id:tts._id, i:i} );
 			}
