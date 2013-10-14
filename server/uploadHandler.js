@@ -1,5 +1,3 @@
-Syncs = new Meteor.Collection('tts');
-
 Meteor.startup( function(){
 
 	// Initialize the Text to speach engine

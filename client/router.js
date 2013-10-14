@@ -12,8 +12,24 @@ Router.configure({
 });
 
 
+// TODO #router: make shoure that text object isn't empty, if it is redirect back to the editor
 Router.map(function() { 
   this.route('home', {
-			path: '/'
+		path: '/',
+		data: function(){
+			var tmpData = { syncs: Syncs.find() }
+			return tmpData;
+		}
+	});
+
+	this.route('editor');
+
+	this.route('player', {
+		waitOn: function(a,b){
+			return Meteor.subscribe('text', Session.get('text'));
+		},
+		data: function(){
+			return {};
+		}
 	});
 });

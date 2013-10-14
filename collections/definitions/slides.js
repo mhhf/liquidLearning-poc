@@ -1,4 +1,5 @@
 Slides = new Meteor.Collection('slides');
+Syncs = new Meteor.Collection('syncs');
 
 if(Meteor.isClient)
 	Meteor.subscribe('slides');
