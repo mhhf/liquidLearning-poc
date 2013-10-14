@@ -26,6 +26,7 @@ Router.map(function() {
 
 	this.route('player', {
 		waitOn: function(a,b){
+			if( !Session.get('text') ) this.redirect('editor');
 			return Meteor.subscribe('text', Session.get('text'));
 		},
 		data: function(){
