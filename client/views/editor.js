@@ -16,6 +16,9 @@ Template.editor.rendered = function(){
 Template.editor.events({
 	"click button[name=play]" : function(){
 
+		// Preprocess the text:
+		// make an array of sentences
+		// TODO #editor #parser: write a parser which parse the text to tokens
 		var s = $('#editor')[0].innerText.replace(/\r\n|\n\r|\r|\n/g, '').split('.');
 		s = _.filter(s, function(str){
 			return !!str && str != "";
@@ -23,6 +26,10 @@ Template.editor.events({
 		s = _.map(s, function(str){
 			return str+'.';
 		});
+		
+		Session.set('text',s)
+		Router.go('player');
+
 		// Meteor.call("process", s, function( err, o ){
 		// 	Session.set('tts',o);
 		// 	loadSounds( context, o, function(err, buffer){

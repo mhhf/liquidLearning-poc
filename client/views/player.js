@@ -33,11 +33,9 @@ snapshotCanvas = function(){
 	});	
 }
 
-
-
 Template.player.events({
 	"click button[name=stop]" : function(){
-		Session.set('typing',true);
+		Router.go('editor');
 	}
 });
 

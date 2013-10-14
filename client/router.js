@@ -29,7 +29,7 @@ Router.map(function() {
 			return Meteor.subscribe('text', Session.get('text'));
 		},
 		data: function(){
-			return {};
+			return { ttsObject: Syncs.find() };
 		}
 	});
 });
