@@ -12,7 +12,6 @@ Router.configure({
 });
 
 
-// TODO #router: make shoure that text object isn't empty, if it is redirect back to the editor
 Router.map(function() { 
   this.route('home', {
 		path: '/',
