@@ -1,4 +1,8 @@
-Meteor.publish('text', function(text){
+/*
+ * Convert a an array of sentances to a syncObject Array 
+ * publish the collection to the client
+ */
+Meteor.publish('text', function( text ){
 	
 	// TODO #performance: why is this method called twice?
 	genObjectSync = Meteor._wrapAsync(genObjectAsync);
@@ -13,6 +17,11 @@ Meteor.publish('text', function(text){
 });
 
 
+// converts an text array to a syncObject id's:
+//
+// 1. synthesize the text to an audio file, if neccecery
+// 2. provides an array of syncObject id's from the database
+//
 var genObjectAsync = function( text, cb ){
 		var processed = [];
 		var queue = 0;
