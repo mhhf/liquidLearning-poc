@@ -1,12 +1,26 @@
-// Handles the time based events during the play state
-
+// #SyncQue - An Time-Event Map / Audio Handler
+//
+// Its necessary in the player module to bind events to a time of execution
+// its possible to jump between times for and backwards
+// a preloader (buffer) of media data is importet to provide a fluid workflow
+//
+//
+// Therefore the folowing questions are importent to answer:
+//
+//	 1. what is the best way to load, play and destroy sounds
+//	 	 * what is the best way to handle a dynamic buffer
+//	 2. what is the best way to track time
+//	 	 * dispatch current playing sound
+//	 	 * get next event
+//	 	 * jump to a time position
+//	 	 * ad a event at a given timeframe
 var SoundQueue = new Meteor.Collection('');
 
 
 SyncQue = function( o ){
 
 	var _startPlaying = 0; // Time when the player starts to play
-	var soundQueue = 0; 
+	var _loadingCounter = 0; 
 	var _soundBuffer = [];
 	var _preloadQueue;
 	var context;
@@ -24,6 +38,7 @@ SyncQue = function( o ){
 		alert('Web Audio API is not supported in this browser');
 	}
 
+	// add an event to the playline
 	this.addEvent = function( e ){
 		
 	};
@@ -33,7 +48,7 @@ SyncQue = function( o ){
 
 	// TODO #loading: build a buffer queue - its not wise to pre buffer an unknown length of sound files
 	this.loadSounds = function(  o, cb ) {
-			soundQueue = o.length;
+			_loadingCounter = o.length;
 
 		_.each(o, function( ttsO ){
 			loadSound( ttsO, cb );
@@ -49,7 +64,7 @@ SyncQue = function( o ){
 		request.onload = function(a,b) {
 			context.decodeAudioData( request.response, function(buffer) {
 				_soundBuffer.push({buffer:buffer, hash:ttsO.hash});
-				if(--soundQueue == 0) cb(null, _soundBuffer );
+				if(--_loadingCounter == 0) cb(null, _soundBuffer );
 			}, function(e,a){
 				console.log(request);
 			});
