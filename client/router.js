@@ -24,12 +24,24 @@ Router.map(function() {
 	this.route('editor');
 
 	this.route('player', {
-		waitOn: function(a,b){
+		before: function(){
 			if( !Session.get('text') ) this.redirect('editor');
+		},
+		waitOn: function(a,b){
 			return Meteor.subscribe('text', Session.get('text'));
 		},
 		data: function(){
 			return { ttsObject: Syncs.find() };
+		},
+		action: function(){
+
+			syncQue = new SyncQue({
+				text: Session.get('text')
+			});
+
+			syncQue.initSounds( Syncs.find().fetch() );
+
+			this.render('player');
 		}
 	});
 });

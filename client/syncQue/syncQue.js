@@ -19,6 +19,8 @@ var SoundQueue = new Meteor.Collection('');
 
 SyncQue = function( o ){
 
+	var deps = new Deps.Dependency;
+
 	var _startPlaying = 0; // Time when the player starts to play
 	var _loadingCounter = 0; 
 	var _soundBuffer = [];
@@ -47,12 +49,18 @@ SyncQue = function( o ){
 
 
 	// TODO #loading: build a buffer queue - its not wise to pre buffer an unknown length of sound files
-	this.loadSounds = function(  o, cb ) {
-			_loadingCounter = o.length;
+	this.initSounds = function(  o, cb ) {
+
+		_loadingCounter = o.length;
 
 		_.each(o, function( ttsO ){
 			loadSound( ttsO, cb );
 		});
+	}
+
+	this.getSoundQueue = function(){
+		deps.depend()
+		return _soundBuffer;
 	}
 
 	var loadSound = function( ttsO, cb ) {
@@ -64,7 +72,7 @@ SyncQue = function( o ){
 		request.onload = function(a,b) {
 			context.decodeAudioData( request.response, function(buffer) {
 				_soundBuffer.push({buffer:buffer, hash:ttsO.hash});
-				if(--_loadingCounter == 0) cb(null, _soundBuffer );
+				deps.changed();
 			}, function(e,a){
 				console.log(request);
 			});
@@ -87,11 +95,10 @@ SyncQue = function( o ){
 	//
 	//
 	// start playing the sounds in the correct order
-	this.startPlay = function( buffer ){
-
+	this.startPlay = function(){
 		var time = 0, cBuffer;
 		for(var i=0; i<text.length; i++) {
-			cBuffer = findHash( MD5.hash( text[i] ), buffer );
+			cBuffer = findHash( MD5.hash( text[i] ), _soundBuffer);
 			playSound(  cBuffer.buffer, time );
 			time += cBuffer.buffer.duration + 0.2;
 		}
