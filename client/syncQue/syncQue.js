@@ -23,7 +23,7 @@ SyncQue = function( o ){
 
 	var _startPlaying = 0; // Time when the player starts to play
 	var _loadingCounter = 0; 
-	var _soundBuffer = [];
+	var _soundBuffer;
 	var _preloadQueue;
 	var context;
 
@@ -50,6 +50,10 @@ SyncQue = function( o ){
 
 	// TODO #loading: build a buffer queue - its not wise to pre buffer an unknown length of sound files
 	this.initSounds = function(  o, cb ) {
+		console.log('initSounds');
+
+		_soundBuffer  = o;
+		// Sort sound buffer
 
 		_loadingCounter = o.length;
 
@@ -71,7 +75,8 @@ SyncQue = function( o ){
 		// Decode asynchronously
 		request.onload = function(a,b) {
 			context.decodeAudioData( request.response, function(buffer) {
-				_soundBuffer.push({buffer:buffer, hash:ttsO.hash});
+				insertBuffer(ttsO.hash, buffer);
+				// _soundBuffer.push({buffer:buffer, hash:ttsO.hash});
 				deps.changed();
 			}, function(e,a){
 				console.log(request);
@@ -113,5 +118,22 @@ SyncQue = function( o ){
 		return null;
 	}
 
+	// inserts the loaded soundBuffer:ArrayBuffer at the right place in the sound
+	// Queue
+	var insertBuffer = function( hash, buffer ){
+		
+		// search for the right hash
+		for(var i = 0; i<_soundBuffer.length; i++) {
+			if( _soundBuffer[i].hash == hash ){
+				_soundBuffer[i].buffer = buffer;
+				_soundBuffer[i].loaded = true;
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
 }
+
 
