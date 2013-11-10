@@ -27,9 +27,6 @@ SyncQue = function( o ){
 	var _preloadQueue;
 	var context;
 
-	if(!o || !o.text) return;
-	var text = o.text;
-
 	// GRAB Audio Context
 	try {
 		// Fix up for prefixing
@@ -50,10 +47,8 @@ SyncQue = function( o ){
 
 	// TODO #loading: build a buffer queue - its not wise to pre buffer an unknown length of sound files
 	this.initSounds = function(  o, cb ) {
-		console.log('initSounds');
 
-		_soundBuffer  = o;
-		// Sort sound buffer
+		_soundBuffer = o;
 
 		_loadingCounter = o.length;
 
@@ -76,7 +71,6 @@ SyncQue = function( o ){
 		request.onload = function(a,b) {
 			context.decodeAudioData( request.response, function(buffer) {
 				insertBuffer(ttsO.hash, buffer);
-				// _soundBuffer.push({buffer:buffer, hash:ttsO.hash});
 				deps.changed();
 			}, function(e,a){
 				console.log(request);
@@ -87,7 +81,6 @@ SyncQue = function( o ){
 
 	// TODO #garbageCollection: destroy played sounds after a while
 	var playSound = function(  buffer, time ) {
-		console.log("startPlay");
 		time || ( time = 0 );
 		var source = context.createBufferSource(); // creates a sound source
 		source.buffer = buffer;                    // tell the source which sound to play
@@ -101,21 +94,11 @@ SyncQue = function( o ){
 	//
 	// start playing the sounds in the correct order
 	this.startPlay = function(){
-		var time = 0, cBuffer;
-		for(var i=0; i<text.length; i++) {
-			cBuffer = findHash( MD5.hash( text[i] ), _soundBuffer);
-			playSound(  cBuffer.buffer, time );
-			time += cBuffer.buffer.duration + 0.2;
+		var time = 0;
+		for(var i=0; i<_soundBuffer.length; i++) {
+			playSound( _soundBuffer[i].buffer, time );
+			time += _soundBuffer[i].buffer.duration + 0.2;
 		}
-	}
-
-	// needet to solve the playback in the right order
-	// TODO: rewrite to an ordered queue
-	var findHash = function( hash, array ){
-		for(var i=0; i< array.length; i++){
-			if( array[i].hash == hash ) { return array[i]; }
-		}
-		return null;
 	}
 
 	// inserts the loaded soundBuffer:ArrayBuffer at the right place in the sound

@@ -35,11 +35,20 @@ Router.map(function() {
 		},
 		action: function(){
 
-			syncQue = new SyncQue({
-				text: Session.get('text')
+			// The Meteor.subscribe method subscribe to a collection of syncs, which
+			// arn't sorted
+			// It is important to sort them before pushing in the play queue
+			
+			var syncs = Syncs.find().fetch();
+			var text = Session.get('text');
+
+			syncs.sort( function(a,b){
+				return _.indexOf( text, a.text ) - _.indexOf(text,b.text);
 			});
 
-			syncQue.initSounds( Syncs.find().fetch() );
+			syncQue = new SyncQue();
+
+			syncQue.initSounds( syncs );
 
 			this.render('player');
 		}
