@@ -26,12 +26,13 @@ Router.map(function() {
 	this.route('player', {
 		before: function(){
 			if( !Session.get('text') ) this.redirect('editor');
+			syncQue = new SyncQue();
 		},
 		waitOn: function(a,b){
 			return Meteor.subscribe('text', Session.get('text'));
 		},
 		data: function(){
-			return { ttsObject: Syncs.find() };
+			return { ttsObject: Syncs.find(), syncQue: syncQue };
 		},
 		action: function(){
 
@@ -41,14 +42,29 @@ Router.map(function() {
 			
 			var syncs = Syncs.find().fetch();
 			var text = Session.get('text');
-
+			
+			// FIXME: ERROR: 2 same sentances in the text are loaded just once;
 			syncs.sort( function(a,b){
 				return _.indexOf( text, a.text ) - _.indexOf(text,b.text);
 			});
 
-			syncQue = new SyncQue();
-
 			syncQue.initSounds( syncs );
+
+			// Visuals
+			Deps.autorun( function(){
+				
+				// align the top position of the subtitles
+				$('.textContainer center').css('margin-top','-'+1.15*syncQue.getPointer()+'em');
+				
+				// mark the current line as active
+				$('.textContainer center span').removeClass('playing');
+				$('.textContainer center span#text_'+syncQue.getElement().hash).addClass('playing');
+
+				// mark the current blob as active
+				$('.processWrapper li').removeClass('playing');
+				$('.processWrapper li#playstate_'+syncQue.getElement().hash).addClass('playing');
+
+			});
 
 			this.render('player');
 		}

@@ -1,7 +1,18 @@
 <template name="loadingIndicator">
+	<div class="textContainer">
+		<center>
+			{{#each ttsObject}}
+			<span class="{{#if playing}}playing{{/if}}" id="text_{{hash}}"> 
+				{{text}}
+			</span><br />
+			{{/each}}
+		</center>
+	</div>
 	<ul class="processWrapper">
 		{{#each ttsObject}}
-		<li {{#if loaded}}class="loaded"{{/if}}><div></div></li>
+		<li class="{{#if loaded}}loaded{{/if}}" id="playstate_{{hash}}">
+			<div></div>
+		</li>
 		{{/each}}
 	</ul>
 </template>

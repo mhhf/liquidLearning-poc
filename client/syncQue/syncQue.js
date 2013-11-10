@@ -19,7 +19,12 @@ var SoundQueue = new Meteor.Collection('');
 
 SyncQue = function( o ){
 
-	var deps = new Deps.Dependency;
+	var _bufferDataDeps = new Deps.Dependency;
+	var _bufferStateDeps = new Deps.Dependency;
+
+	var _intervall; // ticker intervall
+	var _startTime; // current time in the play cycle
+	var _bufferPointer = 0; // pointer, to the current place in the playlist
 
 	var _startPlaying = 0; // Time when the player starts to play
 	var _loadingCounter = 0; 
@@ -58,8 +63,18 @@ SyncQue = function( o ){
 	}
 
 	this.getSoundQueue = function(){
-		deps.depend()
+		_bufferDataDeps.depend()
 		return _soundBuffer;
+	}
+
+	this.getPointer = function(){
+		_bufferStateDeps.depend();
+		return _bufferPointer>-1?_bufferPointer:0;
+	};
+
+	this.getElement = function(){
+		_bufferStateDeps.depend();
+		return _soundBuffer[_bufferPointer];
 	}
 
 	var loadSound = function( ttsO, cb ) {
@@ -71,7 +86,7 @@ SyncQue = function( o ){
 		request.onload = function(a,b) {
 			context.decodeAudioData( request.response, function(buffer) {
 				insertBuffer(ttsO.hash, buffer);
-				deps.changed();
+				_bufferDataDeps.changed();
 			}, function(e,a){
 				console.log(request);
 			});
@@ -81,6 +96,7 @@ SyncQue = function( o ){
 
 	// TODO #garbageCollection: destroy played sounds after a while
 	var playSound = function(  buffer, time ) {
+		// console.log('play');
 		time || ( time = 0 );
 		var source = context.createBufferSource(); // creates a sound source
 		source.buffer = buffer;                    // tell the source which sound to play
@@ -94,10 +110,30 @@ SyncQue = function( o ){
 	//
 	// start playing the sounds in the correct order
 	this.startPlay = function(){
+
+		_startTime = +new Date();
+		_bufferPointer = -1;
+		_intervall = setInterval( function(){
+			console.log('.');
+			if( _bufferPointer + 1 in _soundBuffer ) {
+				if(+new Date() - _startTime > _soundBuffer[ _bufferPointer + 1 ].t){
+					playSound(_soundBuffer[++_bufferPointer].buffer, 0);
+					// set the currentPlayed state
+					for(var i=0; i<_soundBuffer.length; i++) {
+						_soundBuffer[i].playing = i == _bufferPointer;
+					}
+					_bufferStateDeps.changed();
+				}
+			} else {
+				clearInterval( _intervall );
+			}
+				
+		},10);
+
 		var time = 0;
 		for(var i=0; i<_soundBuffer.length; i++) {
-			playSound( _soundBuffer[i].buffer, time );
-			time += _soundBuffer[i].buffer.duration + 0.2;
+			_soundBuffer[i].t = time;
+			time += _soundBuffer[i].buffer.duration * 1000 + 200;
 		}
 	}
 

@@ -6,6 +6,22 @@ textarea {
 	width: 100%;
 }
 
+div.textContainer {
+	height: 2.3em;
+	overflow: hidden;
+	center {
+		transition: margin-top 0.5s;
+		-webkit-transition: margin-top 0.5s; /* Safari */ 
+		font-size: 1em;
+		span {
+			color: #aaa;
+			&.playing {
+				color: #232323;
+			}
+		}
+	}
+}
+
 .processWrapper {
 	text-align: center;
 	margin: 0;
@@ -15,11 +31,14 @@ textarea {
 		div {
 			width: 8px;
 			height: 8px;
-			background: #ddd;
+			background: #eee;
 			border-radius: 4px;
 		}
 		&.loaded div{
-			background: #999999;
+			background: #aaa;
+		}
+		&.playing div{
+			background: #ffa75d;
 		}
 	}
 	span {
