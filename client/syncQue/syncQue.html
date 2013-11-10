@@ -1,7 +1,7 @@
 <template name="loadingIndicator">
 	<ul class="processWrapper">
 		{{#each ttsObject}}
-		<li><div></div></li>
+		<li {{#if loaded}}class="loaded"{{/if}}><div></div></li>
 		{{/each}}
 	</ul>
 </template>
