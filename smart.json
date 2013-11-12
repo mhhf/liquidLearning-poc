@@ -3,11 +3,17 @@
     "iron-router": {},
     "bootstrap-wysiwyg": {},
     "belt-md5": {},
-    "filepicker": {},
+    "filepicker": {
+			"git": "https://github.com/Ink/meteor.git",
+			"tag": "v0.3.0"
+			},
     "spin": {},
     "jquery-ui": {},
-		"tts": {
-			"git": "git@bitbucket.org:liquidlearningdev/tts.git"
+    "tts": {
+      "git": "git@bitbucket.org:liquidlearningdev/tts.git"
+    },
+		"editor": {
+			"path": "../../meteor/packages/editor"
 		}
-  }
+  }	
 }

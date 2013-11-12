@@ -7,18 +7,32 @@ textarea {
 }
 
 div.textContainer {
-	height: 2.3em;
+	height: 2.7em;
 	overflow: hidden;
 	center {
 		transition: margin-top 0.5s;
 		-webkit-transition: margin-top 0.5s; /* Safari */ 
 		font-size: 1em;
 		span {
-			color: #aaa;
+			transition: color 0.3s;
+			-webkit-transition: color 0.3s; /* Safari */ 
+			color: rgba(200,200,200,0.5);
 			&.playing {
-				color: #232323;
+				color: rgba(60,60,60,1);
 			}
 		}
+	}
+}
+
+.circleBtn {
+	background: #555;
+	border-radius: 12px;
+	width: 24px;
+	height: 24px;
+	border: none;
+	color: #fefefe;
+	i {
+		margin-left: -1px;
 	}
 }
 
@@ -46,26 +60,6 @@ div.textContainer {
 		height: 10px;
 		border: 5px;
 	}
-}
-#editor{
-	border: 2px solid #bdc3c7;
-	border-radius: 6px;
-	color: #34495e;
-	padding: 8px 10px;
-	-webkit-appearance: none;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
-
-	margin: 30px 0;
-
-	max-height: 150px;
-	height: 150px;
-	background-color: white;
-	border-collapse: separate;
-	box-sizing: content-box;
-	overflow: scroll;
-	outline: none;
 }
 
 .loadingWrapper {

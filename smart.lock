@@ -5,12 +5,18 @@
       "iron-router": {},
       "bootstrap-wysiwyg": {},
       "belt-md5": {},
-      "filepicker": {},
+      "filepicker": {
+        "git": "https://github.com/Ink/meteor.git",
+        "tag": "v0.3.0"
+      },
       "spin": {},
       "jquery-ui": {},
       "tts": {
         "git": "git@bitbucket.org:liquidlearningdev/tts.git",
         "branch": "master"
+      },
+      "editor": {
+        "path": "../../meteor/packages/editor"
       }
     },
     "packages": {
@@ -30,7 +36,7 @@
         "commit": "20890dc42c6866ca826fdf65d14c801164b597cd"
       },
       "filepicker": {
-        "git": "https://github.com/Filepicker/meteor.git",
+        "git": "https://github.com/Ink/meteor.git",
         "tag": "v0.3.0",
         "commit": "dcb6f3779e5fc105520ba06b0392e3a79c73a7e6"
       },
@@ -48,6 +54,9 @@
         "git": "git@bitbucket.org:liquidlearningdev/tts.git",
         "branch": "master",
         "commit": "2e5d854954460e317d0480cc3182a8b58bda9b3c"
+      },
+      "editor": {
+        "path": "../../meteor/packages/editor"
       },
       "relocator": {
         "git": "git@bitbucket.org:liquidlearningdev/relocator.git",

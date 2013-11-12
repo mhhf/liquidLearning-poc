@@ -69,7 +69,7 @@ SyncQue = function( o ){
 
 	this.getPointer = function(){
 		_bufferStateDeps.depend();
-		return _bufferPointer>-1?_bufferPointer:0;
+		return _bufferPointer;
 	};
 
 	this.getElement = function(){

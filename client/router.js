@@ -54,7 +54,7 @@ Router.map(function() {
 			Deps.autorun( function(){
 				
 				// align the top position of the subtitles
-				$('.textContainer center').css('margin-top','-'+1.15*syncQue.getPointer()+'em');
+				$('.textContainer center').css('margin-top','-'+1.35*syncQue.getPointer()+'em');
 				
 				// mark the current line as active
 				$('.textContainer center span').removeClass('playing');
