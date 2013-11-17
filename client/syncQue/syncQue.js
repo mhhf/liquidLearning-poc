@@ -90,8 +90,7 @@ SyncQue = function( o ){
 		_currentSource.start( time );
 	}
 
-	// TODO #sync: Write a intervall sync cycle routine and an event queue
-	// TODO #sync: show transcript, while text is being read.
+	// TODO #sync: rewrite the intervall approach to the native source.currentTime playtime
 	//
 	//
 	// start playing the sounds in the correct order
@@ -113,7 +112,7 @@ SyncQue = function( o ){
 				clearInterval( _intervall );
 			}
 				
-		},100);
+		},10);
 
 		var time = 0;
 		for(var i=0; i<_soundBuffer.length; i++) {
@@ -161,6 +160,7 @@ SyncQue = function( o ){
 	this.getContext = function(){
 		return context;
 	}
+  // returns a BufferSource
 	this.getSource = function(){
 		return _currentSource;
 	}

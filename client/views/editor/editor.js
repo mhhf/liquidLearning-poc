@@ -105,7 +105,6 @@ Template.editor.events({
 			return str+'.';
 		});
 
-		console.log(s);
 		Session.set('text',s);
     Session.set('slides', slides);
 		Router.go('player');
