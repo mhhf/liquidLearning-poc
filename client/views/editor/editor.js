@@ -2,7 +2,7 @@ Template.editor.rendered = function(){
 	// TODO #editor: allow to insert sync informations.
 	
 	editor = CodeMirror(this.find('#editor'),{
-		value: "### asd\n* dasd\n* ist\n* test",
+		value: "",
 		mode:  "markdown",
 		lineNumbers: true,
 		extraKeys: {"Ctrl-J": "autocomplete"}
