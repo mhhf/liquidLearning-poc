@@ -2,10 +2,15 @@ Template.player.rendered = function(){
 }
 
 Template.player.events({
-	"click button[name=stop]" : function(){
+	"click [name=stop]" : function(){
+		syncQue.stop();
 		Router.go('editor');
 	},
-	"click button[name=play]" : function(){
-		syncQue.startPlay();
+	"click [name=pause]" : function(){
+		syncQue.pause();
+		// syncQue.startPlay();
+	},
+	"click [name=play]" : function(){
+		syncQue.play();
 	},
 });

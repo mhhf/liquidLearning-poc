@@ -24,7 +24,8 @@ SyncQue = function( o ){
 
 	var _intervall; // ticker intervall
 	var _startTime; // current time in the play cycle
-	var _bufferPointer = 0; // pointer, to the current place in the playlist
+	var _bufferPointer = -1; // pointer, to the current place in the playlist
+	var _currentSource; // playing audio source
 
 	var _startPlaying = 0; // Time when the player starts to play
 	var _loadingCounter = 0; 
@@ -62,20 +63,6 @@ SyncQue = function( o ){
 		});
 	}
 
-	this.getSoundQueue = function(){
-		_bufferDataDeps.depend()
-		return _soundBuffer;
-	}
-
-	this.getPointer = function(){
-		_bufferStateDeps.depend();
-		return _bufferPointer;
-	};
-
-	this.getElement = function(){
-		_bufferStateDeps.depend();
-		return _soundBuffer[_bufferPointer];
-	}
 
 	var loadSound = function( ttsO, cb ) {
 		var request = new XMLHttpRequest();
@@ -96,12 +83,11 @@ SyncQue = function( o ){
 
 	// TODO #garbageCollection: destroy played sounds after a while
 	var playSound = function(  buffer, time ) {
-		// console.log('play');
 		time || ( time = 0 );
-		var source = context.createBufferSource(); // creates a sound source
-		source.buffer = buffer;                    // tell the source which sound to play
-		source.connect( context.destination );       // connect the source to the context's destination (the speakers)
-		source.start( time );                          // play the source now
+		_currentSource = context.createBufferSource();
+		_currentSource.buffer = buffer;              
+		_currentSource.connect( context.destination ); 
+		_currentSource.start( time );
 	}
 
 	// TODO #sync: Write a intervall sync cycle routine and an event queue
@@ -109,10 +95,9 @@ SyncQue = function( o ){
 	//
 	//
 	// start playing the sounds in the correct order
-	this.startPlay = function(){
+	var startPlay = function(){
 
 		_startTime = +new Date();
-		_bufferPointer = -1;
 		_intervall = setInterval( function(){
 			console.log('.');
 			if( _bufferPointer + 1 in _soundBuffer ) {
@@ -128,7 +113,7 @@ SyncQue = function( o ){
 				clearInterval( _intervall );
 			}
 				
-		},10);
+		},100);
 
 		var time = 0;
 		for(var i=0; i<_soundBuffer.length; i++) {
@@ -153,6 +138,44 @@ SyncQue = function( o ){
 		return false;
 	}
 	
+
+////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////// INTERFACE
+////////////////////////////////////////////////////////////////////////////////
+
+	this.play = function(){
+		startPlay();
+	}
+	var _pauseAt = -1;
+	this.pause = function(){
+		if( !_intervall ) {
+			if( _currentSource ) _currentSource.stop(0);
+			if( _intervall ) clearInterval( _intervall );
+		}
+	}
+	this.stop = function(){
+		if( _currentSource ) _currentSource.stop(0);
+		if( _intervall ) clearInterval( _intervall );
+		_bufferPointer = 0;
+	}
+	this.getContext = function(){
+		return context;
+	}
+	this.getSource = function(){
+		return _currentSource;
+	}
+	this.getSoundQueue = function(){
+		_bufferDataDeps.depend()
+		return _soundBuffer;
+	}
+
+	this.getPointer = function(){
+		_bufferStateDeps.depend();
+		return _bufferPointer;
+	};
+
+	this.getElement = function(){
+		_bufferStateDeps.depend();
+		return _soundBuffer[_bufferPointer];
+	}
 }
-
-

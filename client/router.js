@@ -52,17 +52,20 @@ Router.map(function() {
 
 			// Visuals
 			Deps.autorun( function(){
-				
-				// align the top position of the subtitles
-				$('.textContainer center').css('margin-top','-'+1.35*syncQue.getPointer()+'em');
-				
-				// mark the current line as active
-				$('.textContainer center span').removeClass('playing');
-				$('.textContainer center span#text_'+syncQue.getElement().hash).addClass('playing');
+				var ele = syncQue.getElement();
 
-				// mark the current blob as active
-				$('.processWrapper li').removeClass('playing');
-				$('.processWrapper li#playstate_'+syncQue.getElement().hash).addClass('playing');
+				if(ele) {
+					// align the top position of the subtitles
+					$('.textContainer center').css('margin-top',-1.35*syncQue.getPointer()+'em');
+					
+					// mark the current line as active
+					$('.textContainer center span').removeClass('playing');
+					$('.textContainer center span#text_'+ele.hash).addClass('playing');
+
+					// mark the current blob as active
+					$('.processWrapper li').removeClass('playing');
+					$('.processWrapper li#playstate_'+ele.hash).addClass('playing');
+				}
 
 			});
 
