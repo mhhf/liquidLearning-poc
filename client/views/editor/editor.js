@@ -1,5 +1,10 @@
+var parsedSlides = null;
+var self;
+
 Template.editor.rendered = function(){
 	// TODO #editor: allow to insert sync informations.
+  
+  self = this;
 	
 	editor = CodeMirror(this.find('#editor'),{
 		value: "",
@@ -7,9 +12,38 @@ Template.editor.rendered = function(){
 		lineNumbers: true,
 		extraKeys: {"Ctrl-J": "autocomplete"}
 	});
+
+	editor.on('change', function(i,o){
+    parsedSlides = slideParser.parse( i.getValue() );
+    currentLine = i.getCursor().line+1;
+    currentSlide = getSlide( currentLine ); 
+    displaySlide( currentSlide );
+	});
 	
+  var currentLine = -1;
+  var currentSlide = -1;
+  editor.on('cursorActivity', function(i,o){
+    if( currentLine != i.getCursor().line+1 // Cursor on different line
+        && currentSlide != getSlide( currentLine = (i.getCursor().line+1)) ) {
+          displaySlide( currentSlide = (getSlide( currentLine )) )
+        }
+  });
 
 };
+
+displaySlide = function( slide ){
+  var html = parsedSlides[slide].md;
+  self.find('#preview').innerHTML= marked( html );
+}
+
+getSlide = function( cursorLine ){
+  for (var i=0; i < parsedSlides.length; i++) {
+    if( parsedSlides[i].from <= cursorLine 
+        && parsedSlides[i].to >= cursorLine )
+        return i;
+  }
+  return -1;
+}
 
 
 Template.editor.events({

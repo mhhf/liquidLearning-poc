@@ -4,16 +4,17 @@
     "bootstrap-wysiwyg": {},
     "belt-md5": {},
     "filepicker": {
-			"git": "https://github.com/Ink/meteor.git",
-			"tag": "v0.3.0"
-			},
+      "git": "https://github.com/Ink/meteor.git",
+      "tag": "v0.3.0"
+    },
     "spin": {},
     "jquery-ui": {},
     "tts": {
       "git": "git@bitbucket.org:liquidlearningdev/tts.git"
     },
-		"editor": {
-			"path": "../../meteor/packages/editor"
-		}
-  }	
+    "editor": {
+      "path": "../../meteor/packages/editor"
+    },
+    "marked": {}
+  }
 }
