@@ -21,7 +21,11 @@ Router.map(function() {
 		}
 	});
 
-	this.route('editor');
+	this.route('editor',{
+    action: function(){
+      GAnalytics.pageview("/editor");
+    }
+  });
 
 	this.route('player', {
 		before: function(){
@@ -36,6 +40,7 @@ Router.map(function() {
 		},
 		action: function(){
 
+      GAnalytics.pageview("/player");
 			// The Meteor.subscribe method subscribe to a collection of syncs, which
 			// arn't sorted
 			// It is important to sort them before pushing in the play queue
