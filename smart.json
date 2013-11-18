@@ -15,6 +15,7 @@
     "editor": {
       "git": "git@bitbucket.org:liquidlearningdev/editor.git"
     },
-    "marked": {}
+    "marked": {},
+    "GAnalytics": {}
   }
 }

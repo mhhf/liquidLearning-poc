@@ -16,9 +16,11 @@
         "branch": "master"
       },
       "editor": {
-        "path": "../../meteor/packages/editor"
+        "git": "git@bitbucket.org:liquidlearningdev/editor.git",
+        "branch": "master"
       },
-      "marked": {}
+      "marked": {},
+      "GAnalytics": {}
     },
     "packages": {
       "iron-router": {
@@ -57,12 +59,19 @@
         "commit": "2e5d854954460e317d0480cc3182a8b58bda9b3c"
       },
       "editor": {
-        "path": "../../meteor/packages/editor"
+        "git": "git@bitbucket.org:liquidlearningdev/editor.git",
+        "branch": "master",
+        "commit": "3c4bfec10bf5a44be734da6848730a8bdfd2d742"
       },
       "marked": {
         "git": "https://github.com/chuangbo/meteor-marked.git",
         "tag": "v0.2.9",
         "commit": "6485d6f03841501f81176e34ab375840473aa714"
+      },
+      "GAnalytics": {
+        "git": "https://github.com/datariot/meteor-ganalytics.git",
+        "tag": "v0.1.0",
+        "commit": "937c664cf755f26c6273e4970450c988291c8208"
       },
       "relocator": {
         "git": "git@bitbucket.org:liquidlearningdev/relocator.git",
