@@ -24,6 +24,8 @@ Router.map(function() {
 	this.route('editor',{
     action: function(){
       GAnalytics.pageview("/editor");
+      
+      this.render('editor');
     }
   });
 
