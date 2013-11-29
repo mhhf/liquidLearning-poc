@@ -58,16 +58,19 @@ Router.map(function() {
 			syncQue.initSounds( syncs );
 
 			// Visuals
+      // TODO: clean router and export it to the player module
 			Deps.autorun( function(){
 				var ele = syncQue.getElement();
+        var pointer = syncQue.getPointer();
 
 				if(ele) {
 					// align the top position of the subtitles
-					$('.textContainer center').css('margin-top',-1.35*syncQue.getPointer()+'em');
+					$('.textContainer center').css('margin-top',-1.35*pointer+'em');
 					
 					// mark the current line as active
 					$('.textContainer center span').removeClass('playing');
-					$('.textContainer center span#text_'+ele.hash).addClass('playing');
+          if( pointer != -1 )
+            $('.textContainer center span#text_'+ele.hash).addClass('playing');
 
 					// mark the current blob as active
 					$('.processWrapper li').removeClass('playing');

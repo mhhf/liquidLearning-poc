@@ -52,7 +52,7 @@ SyncQue = function( o ){
 
 
 	// TODO #loading: build a buffer queue - its not wise to pre buffer an unknown length of sound files
-	this.initSounds = function(  o, cb ) {
+	this.initSounds = function( o, cb ) {
 
 		_soundBuffer = o;
 
@@ -98,32 +98,38 @@ SyncQue = function( o ){
 	// start playing the sounds in the correct order
 	var startPlay = function(){
 
-		_startTime = +new Date();
-		_intervall = setInterval( function(){
-			console.log('.');
-			if( _bufferPointer + 1 in _soundBuffer ) {
-				if(+new Date() - _startTime > _soundBuffer[ _bufferPointer + 1 ].t){
-					playSound( _soundBuffer[++_bufferPointer].buffer, 0, function(){
-					  console.log( _soundBuffer[_bufferPointer].text +" ended" );
-					});
-					// set the currentPlayed state
-					for(var i=0; i<_soundBuffer.length; i++) {
-						_soundBuffer[i].playing = i == _bufferPointer;
-					}
-					_bufferStateDeps.changed();
-				}
-			} else {
-				clearInterval( _intervall );
-			}
-				
-		},10);
+    _startTime = +new Date();
+    
+    playNext();
 
+    // XXX: da fuck? this should be exported to the synthesizer
 		var time = 0;
 		for(var i=0; i<_soundBuffer.length; i++) {
 			_soundBuffer[i].t = time;
 			time += _soundBuffer[i].buffer.duration * 1000 + 200;
 		}
 	}
+
+
+  var playNext = function(){
+
+    if( _bufferPointer + 1 in _soundBuffer ) {
+      playSound( _soundBuffer[++_bufferPointer].buffer, 0, function(){
+
+        // make a little break between sentances
+        //
+        setTimeout( function(){
+          playNext();
+        },50);
+      });
+
+      
+      updatePlayState();
+
+      _bufferStateDeps.changed();
+    }
+
+  }
 
 	// inserts the loaded soundBuffer:ArrayBuffer at the right place in the sound
 	// Queue
@@ -140,6 +146,14 @@ SyncQue = function( o ){
 
 		return false;
 	}
+
+  var updatePlayState = function(){
+    // set the currentPlayed state
+    // XXX: da fuck? rewrite: n -> 1
+    for(var i=0; i<_soundBuffer.length; i++) {
+      _soundBuffer[i].playing = i == _bufferPointer;
+    }
+  }
 	
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -151,15 +165,25 @@ SyncQue = function( o ){
 	}
 	var _pauseAt = -1;
 	this.pause = function(){
-		if( !_intervall ) {
-			if( _currentSource ) _currentSource.stop(0);
-			if( _intervall ) clearInterval( _intervall );
-		}
+    if( _currentSource ) {
+      
+      if( _bufferPointer > 0 ) _bufferPointer--;
+      if( _currentSource ) {
+        _currentSource.onended = null;
+        _currentSource.stop(0);
+      }
+      
+    }
 	}
 	this.stop = function(){
-		if( _currentSource ) _currentSource.stop(0);
-		if( _intervall ) clearInterval( _intervall );
-		_bufferPointer = 0;
+		if( _currentSource ) {
+      _currentSource.stop(0);
+      _currentSource.onended = null;
+    }
+    updatePlayState();
+		_bufferPointer = -1;
+    _bufferStateDeps.changed();
+
 	}
 	this.getContext = function(){
 		return context;
@@ -183,5 +207,6 @@ SyncQue = function( o ){
     // XXX: test why sometimes this is called with _bufferPointer == -1
     if(_bufferPointer != -1)
       return _soundBuffer[_bufferPointer];
+    return _soundBuffer[0];
 	}
 }

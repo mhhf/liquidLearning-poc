@@ -25,7 +25,6 @@ Template.player.rendered = function(){
 Template.player.events({
 	"click [name=stop]" : function(){
 		syncQue.stop();
-		Router.go('editor');
 	},
 	"click [name=pause]" : function(){
 		syncQue.pause();
@@ -38,6 +37,8 @@ Template.player.events({
 
 showSlide = function(){
   var slides = Session.get('slides');
-  var html = slides[ _currentSlide ].md;
-  _template.find('#slideWrapper').innerHTML= marked( html );
+  if( _currentSlide in slides ) {
+    var html = slides[ _currentSlide ].md;
+    _template.find('#slideWrapper').innerHTML= marked( html );
+  }
 }
