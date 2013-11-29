@@ -92,20 +92,12 @@ Template.editor.events({
     // parse the slides again
     parseSlides(); // remove?
 
-    var value = "";
+    var value = [];
     _.each(slides, function(slide){
-      value += slide.notes+"\n";
+      value = value.concat( slide.notes );
     });
-    // TODO #notes: export the split to the jison parser
-		var s = value.replace(/\r\n|\n\r|\r|\n/g, '').split('.');
-		s = _.filter(s, function(str){
-			return !!str && str != "";
-		});
-		s = _.map(s, function(str){
-			return str+'.';
-		});
 
-		Session.set('text',s);
+		Session.set('text',value);
     Session.set('slides', slides);
 		Router.go('player');
 	},
