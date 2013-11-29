@@ -58,7 +58,7 @@
       "slideParser": {
         "git": "git@bitbucket.org:liquidlearningdev/slideparser.git",
         "branch": "master",
-        "commit": "02678bc25a5d14c13a18cdd2d4a22ae9318fba2b"
+        "commit": "e39c220e0a9e62a11975e549e52434f65df2cc5b"
       },
       "marked": {
         "git": "https://github.com/chuangbo/meteor-marked.git",
@@ -73,7 +73,7 @@
       "relocator": {
         "git": "git@bitbucket.org:liquidlearningdev/relocator.git",
         "branch": "master",
-        "commit": "ec911b3e728da0468c3da31fd3a2b7b67ed934f5"
+        "commit": "ea290782d447ff3d57be0e36411ee89dc360f9aa"
       },
       "npm": {
         "git": "https://github.com/arunoda/meteor-npm.git",
