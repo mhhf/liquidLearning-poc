@@ -39,10 +39,15 @@ var genObjectAsync = function( text, cb ){
         Fiber( function(){
 
           // get the synth object
+          var size = -1;
           var obj = TtsEngine.synthesize({
             text : text[i],
-            lang : "en"
+            lang : "en",
+            process: function( buf ){
+              size = buf.length;
+            }
           });
+          obj['size'] = size;
 
           var id = Syncs.insert( obj );
           processed.push( { id:id, i:i} );
@@ -62,7 +67,6 @@ var genObjectAsync = function( text, cb ){
 		}
 }
 var genObjectSync = Meteor._wrapAsync(genObjectAsync);
-
 
 
 
