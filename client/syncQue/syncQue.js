@@ -82,12 +82,14 @@ SyncQue = function( o ){
 	}
 
 	// TODO #garbageCollection: destroy played sounds after a while
-	var playSound = function(  buffer, time ) {
+	var playSound = function( buffer, time, endedCallback ) {
 		time || ( time = 0 );
 		_currentSource = context.createBufferSource();
 		_currentSource.buffer = buffer;              
 		_currentSource.connect( context.destination ); 
 		_currentSource.start( time );
+    if( endedCallback )
+      _currentSource.onended = endedCallback;
 	}
 
 	// TODO #sync: rewrite the intervall approach to the native source.currentTime playtime
@@ -101,7 +103,9 @@ SyncQue = function( o ){
 			console.log('.');
 			if( _bufferPointer + 1 in _soundBuffer ) {
 				if(+new Date() - _startTime > _soundBuffer[ _bufferPointer + 1 ].t){
-					playSound(_soundBuffer[++_bufferPointer].buffer, 0);
+					playSound( _soundBuffer[++_bufferPointer].buffer, 0, function(){
+					  console.log( _soundBuffer[_bufferPointer].text +" ended" );
+					});
 					// set the currentPlayed state
 					for(var i=0; i<_soundBuffer.length; i++) {
 						_soundBuffer[i].playing = i == _bufferPointer;
@@ -138,9 +142,9 @@ SyncQue = function( o ){
 	}
 	
 
-////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////// INTERFACE
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////  INTERFACE
+///////////////////////////////////////////////////////////////////////////////
 
 	this.play = function(){
 		startPlay();
@@ -176,6 +180,8 @@ SyncQue = function( o ){
 
 	this.getElement = function(){
 		_bufferStateDeps.depend();
-		return _soundBuffer[_bufferPointer];
+    // XXX: test why sometimes this is called with _bufferPointer == -1
+    if(_bufferPointer != -1)
+      return _soundBuffer[_bufferPointer];
 	}
 }
