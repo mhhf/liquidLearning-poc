@@ -68,7 +68,7 @@ getSlide = function(){
 
 // Parse the slides to a AST
 parseSlides = function(){
-  slides = slideParser.parse( editor.getValue() );
+  slides = SlideParser.parse( editor.getValue() );
 }
 
 // updates the current line and current slide positions, 
