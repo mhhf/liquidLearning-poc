@@ -207,6 +207,6 @@ SyncQue = function( o ){
     // XXX: test why sometimes this is called with _bufferPointer == -1
     if(_bufferPointer != -1)
       return _soundBuffer[_bufferPointer];
-    return _soundBuffer[0];
+    if(0 in _soundBuffer) return _soundBuffer[0];
 	}
 }
