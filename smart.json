@@ -8,8 +8,8 @@
     "tts": {
       "path":"/Users/mhhf/work/meteor/packages/tts"
     },
-    "editor": {
-      "git": "git@bitbucket.org:liquidlearningdev/editor.git"
+    "instantPreview": {
+      "path": "/Users/mhhf/work/meteor/packages/instantPreview"
     },
     "slideParser": {
       "git": "git@bitbucket.org:liquidlearningdev/slideparser.git"
