@@ -4,7 +4,7 @@ Template.feedbackNew.events = {
     var msg = t.find('textarea[name=msg]').value;
     Feedback.insert({
       title: title,
-      msg: msg,
+      message: msg,
       user: {
         name: Meteor.user().username,
         _id: Meteor.userId()
