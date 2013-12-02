@@ -1,0 +1,42 @@
+<template name="signup">
+
+<div class="login-page">
+  <div class="login-wrapper">
+
+    <form id="form-register">
+      <h3>Sign up</h3>
+      <hr>
+      <div class="control-group">
+        <div class="controls">
+          <input name="email" type="text" placeholder="Email" class="input-block-level">
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <input  name="user" type="text" placeholder="Username" class="input-block-level">
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <input name="pass" type="password" placeholder="Password" class="input-block-level">
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <input name="pass2" type="password" placeholder="Repeat Password" class="input-block-level">
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn btn-primary input-block-level">Sign up</button>
+        </div>
+      </div>
+      <hr>
+      <p class="clearfix">
+      <a href="{{pathFor 'login'}}" class="goto-login pull-left">← Back to login form</a>
+      </p>
+    </form>
+
+  </div>
+</div>
+</template>

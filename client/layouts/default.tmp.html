@@ -3,17 +3,11 @@
     <!-- render to the sidebar yield -->
   </aside>
 
-  <nav>
-    <ul>
-      <!-- static content here like nav links -->
-    </ul>
+  <nav class="navbar">
+    {{yield 'navbar'}}
   </nav>
 
-	<div class="row-fluid">
-		<div class="span10 offset1">
-			{{yield}}
-		</div>
-	</div>
+  {{yield}}
 
   <footer>
     <!-- render to the footer yield -->

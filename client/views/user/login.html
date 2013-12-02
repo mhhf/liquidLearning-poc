@@ -1,0 +1,58 @@
+<template name="login">
+
+<div class="login-page">
+  <div class="login-wrapper">
+    <form id="form-login" >
+      <h3>Login to your account</h3>
+      <hr>
+      <div class="control-group">
+        <div class="controls">
+          <input name="user" type="text" placeholder="Username" class="input-block-level">
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <input name="password" type="password" placeholder="Password" class="input-block-level">
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <label class="checkbox">
+            <input type="checkbox" value="remember"> Remember me
+          </label>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn btn-primary input-block-level">Sign In</button>
+        </div>
+      </div>
+      <hr>
+      <p class="clearfix">
+      <a href="{{pathFor 'signup'}}" class="goto-register pull-right">Sign up now</a>
+      </p>
+    </form>
+    <!-- END Login Form -->
+
+    <!-- BEGIN Forgot Password Form -->
+    <form id="form-forgot" class="hide">
+      <h3>Get back your password</h3>
+      <hr>
+      <div class="control-group">
+        <div class="controls">
+          <input type="text" placeholder="Email" class="input-block-level">
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn btn-primary input-block-level">Recover</button>
+        </div>
+      </div>
+      <hr>
+      <p class="clearfix">
+      <a href="#" class="goto-login pull-left">← Back to login form</a>
+      </p>
+    </form>
+  </div>
+</div>
+</template>

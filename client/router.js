@@ -1,18 +1,49 @@
 Router.configure({
-  layout: 'defaultLayout',
+  layoutTemplate: 'defaultLayout',
 
   notFoundTemplate: 'notFound',
 
   loadingTemplate: 'loading',
 
-  renderTemplates: { 
+  yieldTemplates: { 
     'footer': { to: 'footer' },
-  }
+    'navbar': { to: 'navbar' }
+  },
+
+  // before: function(){
+  //   var routeName = this.route.name;
+
+  //   if(_.include([],routeName))
+  //     return;
+
+  //   var user = Meteor.user();
+  //   if( !user ) {
+  //     this.render( Meteor.loggingIn() ? this.loadingTemplate : 'login' );
+  //     return this.stop();
+  //   }
+  // } 
 
 });
 
 
 Router.map(function() { 
+
+  this.route('login', {
+    path: '/login'
+  });
+
+  this.route('signup', {
+    path: '/signup'
+  });
+
+  this.route('newproject', {
+    path: '/new'
+  });
+
+  this.route('projects', {
+    path: '/projects'
+  });
+
   this.route('home', {
 		path: '/',
 		data: function(){

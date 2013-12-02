@@ -1,0 +1,44 @@
+<template name="navbar">
+<div class="navbar-inner">
+  <div class="container-fluid">
+    <a href="/" class="brand">
+      <small>
+        <i class="icon-desktop"></i>
+        LiquidLearning
+      </small>
+    </a>
+
+    <a href="#" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+      <i class="icon-reorder"></i>
+    </a>
+
+    <ul class="nav flaty-nav pull-right">
+      <li class="hidden-phone">
+        <a href="{{pathFor 'newproject'}}">
+          <i class="icon-file-alt"></i>
+          New Project
+        </a>
+      </li>
+
+      <li class="hidden-phone">
+        <a href="{{pathFor 'projects'}}">
+          <i class="icon-search"></i>
+          Discover
+        </a>
+      </li>
+
+      
+      {{#if currentUser}}
+      {{> showUser}}
+      {{else}}
+      <li class="hidden-phone">
+        <a href="{{pathFor 'login'}}">
+          <i class="icon-user"></i>
+          login
+        </a>
+      </li>
+      {{/if}}
+    </ul>
+  </div>
+</div>
+</template>
