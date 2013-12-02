@@ -28,6 +28,22 @@ Router.configure({
 
 Router.map(function() { 
 
+  this.route('feedbackNew', {
+    path: '/feedback/new'
+  });
+
+  this.route('feedbackPost', {
+    path: '/feedback/list/:_id',
+    data: function(){
+      console.log(this);
+      return Feedback.findOne({ '_id': this.params._id });
+    }
+  });
+
+  this.route('feedback', {
+    path: '/feedback'
+  });
+
   this.route('login', {
     path: '/login'
   });

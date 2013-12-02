@@ -1,0 +1,101 @@
+// TODO: #feedback: Implement conversation between User and Andmin
+// 	User: 
+// 	 can submit a feedback from a page out of the frontend
+//   can view the submited feedbacks as a conversation between him and the admin (/conversations)
+//   can talk via a conversation with the admin in the conversation subpanel
+//
+//  Admin:
+//   can view submitetd feedbacks grouped by the users
+//   can view new feedbacks, -> go to conversation
+//   can replay to a submited feedback
+//   can view a conversation between user and admin
+//   email is sent when a user submit a feedback or replay's on a message
+
+
+
+Session.set('replayFeedback',null);
+
+Template.feedback.feedback = function(){
+	return Feedback.find({},{sort: {date:-1}});	
+}
+
+Template.feedback.getDate = function(){
+  return timeSince(this.date);
+	// return buildFullDate(this.date,true);
+}
+
+Template.feedback.replay = function(){
+	return Session.get('replayFeedback') == this._id;
+}
+
+Template.feedback.comments = function(){
+  return comments(this.comments && this.comments.length);
+}
+Template.feedback.userHasStared = function(){
+  return this.stars && this.stars.indexOf( Meteor.userId() ) > -1;
+}
+
+Template.feedback.stars = function(){
+  var num = 0;
+  if( this.stars && this.stars.length > 0 ) num = this.stars.length;
+  return num;
+}
+
+Template.feedback.events = {
+	"click .replayBtn": function(e,t){
+		e.preventDefault();
+		Session.set('replayFeedback',this._id);
+	},
+	"click button[name=submit]" : function(){
+		Session.set('replayFeedback',null);
+	},
+  "click .star": function(){
+    if( !this.stars ) {
+      Feedback.update({ _id: this._id },{$set:{ stars: [ Meteor.userId() ] }});
+      return;
+    }
+    if( this.stars.indexOf( Meteor.userId() ) > -1 ) {
+      Feedback.update({ _id: this._id },{ $pull: { stars: Meteor.userId() }});
+    } else {
+      Feedback.update({ _id: this._id },{ $push: { stars: Meteor.userId() }});
+    }
+  }
+}
+
+comments = function( num ){
+  if( !num || num == 0 )
+    return "no comments";
+  if( num == 1 )
+    return "1 comment";
+  return num+" comments";
+}
+
+timeSince = function(date) {
+
+    var seconds = Math.floor((new Date() - date) / 1000);
+
+    var interval = Math.floor(seconds / 31536000);
+
+    if (interval > 1) {
+        return interval + " years";
+    }
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) {
+        return interval + " months";
+    }
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) {
+        return interval + " days";
+    }
+    interval = Math.floor(seconds / 3600);
+    if (interval > 1) {
+        return interval + " hours";
+    }
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) {
+        return interval + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
+}
+
+
