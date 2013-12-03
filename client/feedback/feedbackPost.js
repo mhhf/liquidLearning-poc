@@ -20,7 +20,11 @@ Template.feedbackPost.events = {
       },
       date: new Date()
     }}});
-  } 
+  },
+  "click a.replyBtn" : function(e,t){
+    e.preventDefault();
+    $(document.body).scrollTop($('#replyWrapper').offset().top);
+  }
 }
 
 

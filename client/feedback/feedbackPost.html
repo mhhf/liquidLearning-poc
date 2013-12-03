@@ -1,7 +1,7 @@
 <template name="feedbackPost">
 <div class="row-fluid feedbackPost">
   <div class="span10 offset1">
-    <a href="{{pathFor 'feedback'}}"> back to Feedback</a>
+    <a href="{{pathFor 'feedback'}}"> ...back to Feedback</a>
     <h2>
       {{ title }}
     </h2>
@@ -10,7 +10,7 @@
     </p>
     <span class="user"><i class="icon-user"></i> {{user.name}}</span>
     <span class="time"><i class="icon-time"></i> {{getDate}}</span>
-    <a href="#" class="replayBtn">&nbsp;replay</a>
+    <a href="#replyWrapper" class="replyBtn">&nbsp;reply</a>
     
     <ul>
     {{#each comments }}
@@ -23,7 +23,7 @@
       </li>
     {{/each }}
     </ul>
-    <div class="replayText">
+    <div class="replyText" id="replyWrapper">
       <textarea name="message" rows="4" cols="30"></textarea><br/>
       <button name="submit" type="submit" class="btn btn-primary">Submit</button>
     </div>
