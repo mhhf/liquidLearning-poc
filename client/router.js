@@ -75,8 +75,16 @@ Router.map(function() {
 
   this.route('projectEdit', {
     path: '/project/edit/:_id',
+    waitOn: function(){
+      return Meteor.subscribe('userProjects');
+    },
     data: function(){
       var project = Projects.findOne({_id: this.params._id });
+      if( project.hash )
+        // [FIXME] - free from session, maybe implement a waitOn wrapper - remove from router
+        Meteor.call('openFile', project.hash+"/index.md", function(err, succ){
+          Session.set('data',succ);
+        });
       return project;
     },
     layoutTemplate: 'fullLayout'
