@@ -13,7 +13,7 @@ Template.projectNew.events = {
       public: public
     }, function( err, suc ){
       if( err ) console.log(err);
-      if( suc && suc.id ) Router.go( '/project/edit/'+suc.id );
+      if( suc && suc.id ) Router.go( '/project/'+suc.id );
     });
 
   }
