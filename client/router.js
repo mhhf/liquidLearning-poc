@@ -28,6 +28,9 @@ Router.configure({
 
 Router.map(function() { 
 
+  //////////////////////////////////////////////////////     FEEDBACK
+  ///////////////////////////////////////////////////////////////////////////
+
   this.route('feedbackNew', {
     path: '/feedback/new'
   });
@@ -44,22 +47,9 @@ Router.map(function() {
     path: '/feedback'
   });
 
-  this.route('login', {
-    path: '/login'
-  });
-
-  this.route('signup', {
-    path: '/signup'
-  });
-
-  this.route('projectEdit', {
-    path: '/project/edit/:_id',
-    data: function(){
-      var project = Projects.findOne({_id: this.params._id });
-      return project;
-    }
-  });
-
+  //////////////////////////////////////////////////////     PROJECT
+  ///////////////////////////////////////////////////////////////////////////
+  
   this.route('projectNew', {
     path: '/project/new'
   });
@@ -79,6 +69,25 @@ Router.map(function() {
         })
       };
     }
+  });
+
+  this.route('projectEdit', {
+    path: '/project/edit/:_id',
+    data: function(){
+      var project = Projects.findOne({_id: this.params._id });
+      return project;
+    }
+  });
+
+  //////////////////////////////////////////////////////       LAYOUT
+  ///////////////////////////////////////////////////////////////////////////
+
+  this.route('login', {
+    path: '/login'
+  });
+
+  this.route('signup', {
+    path: '/signup'
   });
 
   this.route('home', {
