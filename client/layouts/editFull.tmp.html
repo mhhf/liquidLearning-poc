@@ -1,0 +1,18 @@
+<template name="fullLayout">
+  <aside>
+    <!-- render to the sidebar yield -->
+  </aside>
+
+  <nav class="navbar">
+    {{yield 'navbar'}}
+  </nav>
+
+  <div class="mainWrapper">
+    {{yield}}
+  </div>
+
+  <footer>
+    <!-- render to the footer yield -->
+    {{yield 'footer'}}
+  </footer>
+</template>

@@ -1,3 +1,14 @@
 <template name="projectEdit">
-edit project  {{name}}
+  <div class="row-fluid">
+    <div class="span10 offset1 projectViewWrapper">
+      <a href="{{ pathFor 'projectView' }}">... back to project</a>
+      <span class="info right">
+        <a href="#"><i class="icon-save"></i> save</a>
+        <a href="#"><i class="icon-time"></i> history</a>
+      </span>
+    </div>
+  </div>
+  <div class="instantPreviewWrapper">
+    {{> instantPreview}}
+  </div>
 </template>

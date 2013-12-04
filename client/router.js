@@ -78,6 +78,23 @@ Router.map(function() {
     data: function(){
       var project = Projects.findOne({_id: this.params._id });
       return project;
+    },
+    layoutTemplate: 'fullLayout'
+  });
+
+  this.route('projectSettings', {
+    path: '/project/settings/:_id',
+    data: function(){
+      var project = Projects.findOne({_id: this.params._id });
+      return project;
+    }
+  });
+
+  this.route('projectDiscuss', {
+    path: '/project/discuss/:_id',
+    data: function(){
+      var project = Projects.findOne({_id: this.params._id });
+      return project;
     }
   });
 
