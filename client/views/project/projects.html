@@ -1,0 +1,47 @@
+<template name="projects">
+<div class="row-fluid">
+  <div class="span10 offset1">
+    <h2>Own Projects</h2>
+    <ul id="projectsWrapper">
+      {{#each ownProjects}}
+      <li>
+        {{> projectWrapper}}
+      </li>
+      {{/each}}
+    </ul>
+    <h2> Popular Projects </h2>
+    <ul id="projectsWrapper">
+      {{#each popularProjects}}
+      <li>
+        {{> projectWrapper}}
+      </li>
+      {{/each}}
+    </ul>
+    
+  </div>
+</div>
+</template>
+
+<template name="projectWrapper">
+<div class="projectWrapper">
+  <h4> {{ slice name 20 }} </h4>
+  <p> {{ slice description 28 }} </p>
+  <span class="info left">
+    <span class="star unstared"> {{ stars.length }} <i class="icon-star-empty"></i></span>
+  </span>
+  <span class="info right">
+    {{#if userOwn}}
+      {{> showPublicStatus }}
+    {{/if}}
+  </span>
+</div>
+</template>
+
+
+<template name="showPublicStatus">
+  {{#if public }}
+  <i class="icon-unlock"></i>
+  {{else}}
+  <i class="icon-lock"></i>
+  {{/if}}
+</template>
