@@ -14,8 +14,5 @@ Template.feedbackNew.events = {
       comments: []
     });
     Router.go('feedback');
-  },
-  "click button[name=calcel]": function(e,t){
-    Router.go('feedback');
   }
 }
