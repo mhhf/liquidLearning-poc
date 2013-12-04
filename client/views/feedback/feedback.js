@@ -31,15 +31,7 @@ Template.feedback.replay = function(){
 Template.feedback.comments = function(){
   return comments(this.comments && this.comments.length);
 }
-Template.feedback.userHasStared = function(){
-  return this.stars && this.stars.indexOf( Meteor.userId() ) > -1;
-}
 
-Template.feedback.stars = function(){
-  var num = 0;
-  if( this.stars && this.stars.length > 0 ) num = this.stars.length;
-  return num;
-}
 
 Template.feedback.events = {
 	"click .replayBtn": function(e,t){
@@ -50,15 +42,7 @@ Template.feedback.events = {
 		Session.set('replayFeedback',null);
 	},
   "click .star": function(){
-    if( !this.stars ) {
-      Feedback.update({ _id: this._id },{$set:{ stars: [ Meteor.userId() ] }});
-      return;
-    }
-    if( this.stars.indexOf( Meteor.userId() ) > -1 ) {
-      Feedback.update({ _id: this._id },{ $pull: { stars: Meteor.userId() }});
-    } else {
-      Feedback.update({ _id: this._id },{ $push: { stars: Meteor.userId() }});
-    }
+    updateStar( this, Feedback );
   }
 }
 

@@ -10,11 +10,7 @@
     </a>
   </div>
   <!-- <p>{{message}}</p> -->
-  {{#if userHasStared}}
-  <span class="star stared"> {{ stars }} <i class="icon-star"></i></span>
-  {{else}}
-  <span class="star unstared"> {{ stars }} <i class="icon-star-empty"></i></span>
-  {{/if}}
+  {{> star }}
   <span class="user"><i class="icon-user"></i> {{user.name}}</span>
   <span class="time"><i class="icon-time"></i> {{getDate}}</span>
   <span class="comments">
