@@ -1,6 +1,5 @@
 <template name="projects">
-<div class="row-fluid">
-  <div class="span10 offset1">
+    <a href="{{pathFor 'projectNew'}}" class="btn btn-primary right">new project</a>
     <h2>Own Projects</h2>
     <ul id="projectsWrapper">
       {{#each ownProjects}}
@@ -17,9 +16,6 @@
       </li>
       {{/each}}
     </ul>
-    
-  </div>
-</div>
 </template>
 
 <template name="projectWrapper">
