@@ -38,7 +38,7 @@ Router.map(function() {
   this.route('feedbackPost', {
     path: '/feedback/list/:_id',
     data: function(){
-      return Feedback.findOne({ '_id': this.params._id }));
+      return Feedback.findOne({ '_id': this.params._id });
     }
   });
 
