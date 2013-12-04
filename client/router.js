@@ -1,7 +1,7 @@
 Router.configure({
   layoutTemplate: 'defaultLayout',
 
-  notFoundTemplate: 'notFound',
+  notFoundTemplate: 'noFound',
 
   loadingTemplate: 'loading',
 
@@ -52,12 +52,33 @@ Router.map(function() {
     path: '/signup'
   });
 
-  this.route('newproject', {
-    path: '/new'
+  this.route('projectEdit', {
+    path: '/project/edit/:_id',
+    data: function(){
+      var project = Projects.findOne({_id: this.params._id });
+      return project;
+    }
+  });
+
+  this.route('projectNew', {
+    path: '/project/new'
+  });
+
+  this.route('projectView', {
+    path: '/project/:_id'
   });
 
   this.route('projects', {
-    path: '/projects'
+    path: '/projects',
+    data: function(){
+      return {
+        ownProjects: Projects.find({ "user._id": Meteor.userId() }),
+        popularProjects: Projects.find({"user._id": {$not: Meteor.userId()} },{
+          sort:{'stars.length':1}, 
+          limit: 20
+        })
+      };
+    }
   });
 
   this.route('home', {

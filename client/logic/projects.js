@@ -1,1 +1,2 @@
-Meteor.subscribe('projects');
+Meteor.subscribe('publicProjects');
+Meteor.subscribe('userProjects');
