@@ -2,7 +2,7 @@
 <div id="projectViewWrapper">
   <a href="{{ pathFor 'projects' }}">... back to projects</a>
   <span class="info right">
-    <a href="#" name="star"><i class="icon-star"></i> star</a>
+    {{> star}}
     <a href="#" name="fork"><i class="icon-code-fork"></i> fork</a>
     <a href="{{ pathFor 'projectEdit' }}"><i class="icon-pencil"></i> edit</a>
   </span>
