@@ -1,0 +1,21 @@
+<template name="projectView">
+<div id="projectViewWrapper">
+  <a href="{{ pathFor 'projects' }}">... back to projects</a>
+  <span class="info right">
+    <a href="#" name="star"><i class="icon-star"></i> star</a>
+    <a href="#" name="fork"><i class="icon-code-fork"></i> fork</a>
+    <a href="{{ pathFor 'projectEdit' }}"><i class="icon-pencil"></i> edit</a>
+  </span>
+
+  <h2>{{name}}</h2>
+  <p>{{description}}</p>
+
+
+
+  <center>
+    <h1>Project Page</h1>
+  </center>
+
+
+</div>
+</template>
