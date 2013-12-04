@@ -38,8 +38,7 @@ Router.map(function() {
   this.route('feedbackPost', {
     path: '/feedback/list/:_id',
     data: function(){
-      console.log(this);
-      return Feedback.findOne({ '_id': this.params._id });
+      return Feedback.findOne({ '_id': this.params._id }));
     }
   });
 
@@ -55,7 +54,10 @@ Router.map(function() {
   });
 
   this.route('projectView', {
-    path: '/project/:_id'
+    path: '/project/:_id',
+    data: function(){
+      return Projects.findOne({_id:this.params._id});
+    }
   });
 
   this.route('projects', {
