@@ -31,16 +31,45 @@ Template.projectSettings.events = {
   }
 }
 
+Template.generalSettings.events = {
+  "click button[name=submit]": function(e,t){
+    e.preventDefault();
+    
+    var name = t.find('input[name=name]').value;
+    var description = t.find('input[name=description]').value;
+    var public = t.find('input[name=public]').checked;
+
+    Meteor.call('updateProjectSettings',{
+      projectId: this._id,
+      name: name,
+      description: description,
+      public: public
+    });
+    
+  }   
+}
+
 Template.memberSettings.events = {
   "click button[name=add]" : function(e,t){
     e.preventDefault();
+
     var user = t.find('input[name=user]').value;
     var right = t.find('select').value;
+
+    t.find('input[name=user]').value = '';
 
     Meteor.call('addUserToProject', {
       projectId: this._id, 
       user: user,
       right: right
+    });
+  },
+  "click button[name=remove]": function(e,t){
+    e.preventDefault();
+
+    Meteor.call('removeUserFromProject', {
+      projectId: t.data._id,
+      userId: this._id
     });
   }
 }
@@ -48,7 +77,6 @@ Template.memberSettings.events = {
 Template.deleteProject.events = {
   "click button[name=delete]" : function(e,t){
     e.preventDefault();
-    console.log('removing dat shit');
     Meteor.call('deleteProject',this._id, function(err, succ){
       if( succ ) Router.go('/');
     });

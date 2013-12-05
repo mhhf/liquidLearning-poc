@@ -25,12 +25,18 @@ Meteor.publish('userProjects', function(o){
 
 
 
-
+// [TODO] - export user right check to function
 Meteor.methods({
-  // [XXX] - check if user is alowed to read /write the file
-  openFile: function( file ){
-    var data = fs.readFileSync( path+file, "utf8" );
-    console.log(data);
+  openFile: function( projectId ){
+    
+    // check if project is valid
+    var project = Projects.findOne({ _id: projectId });
+    if( !project ) return null;
+
+    // check if user can read the file
+    if( !project.public && !userHashPermissions( project, 'read' )) return null;
+    
+    var data = fs.readFileSync( path+project.hash+'/index.md', "utf8" );
     return data;
   },
   // [question] - save just markdown or the parsed slides for speed? 
@@ -39,7 +45,8 @@ Meteor.methods({
     if( !( o.md && o.slidesLength && typeof o.slidesLength === 'number' && _id ) ) return false;
 
     var project = Projects.findOne({ _id: _id });
-    if( !project ) return;
+    // project has to be writable by user
+    if( !project || !userHashPermissions(project, 'write') ) return null;
 
     fs.writeFileSync( path + project.hash + '/index.md', o.md );
     Projects.update({ _id: _id },{$set: { slides: o.slidesLength }});
@@ -106,9 +113,7 @@ Meteor.methods({
     var project = Projects.findOne({_id: o.projectId });
 
     // check if user is logged in and has the access rights to do so
-    if( !( Meteor.user() && _.find( project.acl, function(e){
-      return e._id == Meteor.userId(); 
-    } ) ) ) return false;
+    if( !project || !userHashPermissions(project, 'admin') ) return false;
 
     // look for user in the database
     var user = Meteor.users.findOne({ username: o.user });
@@ -132,6 +137,24 @@ Meteor.methods({
     Projects.update({ _id: o.projectId }, {$push: { acl: aclUser }});
   },
 
+  removeUserFromProject: function(o){
+    //
+    // check if information is aviable
+    if( !( o.userId && o.projectId ) ) return false;
+
+    // check if project exists
+    var project = Projects.findOne({_id: o.projectId });
+
+    // check if user is logged in and has the access rights to do so
+    if( !project || !userHashPermissions(project, 'admin') ) return false;
+
+    var newAcl = _.filter(project.acl, function(e){ return e._id != o.userId; });
+    Projects.update({_id: o.projectId}, {$set: {acl: newAcl }});
+
+    return true;
+
+  },
+
   deleteProject: function( _id ){
     
     // find project
@@ -140,15 +163,36 @@ Meteor.methods({
     // no project found
     if( !project ) return false;
 
-    var userAcl = _.find(project.acl, function(e){ return e._id = Meteor.userId(); });
-    
-    // user cant remove project
-    if( !userAcl || userAcl.right != "admin" ) return false;
+    if( !userHashPermissions(project, 'admin')) return false;
 
     // remove the repository
     deleteFolderRecursive( path+project.hash );
 
     Projects.remove({ _id: _id });
+
+    return true;
+  },
+
+  updateProjectSettings: function(o){
+    
+    // check if all elements are rdy
+    if( !( o.projectId && o.name && o.description && o.public ) ) return false;
+
+    // grab project
+    var project = Projects.findOne({_id: o.projectId });
+
+    // check if project exists and user can admin it
+    if( !project ) return false;
+    var userAcl = _.find(project.acl, function(e){ 
+      return e._id == Meteor.userId(); 
+    });
+    
+    if( !userAcl || userAcl.right != "admin" ) return false;
+    
+    // pick the right values
+    var obj = _.pick(o, ['name','description','public']);
+
+    Projects.update({ _id: o.projectId }, {$set: obj });
 
     return true;
   }
@@ -171,3 +215,18 @@ var deleteFolderRecursive = function(path) {
     }
 };
 
+
+var userHashPermissions = function( project, right ){
+  console.log('p');
+
+  var userId = Meteor.userId();
+  var userAcl = _.find(project.acl, function(e){
+    return e._id == userId;
+  });
+  if( !userAcl ) return false;
+
+  return userRightToNumber( userAcl.right ) >= userRightToNumber( right );
+}
+var userRightToNumber = function( right ){
+  return right=='admin'?3:(right=='write'?2:1);
+}
