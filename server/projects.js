@@ -15,13 +15,14 @@ var createRepo = Meteor._wrapAsync(createRepoAsync);
 //
 // public
 Meteor.publish('publicProjects', function(o){
-  return Projects.find({public:true});
+  return Projects.find({$or:[{public:true},{'acl._id':this.userId}]});
 });
 
 // user
 Meteor.publish('userProjects', function(o){
   return Projects.find({ "user._id":this.userId });
 });
+
 
 
 
@@ -217,8 +218,6 @@ var deleteFolderRecursive = function(path) {
 
 
 var userHashPermissions = function( project, right ){
-  console.log('p');
-
   var userId = Meteor.userId();
   var userAcl = _.find(project.acl, function(e){
     return e._id == userId;

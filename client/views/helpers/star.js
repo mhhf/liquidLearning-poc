@@ -8,3 +8,7 @@ Template.star.stars = function(){
   return num;
 }
 
+Handlebars.registerHelper('userStared', function(o){
+  return this.stars && (this.stars.indexOf(Meteor.userId())>-1);
+})
+

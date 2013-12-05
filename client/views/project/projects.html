@@ -25,13 +25,16 @@
   <h4> {{ slice name 20 }} </h4>
   <p> {{ slice description 28 }} </p>
   <span class="info left">
-    <span class="star unstared"> {{ stars.length }} <i class="icon-star-empty"></i></span>
+    <span class="star {{#if userStared}} stared {{else}} unstared {{/if}}"> {{ stars.length }} <i class="icon-star-empty"></i></span>
     <span class="slides"> {{ slides }} <i class="icon-list-alt"></i></span>
   </span>
   <span class="info right">
     {{#if userOwn}}
       {{> showPublicStatus }}
+    {{else}}
+      {{> showContributor}}
     {{/if}}
+
   </span>
 </div>
 </template>
@@ -45,3 +48,11 @@
   {{/if}}
 </template>
 
+<template name="showContributor">
+  {{#if userIsContributor}}
+  <i class="icon-code"></i>
+  {{/if}}
+  {{#if userIsReader}}
+  <i class="icon-eye-open"></i>
+  {{/if}}
+</template>

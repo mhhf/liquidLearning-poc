@@ -17,3 +17,18 @@ Template.projects.events = {
     Router.go('projectView', { _id: this._id });
   }
 }
+
+Template.showContributor.userIsContributor = function(){
+  if( !this.acl ) return false;
+  var userAcl = _.find(this.acl,function(e){return e._id == Meteor.userId();});
+  return (userAcl.right == 'write' || userAcl.right == 'admin');
+}
+
+Template.showContributor.userIsReader = function(){
+  if( !this.acl ) return false;
+  var userAcl = _.find(this.acl,function(e){return e._id == Meteor.userId();});
+  return (userAcl.right == 'read');
+
+}
+
+
