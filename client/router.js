@@ -69,6 +69,13 @@ Router.map(function() {
     }
   });
 
+  // this.route('projectPreview', {
+  //   path: '/project/preview/:_id',
+  //   data: function(){
+  //     return Projects.findOne({_id:this.params._id});
+  //   }
+  // });
+
   this.route('projects', {
     path: '/projects',
     data: function(){
@@ -144,57 +151,62 @@ Router.map(function() {
     }
   });
 
-	this.route('player', {
+	this.route('projectPreview', {
+    path: '/project/preview/:_id',
 		before: function(){
-			if( !Session.get('text') ) this.redirect('editor');
+			// if( !Session.get('text') ) this.redirect('projectEdit');
 			syncQue = new SyncQue();
 		},
 		waitOn: function(a,b){
-			return Meteor.subscribe('text', Session.get('text'));
+      // [TODO] - free from session
+      var slides= InstantPreview.getSlides();
+      Session.set('slides',slides);
+      var notes =  _.flatten(_.pluck(slides,'notes'));
+			return Meteor.subscribe('text', notes );
 		},
 		data: function(){
 			return { ttsObject: Syncs.find(), syncQue: syncQue };
 		},
-		action: function(){
+    action: function(){
 
-      GAnalytics.pageview("/player");
-			// The Meteor.subscribe method subscribe to a collection of syncs, which
-			// arn't sorted
-			// It is important to sort them before pushing in the play queue
-			
-			var syncs = Syncs.find().fetch();
-			var text = Session.get('text');
-			
-			// FIXME: ERROR: 2 same sentances in the text are loaded just once;
-			syncs.sort( function(a,b){
-				return _.indexOf( text, a.text ) - _.indexOf(text,b.text);
-			});
+      // GAnalytics.pageview("/player");
+      // The Meteor.subscribe method subscribe to a collection of syncs, which
+      // arn't sorted
+      // It is important to sort them before pushing in the play queue
 
-			syncQue.initSounds( syncs );
+      var syncs = Syncs.find().fetch();
 
-			// Visuals
+      var text =  _.flatten(_.pluck(Session.get('slides'),'notes'));
+
+      // FIXME: ERROR: 2 same sentances in the text are loaded just once;
+      syncs.sort( function(a,b){
+        return _.indexOf( text, a.text ) - _.indexOf(text,b.text);
+      });
+      syncQue.initSounds( syncs );
+
+      // Visuals
       // TODO: clean router and export it to the player module
-			Deps.autorun( function(){
-				var ele = syncQue.getElement();
+      Deps.autorun( function(){
+        var ele = syncQue.getElement();
         var pointer = syncQue.getPointer();
 
-				if(ele) {
-					// align the top position of the subtitles
-					$('.textContainer center').css('margin-top',-1.35*pointer+'em');
-					
-					// mark the current line as active
-					$('.textContainer center span').removeClass('playing');
+        if(ele) {
+          // align the top position of the subtitles
+          $('.textContainer center').css('margin-top',-1.35*pointer+'em');
+
+          // mark the current line as active
+          $('.textContainer center span').removeClass('playing');
           if( pointer != -1 )
-            $('.textContainer center span#text_'+ele.hash).addClass('playing');
+        $('.textContainer center span#text_'+ele.hash).addClass('playing');
 
-					// mark the current blob as active
-					$('.processWrapper li').removeClass('playing');
-					$('.processWrapper li#playstate_'+ele.hash).addClass('playing');
-				}
+      // mark the current blob as active
+      $('.processWrapper li').removeClass('playing');
+      $('.processWrapper li#playstate_'+ele.hash).addClass('playing');
+        }
 
-			});
+      });
 
-			this.render('player');
-		}
+      this.render();
+    }
 	});
 });
