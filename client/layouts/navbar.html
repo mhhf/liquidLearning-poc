@@ -13,12 +13,14 @@
     </a>
 
     <ul class="nav flaty-nav pull-right">
+      {{#if currentUser }}
       <li class="hidden-phone">
         <a href="{{pathFor 'projectNew'}}">
           <i class="icon-file-alt"></i>
           New Project
         </a>
       </li>
+      {{/if}}
 
       <li class="hidden-phone">
         <a href="{{pathFor 'projects'}}">

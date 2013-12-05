@@ -1,5 +1,5 @@
 Template.projectView.events = {
   "click .star": function(){
-    updateStar( this, Projects );
+    Meteor.call( 'updateProjectStar', this._id );
   }
 }

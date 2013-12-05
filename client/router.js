@@ -64,9 +64,11 @@ Router.map(function() {
     path: '/projects',
     data: function(){
       return {
-        ownProjects: Projects.find({ "user._id": Meteor.userId() }),
+        ownProjects: Projects.find({ "user._id": Meteor.userId() }, {
+          sort:{'stars.length':-1,'name':1},
+        }),
         popularProjects: Projects.find({"user._id": {$not: Meteor.userId()} },{
-          sort:{'stars.length':1}, 
+          sort:{'stars.length':-1,'name':1}, 
           limit: 20
         })
       };

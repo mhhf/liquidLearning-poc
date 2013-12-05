@@ -1,4 +1,93 @@
 <template name="projectSettings">
 <a href="{{ pathFor 'projectView' }}">... back to project</a>
-Admin dat shit
+<h2>Project "{{name}}" Settings</h2>
+<div class="row-fluid">
+  <div class="span3">
+    <ul class="menue">
+      <li class="{{isState 'general'}}"><a class="menueBtn general" href="#">General</a></li>
+      <li class="{{isState 'members'}}"><a class="menueBtn members" href="#">Members</a></li>
+      <li class="{{isState 'delete'}}"><a class="menueBtn delete" href="#">Delete Project</a></li>
+    </ul>
+  </div>
+  <div class="span9">
+    {{#if isState 'general'}}
+      {{> generalSettings}}
+    {{/if}}
+
+    {{#if isState 'members'}}
+      {{> memberSettings}}
+    {{/if}}
+
+    {{#if isState 'delete'}}
+      {{> deleteProject}}
+    {{/if}}
+  </div>
+</div>
+</template>
+
+
+<template name="deleteProject">
+Everything has to come to an end.
+<button class="btn btn-warning btn-large btn-block" name="delete">remove project forever and ever</button>
+</template>
+
+<template name="memberSettings">
+<label for="">Members:</label>
+<table class="table table-advance memberTable">
+  <thead>
+  <tr>
+    <th> Name </th>
+    <th> Right </th>
+  </tr>
+  </thead>
+  <tbody>
+    {{#each acls}}
+    <tr>
+      <td> {{name}} </td>
+      <td> {{right}} </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+<label for="">add user: </label>
+<input type="text" name="user" placeholder="user or email" />
+<select id="right" name="right">
+  <option value="admin">admin</option>
+  <option value="write">write</option>
+  <option value="read">read</option>
+</select> 
+<br />
+<button class="btn btn-primary" name="add">Add</button>
+</template>
+
+
+<template name="generalSettings">
+<div id="nameCG" class="control-group">
+  <label for="textfield5" class="control-label">name</label>
+  <div class="controls">
+    <input type="text" name="name" id="name" placeholder="name..." class="input-xlarge" value="{{name}}">
+    <span class="help-inline"></span>
+  </div>
+</div>
+
+<div id="descriptionCG" class="control-group">
+  <label for="textfield5" class="control-label">description</label>
+  <div class="controls">
+    <input type="text" name="description" id="description" placeholder="description..." class="input-xlarge" value="{{description}}">
+    <span class="help-inline"></span>
+  </div>
+</div>
+
+<div id="publicCG" class="control-group">
+  <label for="textfield5" class="control-label">public</label>
+  <div class="controls">
+    <label class="checkbox">
+      <input type="checkbox" name="public" {{#if public}} checked {{/if}}/> public
+    </label>
+    <span class="help-inline"></span>
+  </div>
+</div>
+
+<button name="submit" class="btn btn-primary">Submit</button>
+<a href="{{ pathFor 'projects' }}" class="btn">Cancel</a>
 </template>

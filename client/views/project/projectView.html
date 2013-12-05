@@ -3,10 +3,12 @@
   <a href="{{ pathFor 'projects' }}">... back to projects</a>
   <span class="info right">
     {{> star}}
-    <a href="#" name="fork"><i class="icon-code-fork"></i> fork</a>
     <a href="{{ pathFor 'projectDiscuss' }}"><i class="icon-comments"></i> discuss</a>
+    {{#if currentUser }}
+    <a href="#" name="fork"><i class="icon-code-fork"></i> fork</a>
     <a href="{{ pathFor 'projectEdit' }}"><i class="icon-pencil"></i> edit</a>
     <a href="{{ pathFor 'projectSettings' }}"><i class="icon-cog"></i> settings</a>
+    {{/if}}
   </span>
 
   <h2>{{name}}</h2>

@@ -1,13 +1,15 @@
 <template name="projects">
-    <a href="{{pathFor 'projectNew'}}" class="btn btn-primary right">new project</a>
-    <h2>Own Projects</h2>
-    <ul id="projectsWrapper">
-      {{#each ownProjects}}
-      <li>
-        {{> projectWrapper}}
-      </li>
-      {{/each}}
-    </ul>
+    {{#if currentUser }}
+      <a href="{{pathFor 'projectNew'}}" class="btn btn-primary right">new project</a>
+      <h2>Own Projects</h2>
+      <ul id="projectsWrapper">
+        {{#each ownProjects}}
+        <li>
+          {{> projectWrapper}}
+        </li>
+        {{/each}}
+      </ul>
+    {{/if}}
     <h2> Popular Projects </h2>
     <ul id="projectsWrapper">
       {{#each popularProjects}}
@@ -24,6 +26,7 @@
   <p> {{ slice description 28 }} </p>
   <span class="info left">
     <span class="star unstared"> {{ stars.length }} <i class="icon-star-empty"></i></span>
+    <span class="slides"> {{ slides }} <i class="icon-list-alt"></i></span>
   </span>
   <span class="info right">
     {{#if userOwn}}
@@ -41,3 +44,4 @@
   <i class="icon-lock"></i>
   {{/if}}
 </template>
+

@@ -6,13 +6,14 @@ Template.signup.events = {
     var pass = t.find('input[name=pass]').value;
     var pass2 = t.find('input[name=pass2]').value;
 
+    // [TODO] - export to the server
     if( pass == pass2 )
       Accounts.createUser({
         username: user,
         email: email,
         password: pass
       }, function( e, o ){
-        console.log("dafuck",e,o);
+        Router.go('/');
       });
   }
 }

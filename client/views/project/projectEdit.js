@@ -6,7 +6,13 @@ Deps.autorun( function(){
 Template.projectEdit.events = {
   "click a.save": function(e,t){
     e.preventDefault();
-    var data = InstantPreview.getMarkdown();
-    Meteor.call('saveFile', this.hash, data );
+    var md = InstantPreview.getMarkdown();
+    var slides = InstantPreview.getSlides();
+    //
+    // [todo] - ACL
+    Meteor.call('saveFile', this._id, { 
+      md: md,
+      'slidesLength': slides.length
+    });
   }
 }

@@ -42,7 +42,7 @@ Template.feedback.events = {
 		Session.set('replayFeedback',null);
 	},
   "click .star": function(){
-    updateStar( this, Feedback );
+    Meteor.call('updateFeedbackStar', this._id );
   }
 }
 
