@@ -1,6 +1,8 @@
+// 
 // [TODO] - provide feedback to the user 
 // http://www.nodegit.org/nodegit/#Repo-init
 var git = Meteor.require('nodegit');
+var Fiber = Npm.require('fibers');
 var fs = Npm.require('fs');
 var path = "/Users/mhhf/llWd/";
 
@@ -44,16 +46,58 @@ Meteor.methods({
   // [todo] - commit with commit message
   saveFile: function( _id, o ){
     if( !( o.md && o.slidesLength && typeof o.slidesLength === 'number' && _id ) ) return false;
-
+    
     var project = Projects.findOne({ _id: _id });
+     
     // project has to be writable by user
     if( !project || !userHashPermissions(project, 'write') ) return null;
-
+    
     fs.writeFileSync( path + project.hash + '/index.md', o.md );
-    Projects.update({ _id: _id },{$set: { slides: o.slidesLength }});
-
+    Projects.update({ _id: _id },{$set: { 
+      slides: o.slidesLength,
+      data: o.md,
+      ast: o.ast
+    }});
+    
     return true;
   },
+  
+  buildProject: function( _id ){
+    
+    // [TODO] - acl
+    var project = Projects.findOne( { _id: _id } );
+    var ast = project.ast;
+    var notes =  _.filter(_.flatten(_.pluck(ast,'notes')), function( s ){
+      return typeof s == 'string';
+    });
+    
+    var endResult = [],
+    result = _.sortBy(genObjectSync( notes ), function(o){
+      return o.i;
+    });
+    
+    result = _.map(result, function(o){
+      delete o.i;
+      return o;
+    });
+    
+    // Substitude the string with the syncs object
+    // 
+    var newAst = _.map(ast, function(o){ // each slide
+      o.notes = _.map(o.notes, function(n){ // each note
+        // Substitude note with syncObject
+        if( typeof n == 'string' )
+          return _.find(result, function(r){ return r.text == n; }); 
+        return n;
+      }); 
+      return o;
+    });
+    
+    Projects.update({ _id: _id }, {$set: {ast: newAst}});
+      
+    return true;
+  },
+  
   projectNew: function(o){
 
     // check if user is logged in
@@ -229,3 +273,57 @@ var userHashPermissions = function( project, right ){
 var userRightToNumber = function( right ){
   return right=='admin'?3:(right=='write'?2:1);
 }
+
+
+
+// converts an text array to a syncObject id's:
+//
+// 1. synthesize the text to an audio file, if neccecery
+// 2. provides an array of syncObject id's from the database
+//
+var genObjectAsync = function( text, cb ){
+  var processed = [];
+  var queue = 0;
+
+  var t0 = +(new Date());
+
+  var hash, tts, mp3Link;
+  for(var i=0; i<text.length; i++) {
+    hash = MD5.hash( text[i] ).toString();
+    tts = Syncs.findOne({ hash: hash });
+    if(!tts){
+      queue++;
+      
+
+        Fiber( function(){
+
+          // get the synth object
+          var size = -1;
+          var obj = TtsEngine.synthesize({
+            text : text[i],
+            lang : "en",
+            process: function( buf ){
+              size = buf.length;
+            }
+          });
+          obj['size'] = size;
+
+          var id = Syncs.insert( obj );
+          
+          processed.push( _.extend(obj,{_id:id, i:i}) );
+          if( --queue == 0 ) {
+            cb && cb(null, processed);
+            cb = null;
+          }
+
+        }).run();
+
+			} else {
+				processed.push( _.extend(tts,{i:i} ) );
+			}
+		}
+		if( queue == 0 ){
+			cb && cb(null, processed);
+		}
+}
+var genObjectSync = Meteor._wrapAsync(genObjectAsync);

@@ -17,20 +17,7 @@ Router.configure({
   yieldTemplates: { 
     'footer': { to: 'footer' },
     'navbar': { to: 'navbar' }
-  },
-
-  // before: function(){
-  //   var routeName = this.route.name;
-
-  //   if(_.include([],routeName))
-  //     return;
-
-  //   var user = Meteor.user();
-  //   if( !user ) {
-  //     this.render( Meteor.loggingIn() ? this.loadingTemplate : 'login' );
-  //     return this.stop();
-  //   }
-  // } 
+  }
 
 });
 
@@ -98,11 +85,6 @@ Router.map(function() {
     },
     data: function(){
       var project = Projects.findOne({_id: this.params._id });
-      if( project.hash )
-        // [FIXME] - free from session, maybe implement a waitOn wrapper - remove from router
-        Meteor.call('openFile', project._id, function(err, succ){
-          Session.set('data',succ);
-        });
       return project;
     },
     layoutTemplate: 'fullLayout'
@@ -144,6 +126,10 @@ Router.map(function() {
 	});
 
 	this.route('editor',{
+    waitOn: function(){
+
+      return new SyncLoader('text');
+    },
     action: function(){
       GAnalytics.pageview("/editor");
       
@@ -151,62 +137,118 @@ Router.map(function() {
     }
   });
 
-	this.route('projectPreview', {
-    path: '/project/preview/:_id',
-		before: function(){
-			// if( !Session.get('text') ) this.redirect('projectEdit');
-			syncQue = new SyncQue();
-		},
-		waitOn: function(a,b){
-      // [TODO] - free from session
-      var slides= InstantPreview.getSlides();
-      Session.set('slides',slides);
-      var notes =  _.flatten(_.pluck(slides,'notes'));
-			return Meteor.subscribe('text', notes );
-		},
-		data: function(){
-			return { ttsObject: Syncs.find(), syncQue: syncQue };
-		},
-    action: function(){
+  this.route('projectPreview', {
 
+    path: '/project/preview/:_id',
+    
+    waitOn: function(a,b){
+      // // [TODO] - free from session
+      // var slides= InstantPreview.getSlides();
+      // Session.set('slides',slides);
+      // var notes =  _.flatten(_.pluck(slides,'notes'));
+      // return Meteor.subscribe('text', notes );
+      return Meteor.subscribe('userProjects');
+    },
+    
+    before: function(){
+      syncQue = new SyncQue();
+    },
+    
+    data: function(){
+      var project = Projects.findOne({ _id: this.params._id });
+      window.project = project;
+      if( project ) {
+        syncQue.initSounds( project.syncs );
+        
+        return { 
+          ttsObject: Syncs.find(),
+          syncQue: syncQue,
+          ast: project.ast,
+          syncs: project.syncs,
+          project: project
+        };
+      }
+      console.log("err");
+      return null;
+    },
+    
+    action: function(data){
+    
       // GAnalytics.pageview("/player");
       // The Meteor.subscribe method subscribe to a collection of syncs, which
       // arn't sorted
       // It is important to sort them before pushing in the play queue
-
-      var syncs = Syncs.find().fetch();
-
-      var text =  _.flatten(_.pluck(Session.get('slides'),'notes'));
-
+      
+      // var syncs = Syncs.find().fetch();
+      
+      // var text =  _.flatten(_.pluck(Session.get('slides'),'notes'));
+      
       // FIXME: ERROR: 2 same sentances in the text are loaded just once;
-      syncs.sort( function(a,b){
-        return _.indexOf( text, a.text ) - _.indexOf(text,b.text);
-      });
-      syncQue.initSounds( syncs );
-
+      // syncs.sort( function(a,b){
+      //   return _.indexOf( text, a.text ) - _.indexOf(text,b.text);
+      // });
+      
+      
       // Visuals
       // TODO: clean router and export it to the player module
       Deps.autorun( function(){
         var ele = syncQue.getElement();
         var pointer = syncQue.getPointer();
-
+        
         if(ele) {
           // align the top position of the subtitles
           $('.textContainer center').css('margin-top',-1.35*pointer+'em');
-
+          
           // mark the current line as active
           $('.textContainer center span').removeClass('playing');
           if( pointer != -1 )
         $('.textContainer center span#text_'+ele.hash).addClass('playing');
-
+        
       // mark the current blob as active
       $('.processWrapper li').removeClass('playing');
       $('.processWrapper li#playstate_'+ele.hash).addClass('playing');
         }
-
+        
       });
-
+      
       this.render();
     }
-	});
+  });
 });
+
+
+// TODO: factory?
+// Reactive Object to pass to the waitOn function for wait on data is ready
+var id = null;
+var retObj = null;
+SyncLoader = function( id ){
+  if ( retObj ) return retObj; 
+
+  var readyFlag = false ;
+  var readyFlagDep = new Deps.Dependency;
+
+  var ready = function(){
+    readyFlagDep.depend();
+    console.log(readyFlag);
+    return readyFlag;
+
+  }
+  var setReady = function( val ){
+    console.log(readyFlag);
+    readyFlag = val;
+    console.log(readyFlag);
+    readyFlagDep.changed();
+  }
+  window.setReady = setReady;
+  window.getReady = ready;
+
+  setTimeout( function(){
+    setReady(true);
+  },3000);
+
+  retObj = {
+    ready: ready
+  };
+  return retObj;
+};
+
