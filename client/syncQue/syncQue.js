@@ -17,6 +17,7 @@
 var SoundQueue = new Meteor.Collection('');
 
 
+// [TODO] - indicate dublicate buffer and dont loading it twice
 SyncQue = function( o ){
 
 	var _bufferDataDeps = new Deps.Dependency;

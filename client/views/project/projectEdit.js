@@ -1,5 +1,6 @@
 Template.projectEdit.rendered = function(){
-  InstantPreview.setMarkdown( this.data.data );
+  if( this.data.data )
+    InstantPreview.setMarkdown( this.data.data );
 }
 
 Template.projectEdit.events = {

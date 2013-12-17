@@ -21,13 +21,13 @@ Template.projects.events = {
 Template.showContributor.userIsContributor = function(){
   if( !this.acl ) return false;
   var userAcl = _.find(this.acl,function(e){return e._id == Meteor.userId();});
-  return (userAcl.right == 'write' || userAcl.right == 'admin');
+  return userAcl && (userAcl.right == 'write' || userAcl.right == 'admin');
 }
 
 Template.showContributor.userIsReader = function(){
   if( !this.acl ) return false;
   var userAcl = _.find(this.acl,function(e){return e._id == Meteor.userId();});
-  return (userAcl.right == 'read');
+  return userAcl && (userAcl.right == 'read');
 
 }
 

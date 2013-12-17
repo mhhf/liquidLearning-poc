@@ -158,7 +158,8 @@ Router.map(function() {
       var project = Projects.findOne({ _id: this.params._id });
       window.project = project;
       if( project ) {
-        syncQue.initSounds( project.syncs );
+       
+        syncQue.initSounds( _.flatten(_.pluck(project.ast,'notes')) );
         
         return { 
           ttsObject: Syncs.find(),
@@ -190,7 +191,7 @@ Router.map(function() {
       
       
       // Visuals
-      // TODO: clean router and export it to the player module
+      // [TODO] - free from router
       Deps.autorun( function(){
         var ele = syncQue.getElement();
         var pointer = syncQue.getPointer();
