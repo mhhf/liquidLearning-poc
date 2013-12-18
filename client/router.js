@@ -160,6 +160,15 @@ Router.map(function() {
       
       if( project ) {
        
+        // inherent slideIndex number to syncs
+        _.each( project.ast, function( slide, slideIndex ){
+          _.map( slide.notes, function( note ){
+            note.slideIndex = slideIndex;
+            return note;
+          });
+        });
+        
+        // make a playList from the projectAST
         syncQue.initSounds( _.flatten(_.pluck(project.ast,'notes')) );
         
         return { 
@@ -177,21 +186,6 @@ Router.map(function() {
     
     action: function(data){
     
-      // GAnalytics.pageview("/player");
-      // The Meteor.subscribe method subscribe to a collection of syncs, which
-      // arn't sorted
-      // It is important to sort them before pushing in the play queue
-      
-      // var syncs = Syncs.find().fetch();
-      
-      // var text =  _.flatten(_.pluck(Session.get('slides'),'notes'));
-      
-      // FIXME: ERROR: 2 same sentances in the text are loaded just once;
-      // syncs.sort( function(a,b){
-      //   return _.indexOf( text, a.text ) - _.indexOf(text,b.text);
-      // });
-      
-      
       // Visuals
       // [TODO] - free from router
       Deps.autorun( function(){
