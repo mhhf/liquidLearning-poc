@@ -30,7 +30,8 @@ SyncQue = function( o ){
 
 	var _startPlaying = 0; // Time when the player starts to play
 	var _loadingCounter = 0; 
-	var _soundBuffer;
+	var _syncObjects;
+  var _soundBuffersHashMap;
 	var _preloadQueue;
 	var context;
 
@@ -55,9 +56,15 @@ SyncQue = function( o ){
 	// TODO #loading: build a buffer queue - its not wise to pre buffer an unknown length of sound files
 	this.initSounds = function( o, cb ) {
 
-		_soundBuffer = o;
+		_syncObjects = o;
+    _soundBuffersHashMap = {};
+    
+    _.each( _syncObjects, function( syncObject, index ){
+      _soundBuffersHashMap[ syncObject.hash ] = null;
+      syncObject.i = index;
+    });
 
-		_loadingCounter = o.length;
+		_loadingCounter = Object.keys(_soundBuffersHashMap).length;
 
 		_.each(o, function( ttsO ){
 			loadSound( ttsO, cb );
@@ -105,17 +112,17 @@ SyncQue = function( o ){
 
     // XXX: da fuck? this should be exported to the synthesizer
 		var time = 0;
-		for(var i=0; i<_soundBuffer.length; i++) {
-			_soundBuffer[i].t = time;
-			time += _soundBuffer[i].buffer.duration * 1000 + 200;
+		for(var i=0; i<_syncObjects.length; i++) {
+			_syncObjects[i].t = time;
+			time += getBuffer(i).duration * 1000 + 200;
 		}
 	}
 
 
   var playNext = function(){
 
-    if( _bufferPointer + 1 in _soundBuffer ) {
-      playSound( _soundBuffer[++_bufferPointer].buffer, 0, function(){
+    if( _bufferPointer + 1 in _syncObjects ) {
+      playSound( getNextBuffer(), 0, function(){
 
         // make a little break between sentances
         //
@@ -134,26 +141,43 @@ SyncQue = function( o ){
 
 	// inserts the loaded soundBuffer:ArrayBuffer at the right place in the sound
 	// Queue
-	var insertBuffer = function( hash, buffer ){
-		
-		// search for the right hash
-		for(var i = 0; i<_soundBuffer.length; i++) {
-			if( _soundBuffer[i].hash == hash ){
-				_soundBuffer[i].buffer = buffer;
-				_soundBuffer[i].loaded = true;
-				return true;
-			}
-		}
-
-		return false;
+	var insertBuffer = function( hash, buffer ) {
+    _soundBuffersHashMap[ hash ] = buffer;
+    setStatus( hash, 'loaded' );
+    return true;
 	}
 
   var updatePlayState = function(){
     // set the currentPlayed state
     // XXX: da fuck? rewrite: n -> 1
-    for(var i=0; i<_soundBuffer.length; i++) {
-      _soundBuffer[i].playing = i == _bufferPointer;
+    for(var i=0; i<_syncObjects.length; i++) {
+      _syncObjects[i].playing = i == _bufferPointer;
     }
+  }
+  
+  var setStatus = function( hash, status ){
+    
+    for(var i = 0; i<_syncObjects.length; i++) {
+      if( _syncObjects[i].hash == hash ){
+        switch ( status ) {
+          case 'loading':
+            
+            break;
+          case 'loaded': 
+            _syncObjects[i].loaded = true;
+            break;
+        }
+      }
+    }
+    return true;
+  }
+  
+  var getNextBuffer = function(){
+    return _soundBuffersHashMap[ _syncObjects[++_bufferPointer].hash ];
+  }
+  
+  var getBuffer = function( i ){
+    return _soundBuffersHashMap[ _syncObjects[i].hash ];
   }
 	
 
@@ -195,7 +219,7 @@ SyncQue = function( o ){
 	}
 	this.getSoundQueue = function(){
 		_bufferDataDeps.depend()
-		return _soundBuffer;
+		return _syncObjects;
 	}
 
 	this.getPointer = function(){
@@ -207,7 +231,9 @@ SyncQue = function( o ){
 		_bufferStateDeps.depend();
     // XXX: test why sometimes this is called with _bufferPointer == -1
     if(_bufferPointer != -1)
-      return _soundBuffer[_bufferPointer];
-    if(0 in _soundBuffer) return _soundBuffer[0];
+      return _syncObjects[_bufferPointer];
+    if(0 in _syncObjects) return _syncObjects[0];
 	}
+  
 }
+

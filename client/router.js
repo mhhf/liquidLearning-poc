@@ -157,11 +157,13 @@ Router.map(function() {
     data: function(){
       var project = Projects.findOne({ _id: this.params._id });
       window.project = project;
+      
       if( project ) {
        
         syncQue.initSounds( _.flatten(_.pluck(project.ast,'notes')) );
         
         return { 
+          _id: this.params._id,
           ttsObject: Syncs.find(),
           syncQue: syncQue,
           ast: project.ast,
@@ -203,11 +205,12 @@ Router.map(function() {
           // mark the current line as active
           $('.textContainer center span').removeClass('playing');
           if( pointer != -1 )
-        $('.textContainer center span#text_'+ele.hash).addClass('playing');
+            $('.textContainer center span#text_'+pointer).addClass('playing');
+        
         
       // mark the current blob as active
       $('.processWrapper li').removeClass('playing');
-      $('.processWrapper li#playstate_'+ele.hash).addClass('playing');
+      $('.processWrapper li#playstate_'+ele.i).addClass('playing');
         }
         
       });

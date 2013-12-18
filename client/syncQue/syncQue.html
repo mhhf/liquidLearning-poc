@@ -2,7 +2,7 @@
 	<div class="textContainer">
 		<center style="margin-top:1.35em;">
 			{{#each ttsObject}}
-			<span class="{{#if playing}}playing{{/if}}" id="text_{{hash}}"> 
+			<span class="{{#if playing}}playing{{/if}}" id="text_{{i}}"> 
 				{{text}}
 			</span><br />
 			{{/each}}
@@ -10,7 +10,7 @@
 	</div>
 	<ul class="processWrapper">
 		{{#each ttsObject}}
-		<li class="{{#if loaded}}loaded{{/if}}" id="playstate_{{hash}}">
+    <li class="{{#if loaded}}loaded{{/if}}" id="playstate_{{i}}">
 			<div></div>
 		</li>
 		{{/each}}
