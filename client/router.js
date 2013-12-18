@@ -200,11 +200,11 @@ Router.map(function() {
           $('.textContainer center span').removeClass('playing');
           if( pointer != -1 )
             $('.textContainer center span#text_'+pointer).addClass('playing');
-        
-        
-      // mark the current blob as active
-      $('.processWrapper li').removeClass('playing');
-      $('.processWrapper li#playstate_'+ele.i).addClass('playing');
+          
+          
+          // mark the current blob as active
+          $('.processWrapper li').removeClass('playing');
+          $('.processWrapper li#playstate_'+ele.i).addClass('playing');
         }
         
       });
