@@ -83,7 +83,7 @@ SyncQue = function( o ){
 				insertBuffer(ttsO.hash, buffer);
 				_bufferDataDeps.changed();
 			}, function(e,a){
-				console.log(request);
+				console.log(request, e);
 			});
 		}
 		request.send();
@@ -128,7 +128,7 @@ SyncQue = function( o ){
         //
         setTimeout( function(){
           playNext();
-        },50);
+        },250);
       });
 
       

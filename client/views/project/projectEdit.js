@@ -1,4 +1,5 @@
 Template.projectEdit.rendered = function(){
+  
   if( this.data.data )
     InstantPreview.setMarkdown( this.data.data );
 }
@@ -6,15 +7,26 @@ Template.projectEdit.rendered = function(){
 Template.projectEdit.events = {
   "click a.save": function(e,t){
     e.preventDefault();
-    var md = InstantPreview.getMarkdown();
-    var slides = InstantPreview.getSlides();
-    //
-    // [todo] - feedback
-    Meteor.call('saveFile', this._id, { 
-      md: md,
-      ast: slides,
-      'slidesLength': slides.length
-    });
+    
+    var _id = this._id;
+    
+    bootbox.prompt("What did you changed?", function(result) {                
+      if (result === null) {                                             
+        
+      } else {
+        var md = InstantPreview.getMarkdown();
+        var slides = InstantPreview.getSlides();
+        //
+        // [todo] - feedback
+        Meteor.call('saveFile', _id, { 
+          md: md,
+          ast: slides,
+          slidesLength: slides.length,
+          commitMsg: result
+        });
+      }
+    }); 
+    
   },
   "click a.preview": function(e, t){
     e.preventDefault();
@@ -30,6 +42,11 @@ Template.projectEdit.events = {
       }
       console.log('err');
     });
+  },
+  "click a.saveReadyBtn": function(e, t){
+    e.preventDefault();
     
+    var msg = t.find('#xlInput').value();
+    console.log(msg);
   }
 }

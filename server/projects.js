@@ -44,19 +44,36 @@ Meteor.methods({
   // [question] - save just markdown or the parsed slides for speed? 
   // [todo] - commit with commit message
   saveFile: function( _id, o ){
-    if( !( o.md && o.slidesLength && typeof o.slidesLength === 'number' && _id ) ) return false;
+    if( !( o.md && o.slidesLength && typeof o.slidesLength == 'number' && _id ) ) return false;
     
     var project = Projects.findOne({ _id: _id });
      
     // project has to be writable by user
     if( !project || !userHashPermissions(project, 'write') ) return null;
     
+    
+    // [TODO] - commit proces
     fs.writeFileSync( path + project.hash + '/index.md', o.md );
-    Projects.update({ _id: _id },{$set: { 
-      slides: o.slidesLength,
-      data: o.md,
-      ast: o.ast
-    }});
+    
+    
+    Projects.update({ _id: _id },{
+      $set: { 
+        slides: o.slidesLength,
+        data: o.md,
+        ast: o.ast
+      },
+      $push: {
+        activity: {
+          user: {
+            name: Meteor.user().username,
+            _id: Meteor.userId()
+          },
+          date: new Date(),
+          type: 'save',
+          msg: Meteor.user().username + ' saved new Version: ' + o.commitMsg
+        }
+      }
+    });
     
     return true;
   },
@@ -126,7 +143,8 @@ Meteor.methods({
     };
 
     // create index page
-    var index = fs.writeFileSync(path+hash+'/index.md','#Index\nthis is the index page');
+    var initialData = '#Index\nthis is the index page';
+    var index = fs.writeFileSync(path+hash+'/index.md', initialData );
 
     // extend the object
     // [TODO] - refactor user to creator
@@ -142,7 +160,10 @@ Meteor.methods({
         _id: Meteor.userId(),
         name: Meteor.user().username,
         right: "admin"
-      }]
+      }],
+      ast: {},
+      activity: [],
+      data: initialData
     });
 
     var id = Projects.insert(o);

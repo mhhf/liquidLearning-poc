@@ -1,6 +1,6 @@
 <template name="projectView">
 <div id="projectViewWrapper">
-  <a href="{{ pathFor 'projects' }}">... back to projects</a>
+  <!-- <a href="{{ pathFor 'projects' }}">... back to projects</a> -->
   <span class="info right">
     {{> star}}
     <a href="{{ pathFor 'projectDiscuss' }}"><i class="icon-comments"></i> discuss</a>
@@ -20,7 +20,23 @@
   <center>
     <h1>Project Page</h1>
   </center>
-
+  
+  <div class="row-fluid">
+    <div class="span10">
+      {{> activities}}
+    </div>
+  </div>
 
 </div>
+</template>
+
+<template name="activities">
+  {{#each activity}}
+    <div class="activityWrapper">
+      {{msg}}
+      {{#if save}}
+      <span class="iconWrapper"> <i class="icon-save"></i></span>
+      {{/if}}
+    </div>
+  {{/each}}
 </template>

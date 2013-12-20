@@ -7,7 +7,6 @@ var Fiber = Npm.require('fibers');
 // 2. provides an array of syncObject id's from the database
 //
 var getSyncsForNotesAsync = function( text, cb ){
-  console.log("get",text);
   var processed = [];
   var queue = 0;
 
@@ -19,6 +18,7 @@ var getSyncsForNotesAsync = function( text, cb ){
     tts = Syncs.findOne({ hash: hash });
     if(!tts){
       queue++;
+      console.log("synthesize :"+text[i]);
       
 
         Fiber( function(){

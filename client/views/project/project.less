@@ -24,7 +24,7 @@ ul#projectsWrapper {
     background: #fcf6ec;
   }
   position: relative;
-  h4,p {
+  h4,p,span {
     cursor: default;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -34,9 +34,7 @@ ul#projectsWrapper {
     user-select: none;
   }
 }
-.projectViewWrapper {
-  position: relative;
-}
+
 span.info{
   position: absolute;
   bottom: 10px;
@@ -47,7 +45,8 @@ span.info{
     left: 20px;
   }
 }
-#projectViewWrapper {
+
+#projectViewWrapper, #projectPreviewWrapper, #projectEditWrapper {
   position: relative;
   span.info{
     position: absolute;
@@ -86,4 +85,18 @@ ul.menue {
 
 table.memberTable {
   background: #fff;
+}
+
+.activityWrapper {
+  background: #fff;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  padding: 12px;
+  .iconWrapper {
+    float: right;
+  }
+  i {
+    color: #ccc;
+    font-size: 2em;
+  }
 }

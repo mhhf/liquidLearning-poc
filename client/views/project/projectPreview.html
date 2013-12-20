@@ -1,4 +1,10 @@
 <template name="projectPreview">
-  <a href="{{pathFor 'projectEdit' }}">... edit</a>
+  <div id="projectPreviewWrapper">
+    <a href="{{pathFor 'projectEdit' }}">{{project.user.name}}</a> /
+    <a href="{{pathFor 'projectView' }}">{{project.name}}</a>
+    <span class="info right">
+      <a href="{{ pathFor 'projectEdit' }}"><i class="icon-pencil"></i> edit</a>
+    </span>
+  </div>
   {{> player}}
 </template>

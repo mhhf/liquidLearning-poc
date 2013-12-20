@@ -194,7 +194,7 @@ Router.map(function() {
         
         if(ele) {
           // align the top position of the subtitles
-          $('.textContainer center').css('margin-top',-1.35*pointer+'em');
+          $('.textContainer center').css('margin-top',-20*pointer+'px');
           
           // mark the current line as active
           $('.textContainer center span').removeClass('playing');

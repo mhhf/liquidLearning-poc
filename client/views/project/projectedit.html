@@ -1,7 +1,8 @@
 <template name="projectEdit">
   <div class="row-fluid">
-    <div class="span10 offset1 projectViewWrapper">
-      <a href="{{ pathFor 'projectView' }}">... back to project</a>
+    <div id="projectEditWrapper" class="span10 offset1 projectViewWrapper">
+      <a href="{{ pathFor 'projectView' }}">{{user.name}}</a> /
+      <a href="{{ pathFor 'projectView' }}">{{name}}</a>
       <span class="info right">
         <a class="save" href="#"><i class="icon-save"></i> save</a>
         <a class="preview" href="#"><i class="icon-eye-open"></i> preview</a>
