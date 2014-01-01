@@ -54,6 +54,8 @@ comments = function( num ){
   return num+" comments";
 }
 
+
+// [TODO] - export to helper
 timeSince = function(date) {
 
     var seconds = Math.floor((new Date() - date) / 1000);
@@ -81,5 +83,3 @@ timeSince = function(date) {
     }
     return Math.floor(seconds) + " seconds";
 }
-
-

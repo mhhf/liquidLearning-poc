@@ -70,7 +70,7 @@ Meteor.methods({
           },
           date: new Date(),
           type: 'save',
-          msg: Meteor.user().username + ' saved new Version: ' + o.commitMsg
+          msg: o.commitMsg
         }
       }
     });

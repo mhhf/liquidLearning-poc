@@ -31,12 +31,17 @@
 </template>
 
 <template name="activities">
+<ul class="activities">
   {{#each activity}}
-    <div class="activityWrapper">
-      {{msg}}
-      {{#if save}}
-      <span class="iconWrapper"> <i class="icon-save"></i></span>
-      {{/if}}
-    </div>
+  <li class="activityWrapper">
+    {{#if save}}
+    <span class="iconWrapper"> <i class="icon-save"></i></span>
+    {{/if}}
+    {{msg}}
+    <span class="activityInfo">
+      {{user.name}}, &nbsp;&nbsp;&nbsp; {{getDate}} ago
+    </span>
+  </li>
   {{/each}}
+</ul>
 </template>
