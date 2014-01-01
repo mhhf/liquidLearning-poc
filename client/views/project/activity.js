@@ -1,6 +1,14 @@
+// [TODO] - find better name than activity 
+// 
 Template.activities.getDate = function(){
   return timeSince( this.date );
 }
+
+Template.activities.getActivities = function(){
+  // return this.activity.slice(0,10); 
+  return this.activity;
+}
+
 
 timeSince = function(date) {
 

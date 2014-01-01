@@ -15,14 +15,13 @@
   <h2>{{name}}</h2>
   <p>{{description}}</p>
 
-
-
   <center>
     <h1>Project Page</h1>
   </center>
   
   <div class="row-fluid">
     <div class="span10">
+      <h2>History</h2>
       {{> activities}}
     </div>
   </div>
@@ -32,14 +31,14 @@
 
 <template name="activities">
 <ul class="activities">
-  {{#each activity}}
+  {{#each getActivities}}
   <li class="activityWrapper">
     {{#if save}}
     <span class="iconWrapper"> <i class="icon-save"></i></span>
     {{/if}}
     {{msg}}
     <span class="activityInfo">
-      {{user.name}}, &nbsp;&nbsp;&nbsp; {{getDate}} ago
+      {{user.name}}, &nbsp; {{getDate}} ago
     </span>
   </li>
   {{/each}}
