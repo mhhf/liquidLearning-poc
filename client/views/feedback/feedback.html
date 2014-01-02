@@ -1,33 +1,35 @@
 <template name="feedback">
+<div class="row-fluid">
+  <div class="span2">
+  
+  </div>
+  
+  <div class="span10">
+    <a class="btn btn-primary newFeedbackBtn" href="{{pathFor 'feedbackNew'}}">new feedback</a>
 
-<ul class="feedback">
-  <li><a class="btn btn-primary" href="{{pathFor 'feedbackNew'}}">new feedback</a></li>
-  {{#each feedback}}
-  <li>
-  <div>
-    <a href="{{pathFor 'feedbackPost'}}">
-      <h3>{{ title }}</h3>
-    </a>
+    <ul class="feedback">
+      {{#each feedback}}
+      <li>
+      <a class="mainTitle" href="{{pathFor 'feedbackPost'}}">
+        {{ title }}
+      </a>
+      <!-- <p>{{message}}</p> -->
+      {{> star }}
+      <span class="comments">
+        <i class="icon-comment"></i>
+        <a href="{{pathFor 'feedbackPost'}}">
+          {{comments}} 
+        </a>
+      </span>
+      <span class="mainInfo">
+        <span class="user"><i class="icon-user"></i> {{user.name}}</span>
+        <span class="time"><i class="icon-time"></i> {{getDate}}</span>
+      </span>
+      </li>
+      {{/each}}
+    </ul>
   </div>
-  <!-- <p>{{message}}</p> -->
-  {{> star }}
-  <span class="user"><i class="icon-user"></i> {{user.name}}</span>
-  <span class="time"><i class="icon-time"></i> {{getDate}}</span>
-  <span class="comments">
-    <i class="icon-comment"></i>
-    <a href="{{pathFor 'feedbackPost'}}">
-      {{comments}} 
-    </a>
-  </span>
-  {{#if replay}}
-  <div class="replayText">
-    <textarea name="message" rows="4" cols="30"></textarea><br/>
-    <button name="submit" class="btn btn-primary">Submit</button>
-  </div>
-  {{else}}
-  <a href="#" class="replayBtn">&nbsp;replay</a>
-  {{/if}}
-  </li>
-  {{/each}}
-</ul>
+</div>
+
+
 </template>

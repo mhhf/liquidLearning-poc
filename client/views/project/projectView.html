@@ -5,7 +5,7 @@
     {{> star}}
     <a href="{{ pathFor 'projectDiscuss' }}"><i class="icon-comments"></i> discuss</a>
     {{#if currentUser }}
-    <a href="#" name="fork"><i class="icon-code-fork"></i> fork</a>
+    <a href="#" name="fork" class="notDoneYet"><i class="icon-code-fork"></i> fork</a>
     <a href="{{ pathFor 'projectPreview' }}"><i class="icon-eye-open"></i> preview</a>
     <a href="{{ pathFor 'projectEdit' }}"><i class="icon-pencil"></i> edit</a>
     <a href="{{ pathFor 'projectSettings' }}"><i class="icon-cog"></i> settings</a>
@@ -20,7 +20,7 @@
   </center>
   
   <div class="row-fluid">
-    <div class="span10">
+    <div class="span12">
       <h2>History</h2>
       {{> activities}}
     </div>

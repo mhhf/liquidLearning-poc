@@ -28,8 +28,6 @@ Meteor.publish('userProjects', function(o){
 
 
 
-
-// [TODO] - export user right check to function
 Meteor.methods({
   openFile: function( projectId ){
     
@@ -269,16 +267,16 @@ Meteor.methods({
 var deleteFolderRecursive = function(path) {
     var files = [];
     if( fs.existsSync(path) ) {
-        files = fs.readdirSync(path);
-        files.forEach(function(file,index){
-            var curPath = path + "/" + file;
-            if(fs.statSync(curPath).isDirectory()) { // recurse
-                deleteFolderRecursive(curPath);
-            } else { // delete file
-                fs.unlinkSync(curPath);
-            }
-        });
-        fs.rmdirSync(path);
+      files = fs.readdirSync(path);
+      files.forEach(function(file,index){
+        var curPath = path + "/" + file;
+        if(fs.statSync(curPath).isDirectory()) { // recurse
+          deleteFolderRecursive(curPath);
+        } else { // delete file
+          fs.unlinkSync(curPath);
+        }
+      });
+      fs.rmdirSync(path);
     }
 };
 
