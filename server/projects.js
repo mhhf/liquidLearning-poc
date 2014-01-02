@@ -61,18 +61,13 @@ Meteor.methods({
         slides: o.slidesLength,
         data: o.md,
         ast: o.ast
-      },
-      $push: {
-        activity: {
-          user: {
-            name: Meteor.user().username,
-            _id: Meteor.userId()
-          },
-          date: new Date(),
-          type: 'save',
-          msg: o.commitMsg
-        }
       }
+    });
+    
+    postActivity( {
+      _id: _id,
+      type: 'save',
+      msg: o.commitMsg
     });
     
     return true;
@@ -301,3 +296,18 @@ var userRightToNumber = function( right ){
   return right=='admin'?3:(right=='write'?2:1);
 }
 
+var postActivity = function( o ) {
+  Projects.update({ _id: o._id }, {
+    $push: {
+      activity: {
+        user: {
+          name: Meteor.user().username,
+          _id: Meteor.userId()
+        },
+        date: new Date(),
+        type: o.type,
+        msg: o.msg
+      }
+    }
+  });
+}

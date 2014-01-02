@@ -39,15 +39,12 @@ Git = {
                     repo.getCommit(head, function(getCommitError, parent) {
                     if (getCommitError) throw getCommitError;
                         
-                      repo.createCommit('HEAD', sig, sig, msg, oid, [parent], function(error, commitId) {
-                        console.log("New Commit:", commitId.sha());
-                      });
+                      repo.createCommit('HEAD', sig, sig, msg, oid, [parent], function(error, commitId) {});
                       
                     });
                   } else {
                     
                     repo.createCommit('HEAD', sig, sig, msg, oid, [], function(error, commitId) {
-                      console.log("New Commit:", commitId.sha());
                     });
                   }
                   
