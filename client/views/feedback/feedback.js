@@ -32,6 +32,12 @@ Template.feedback.comments = function(){
   return comments(this.comments && this.comments.length);
 }
 
+Template.feedback.getIcon = function(){
+  // poll, discussion, task
+  // icon-check, icon-bar-chart
+  return 'icon-comments';
+}
+
 
 Template.feedback.events = {
 	"click .replayBtn": function(e,t){

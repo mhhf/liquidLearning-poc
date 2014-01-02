@@ -1,18 +1,25 @@
 <template name="feedback">
+
+<a class="btn btn-primary newFeedbackBtn" href="{{pathFor 'feedbackNew'}}">new feedback</a>
+
 <div class="row-fluid">
   <div class="span2">
-  
+    <ul>
+      <li>polls</li>
+      <li>discussions</li>
+    </ul>
   </div>
   
   <div class="span10">
-    <a class="btn btn-primary newFeedbackBtn" href="{{pathFor 'feedbackNew'}}">new feedback</a>
 
     <ul class="feedback">
       {{#each feedback}}
       <li>
+      <span class="iconWrapper"> <i class="{{getIcon}}"></i></span> 
       <a class="mainTitle" href="{{pathFor 'feedbackPost'}}">
         {{ title }}
       </a>
+      <br />
       <!-- <p>{{message}}</p> -->
       {{> star }}
       <span class="comments">
