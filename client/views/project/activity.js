@@ -6,7 +6,7 @@ Template.activities.getDate = function(){
 
 Template.activities.getActivities = function(){
   // return this.activity.slice(0,10); 
-  return this.activity;
+  return this.activity.reverse().slice(0,15);
 }
 
 

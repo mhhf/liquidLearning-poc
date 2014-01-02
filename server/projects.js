@@ -3,6 +3,8 @@
 // http://www.nodegit.org/nodegit/#Repo-init
 var git = Meteor.require('nodegit');
 var fs = Npm.require('fs');
+
+// [TODO] - export path to global settings
 var path = "/Users/mhhf/llWd/";
 
 
@@ -41,20 +43,18 @@ Meteor.methods({
     var data = fs.readFileSync( path+project.hash+'/index.md', "utf8" );
     return data;
   },
+  // 
   // [question] - save just markdown or the parsed slides for speed? 
   // [todo] - commit with commit message
   saveFile: function( _id, o ){
     if( !( o.md && o.slidesLength && typeof o.slidesLength == 'number' && _id ) ) return false;
     
     var project = Projects.findOne({ _id: _id });
-     
+    
     // project has to be writable by user
     if( !project || !userHashPermissions(project, 'write') ) return null;
     
-    
-    // [TODO] - commit proces
-    fs.writeFileSync( path + project.hash + '/index.md', o.md );
-    
+    Git.commit( o.commitMsg, path, project, o.md );
     
     Projects.update({ _id: _id },{
       $set: { 
