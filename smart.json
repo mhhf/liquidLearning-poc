@@ -12,7 +12,7 @@
       "path": "/Users/mhhf/work/meteor/packages/instantPreview"
     },
     "slideParser": {
-      "git": "git@bitbucket.org:liquidlearningdev/slideparser.git"
+      "path": "/Users/mhhf/work/meteor/packages/slideParser"
     },
     "marked": {},
     "GAnalytics": {},
