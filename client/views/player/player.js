@@ -17,16 +17,3 @@ Template.player.events({
 		syncQue.play();
 	},
 });
-
-// [TODO] - ! write a package html parser and return the html here
-Template.slidesDisplay.currentSlide = function(){
-  var pointer = syncQue.getPointer();
-    
-  if( syncQue && syncQue.getElement().slideIndex in this.ast ) {
-    var html = this.ast[ syncQue.getElement().slideIndex ].md;
-    console.log(html[0]);
-    return marked( html[0] );
-  }
-  return '';
-}
-

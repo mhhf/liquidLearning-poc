@@ -17,3 +17,7 @@ blocking
 slideParser
 instantPreview
 bootboxjs
+/iron-router
+/spin
+/slideParser
+/aws-sdk

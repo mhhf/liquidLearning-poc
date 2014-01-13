@@ -1,9 +1,3 @@
-Template.projectEdit.rendered = function(){
-  
-  if( this.data.data )
-    InstantPreview.setMarkdown( this.data.data );
-}
-
 Template.projectEdit.events = {
   "click a.save": function(e,t){
     e.preventDefault();

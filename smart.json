@@ -8,12 +8,6 @@
     "tts": {
       "path": "/Users/mhhf/work/meteor/packages/tts"
     },
-    "instantPreview": {
-      "path": "/Users/mhhf/work/meteor/packages/instantPreview"
-    },
-    "slideParser": {
-      "path": "/Users/mhhf/work/meteor/packages/slideParser"
-    },
     "marked": {},
     "GAnalytics": {},
     "bootboxjs": {}

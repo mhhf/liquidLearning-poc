@@ -18,9 +18,9 @@ editor
 marked
 GAnalytics
 relocator
-slideParser
 instantPreview
 accounts-password
 accounts-ui
 npm
 bootboxjs
+llmdParser
