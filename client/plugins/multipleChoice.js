@@ -1,12 +1,10 @@
-
+// [TODO] - make template interactive - wait for the new rendering engine
 PluginController.loadPlugin("multipleChoice", {
   getFragment: function( obj ){
     var html = "";
     
-    
     var tmp = Template.pkg_multipleChoice(obj);
     var docFragment = Meteor.render( tmp );
-    
     
     
     return docFragment;
