@@ -17,9 +17,9 @@ Template.slide.rendered = function(e,t){
       // [TODO] - rename md to slideObject
       var html = template.data.ast[ syncQue.getElement().slideIndex ].md;
       var fragment = buildSlide( html );
-      
-      template.find('#slideWrapper').appendChild( fragment );
-      // console.log(template);
+      var wrapper = template.find('#slideWrapper');
+      wrapper.innerHTML = '';
+      wrapper.appendChild( fragment );
     });
   }
 }
