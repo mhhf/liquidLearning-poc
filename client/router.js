@@ -142,11 +142,6 @@ Router.map(function() {
     path: '/project/preview/:_id',
     
     waitOn: function(a,b){
-      // // [TODO] - free from session
-      // var slides= InstantPreview.getSlides();
-      // Session.set('slides',slides);
-      // var notes =  _.flatten(_.pluck(slides,'notes'));
-      // return Meteor.subscribe('text', notes );
       return Meteor.subscribe('userProjects');
     },
     

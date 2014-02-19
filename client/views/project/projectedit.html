@@ -11,6 +11,15 @@
     </div>
   </div>
   <div class="instantPreviewWrapper">
-    {{> instantPreview}}
+    <div class="row-fluid">
+      <div id="editorWrapper" class="span6">
+        {{#isolate}}
+        <div id="editor"></div>
+        {{/isolate}}
+      </div>
+      <div class="span6">
+        <div id="preview"></div>
+      </div>
+    </div>
   </div>
 </template>
