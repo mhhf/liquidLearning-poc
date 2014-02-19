@@ -184,10 +184,10 @@ Router.map(function() {
       return null;
     },
     
-    action: function(data){
+    action: function(data) {
     
-      // Visuals
-      // [TODO] - free from router
+      // Subtitle Visuals
+      // [TODO] - free from router - wait for shark rendering engine #UI
       Deps.autorun( function(){
         var ele = syncQue.getElement();
         var pointer = syncQue.getPointer();
@@ -210,6 +210,10 @@ Router.map(function() {
       });
       
       this.render();
+    },
+    
+    unload: function(){
+      syncQue.stop();
     }
   });
 });
