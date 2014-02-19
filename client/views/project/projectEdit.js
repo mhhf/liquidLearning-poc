@@ -18,8 +18,8 @@ Template.projectEdit.destroyed = function(){
 
 Template.projectEdit.rendered = function(){
   
+  // init needet due to own plugin injection
   if(!init) {
-    // [TODO] - check if initalisation stop is necessary
     init = true;
     _template = this;
     
