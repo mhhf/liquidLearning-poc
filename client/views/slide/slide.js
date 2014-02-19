@@ -4,8 +4,9 @@ Template.slide.rendered = function(e,t){
   
   var template = this;
   
+  console.log(init);
   if( !init ) {
-    init = true;
+    // init = true;
     Deps.autorun( function(e,t){
       
       var pointer = syncQue.getPointer();

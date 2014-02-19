@@ -9,18 +9,18 @@ var currentLine = -1;
 var currentSlide = -1;
 
 var editor;
-var init = false;
 
+Template.projectEdit.destroyed = function(){
+  editor = null;
+}
 
 Template.projectEdit.rendered = function(){
-  
-  if(!init) {
-    // [TODO] - check if initalisation stop is necessary
-    init = true;
-    _template = this;
-    
-    value = this.data.data;
 
+  _template = this;
+
+  value = this.data.data;
+
+  if(!editor) {
     editor = CodeMirror(this.find('#editor'),{
       value: value,
       mode:  "markdown",
@@ -38,7 +38,7 @@ Template.projectEdit.rendered = function(){
       // display it
       displaySlide();
     });
-    
+
     // [FIXME] - clean initial state
     editor.on('cursorActivity', function(i,o){
       console.log('ca');
@@ -46,11 +46,13 @@ Template.projectEdit.rendered = function(){
         displaySlide(); // display the changed slide
       }
     });
-    if(value) {
-      parseLlmd();
-      positionHasChanged();
-      displaySlide();
-    }
+  } else {
+    console.log(editor);
+  }
+  if(value) {
+    parseLlmd();
+    positionHasChanged();
+    displaySlide();
   }
 }
 
