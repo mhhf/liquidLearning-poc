@@ -207,7 +207,9 @@ SyncQue = function( o ){
   //////////////////////////////////////////////////////       Stop
   ///////////////////////////////////////////////////////////////////////////
 	this.stop = function(){
-		if( _currentSource ) {
+		if( _currentSource 
+        && _currentSource.playbackState == _currentSource.PLAYING_STATE 
+    ) {
       _currentSource.stop(0);
       _currentSource.onended = null;
     }
