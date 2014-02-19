@@ -9,50 +9,53 @@ var currentLine = -1;
 var currentSlide = -1;
 
 var editor;
+var init = false;
 
 Template.projectEdit.destroyed = function(){
   editor = null;
+  init = false;
 }
 
 Template.projectEdit.rendered = function(){
+  
+  if(!init) {
+    // [TODO] - check if initalisation stop is necessary
+    init = true;
+    _template = this;
+    
+    value = this.data.data;
 
-  _template = this;
+    if(!editor) {
+      editor = CodeMirror(this.find('#editor'),{
+        value: value,
+        mode:  "markdown",
+        lineNumbers: true,
+        extraKeys: {"Ctrl-J": "autocomplete"}
+      });
 
-  value = this.data.data;
-
-  if(!editor) {
-    editor = CodeMirror(this.find('#editor'),{
-      value: value,
-      mode:  "markdown",
-      lineNumbers: true,
-      extraKeys: {"Ctrl-J": "autocomplete"}
-    });
-
-    // When the markup is changed
-    editor.on('change', function(i,o){
-      // Parse the markup
+      // When the markup is changed
+      editor.on('change', function(i,o){
+        // Parse the markup
+        parseLlmd();
+        // update the display
+        // pick what to display
+        positionHasChanged();
+        // display it
+        displaySlide();
+      });
+      
+      // [FIXME] - clean initial state
+      editor.on('cursorActivity', function(i,o){
+        if( positionHasChanged() ) { // and slide changed
+          displaySlide(); // display the changed slide
+        }
+      });
+    }
+    if(value) {
       parseLlmd();
-      // update the display
-      // pick what to display
       positionHasChanged();
-      // display it
       displaySlide();
-    });
-
-    // [FIXME] - clean initial state
-    editor.on('cursorActivity', function(i,o){
-      console.log('ca');
-      if( positionHasChanged() ) { // and slide changed
-        displaySlide(); // display the changed slide
-      }
-    });
-  } else {
-    console.log(editor);
-  }
-  if(value) {
-    parseLlmd();
-    positionHasChanged();
-    displaySlide();
+    }
   }
 }
 
