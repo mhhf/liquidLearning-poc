@@ -5,9 +5,24 @@
   }
 }
 
-#slideWrapper, #preview {
+#preview {
   border: 1px dotted #aaa;
   width: 540px;
   height: 337px;
   overflow: scroll;
 }
+
+#slideWrapper {
+  padding: 0 100px;
+}
+#slideWrapper div div {
+  -webkit-transition: all 0.5s ease;
+}
+#slideWrapper div div:last-child {
+  font-weight: bold;
+  font-size: 2em;
+  li {
+    line-height: 1.5em;
+  }
+}
+
