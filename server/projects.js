@@ -73,6 +73,7 @@ Meteor.methods({
   
   
   
+  // [TODO] - "sentance" and "sentance " has different hashes but same mp3url hash? - BUG!
   // Build the ast
   // maps the syncs to the ast notes
   buildProject: function( _id ){
@@ -81,7 +82,8 @@ Meteor.methods({
     var project = Projects.findOne( { _id: _id } );
     var ast = project.ast;
     
-    var notes =  _.filter(_.flatten(_.pluck(ast,'notes')), function( s ){
+    // Grab all notes
+    var notes =  _.filter(_.flatten(_.pluck(ast,'exp')), function( s ){
       return typeof s == 'string';
     });
     
@@ -92,20 +94,21 @@ Meteor.methods({
     //   return o.i;
     // });
     
+    // Result after the sythesize process
     result = _.map(Syncer.getSyncsForNotes( notes ), function(o){
       delete o.i;
       return o;
     });
     
+    
     // Substitude the string with the syncs object
-    // 
     var newAst = _.map(ast, function(o){ // each slide
-      o.notes = _.map(o.notes, function(n){ // each note
-        // Substitude note with syncObject
-        if( typeof n == 'string' )
-          return _.find(result, function(r){ return r.text == n; }); 
-        return n;
-      }); 
+      if( o.exp ) o.exp = _.map(o.exp, function(n) { // each note
+          // Substitude note with syncObject
+          if( typeof n == 'string' )
+            return _.find(result, function(r){ return r.text == n; }); 
+          return n;
+        }); 
       return o;
     });
     

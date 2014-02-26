@@ -82,8 +82,8 @@ SyncQue = function( o ){
 			context.decodeAudioData( request.response, function(buffer) {
 				insertBuffer(ttsO.hash, buffer);
 				_bufferDataDeps.changed();
-			}, function(e,a){
-				console.log(request, e);
+			}, function(e){
+				console.log(request, e,a,b, ttsO.link);
 			});
 		}
 		request.send();
