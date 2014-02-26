@@ -30,11 +30,11 @@ buildSlide = function( o ){
   var fragment = document.createElement('div');
   
   o.forEach( function( obj ){
-    if( typeof obj == 'string' ) { // simple Markdown
+    if( typeof obj.md == 'string' ) { // simple Markdown
       var divWrapper = document.createElement('div');
-      divWrapper.innerHTML = marked( obj );
+      divWrapper.innerHTML = marked( obj.md );
       fragment.appendChild( divWrapper );
-    } else { // package
+    } else if( typeof obj.package == 'string' ){ // package
       var packageObject =  JSON.parse( obj.data );
       
       // look for package

@@ -110,8 +110,11 @@ Template.projectEdit.events = {
 
 // render the current slide to the preview
 var displaySlide = function( slide ){
+  // [TODO] - dafuck? why is this global?
   var slide = window.slide;
-  var ast = slides[ slide == null?currentSlide:slide ].md;
+  var ast = _.filter(slides.slice(0,currentSlide+1), function(block){
+      return block.exp == null;
+    });
   var fragment = buildSlide( ast ) ;
   var previewWrapper = _template.find('#preview');
   previewWrapper.innerHTML = '';
