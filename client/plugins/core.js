@@ -32,7 +32,7 @@ buildSlide = function( o ){
   
   o.forEach( function( obj ){
     if( typeof obj.md == 'string' ) { // simple Markdown
-      var divWrapper = document.createElement('div');
+      var divWrapper = document.createElement('span');
       divWrapper.innerHTML = marked( obj.md );
       fragment.appendChild( divWrapper );
     } else if( typeof obj.package == 'string' ){ // package

@@ -14,15 +14,21 @@
 
 #slideWrapper {
   padding: 0 100px;
+  height: 400px;
+  overflow: scroll;
+  position: relative;
 }
-#slideWrapper div div {
-  -webkit-transition: all 0.5s ease;
+#slideWrapper div{
+  -webkit-transition: all 0.8s ease;
 }
-#slideWrapper div div:last-child {
+#slideWrapper div:last-child{
+  margin-top: 100px;
+  margin-bottom: 100px;
   font-weight: bold;
-  font-size: 2em;
+  font-size: 1.5em;
+  margin-left: 20%;
   li {
-    line-height: 1.5em;
+    line-height: 1.2em;
   }
 }
 
