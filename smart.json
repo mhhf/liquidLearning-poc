@@ -1,6 +1,5 @@
 {
   "packages": {
-    "iron-router": {},
     "bootstrap-wysiwyg": {},
     "belt-md5": {},
     "spin": {},
@@ -10,6 +9,8 @@
     },
     "marked": {},
     "GAnalytics": {},
-    "bootboxjs": {}
+    "bootboxjs": {},
+    "iron-router": {
+    }
   }
 }

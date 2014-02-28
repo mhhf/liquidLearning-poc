@@ -2,7 +2,6 @@
   "meteor": {},
   "dependencies": {
     "basePackages": {
-      "iron-router": {},
       "bootstrap-wysiwyg": {},
       "belt-md5": {},
       "spin": {},
@@ -12,14 +11,10 @@
       },
       "marked": {},
       "GAnalytics": {},
-      "bootboxjs": {}
+      "bootboxjs": {},
+      "iron-router": {}
     },
     "packages": {
-      "iron-router": {
-        "git": "https://github.com/EventedMind/iron-router.git",
-        "tag": "v0.6.2",
-        "commit": "ce56e58b45624dce992490f3a1c10f10d3948bae"
-      },
       "bootstrap-wysiwyg": {
         "git": "https://github.com/mcrider/meteor-bootstrap-wysiwyg.git",
         "tag": "v0.1.0",
@@ -45,8 +40,8 @@
       },
       "marked": {
         "git": "https://github.com/chuangbo/meteor-marked.git",
-        "tag": "v0.2.9",
-        "commit": "6485d6f03841501f81176e34ab375840473aa714"
+        "tag": "v0.3.1",
+        "commit": "3d9a9c94793b20e1ee7c807931cb536010d6f820"
       },
       "GAnalytics": {
         "git": "https://github.com/datariot/meteor-ganalytics.git",
@@ -57,6 +52,11 @@
         "git": "https://github.com/TimHeckel/meteor-bootboxjs.git",
         "tag": "v3.2.2",
         "commit": "580adfebfa12b4d2186a80cec1109dab74ad6228"
+      },
+      "iron-router": {
+        "git": "https://github.com/EventedMind/iron-router.git",
+        "tag": "v0.6.4",
+        "commit": "927bbaed1b87894fb6fb70807f74ff3a5bd89f29"
       },
       "relocator": {
         "git": "git@bitbucket.org:liquidlearningdev/relocator.git",
