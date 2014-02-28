@@ -39,7 +39,7 @@ buildSlide = function( o ){
       var packageObject =  JSON.parse( obj.data );
       
       // look for package
-      var plugin = PluginController.getPlugin( obj.name );
+      var plugin = PluginController.getPlugin( obj.package );
       if( !plugin ) return false;
       
       // compile html

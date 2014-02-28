@@ -7,7 +7,6 @@ standard-app-packages
 insecure
 preserve-inputs
 bootstrap
-iron-router
 less
 bootstrap-wysiwyg
 belt-md5
@@ -23,3 +22,4 @@ accounts-ui
 npm
 bootboxjs
 llmdParser
+iron-router

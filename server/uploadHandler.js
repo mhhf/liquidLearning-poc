@@ -6,7 +6,7 @@ Meteor.startup( function(){
     awsId: 'AKIAIAZ7MFEB2LGSKTYQ',
     awsSecret: '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',
 		s3bucket: 'liquidlearning-poc',
-		service: "tts"
+		service: "acapella"
 	});
 
 });
