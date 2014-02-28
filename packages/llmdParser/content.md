@@ -1,5 +1,1 @@
-{{multipleChoice {
-	"questions": [
-    	{"question": true }
-    ]
-}}}
+{{ packageName {} }}

@@ -3,6 +3,7 @@
 /* lexical grammar */
 %lex
 %x code
+%x expBlock
 %x package
 %x packagename
 %x packagecontent
@@ -19,16 +20,16 @@ BL                    ({EOL}*{WS}*)*
 /*%token block*/
 
 
-<*>{EOL}*<<EOF>>           return 'EOF'
+<*><<EOF>>           return 'EOF'
 <*>{EOL}                   return 'EOL'
 
 <INITIAL>'```'{NEOL}*      { this.begin('code'); return 'BEGIN_CODE'; }
 <code>'```'{NEOL}*         { this.popState(); return 'END_CODE'; }
 <code>{NEOL}*              { return 'CODELINE'; }
 
-<INITIAL>'{{'{BL}          { this.begin('packagename'); return 'BEGIN_PACKAGE' }
+<INITIAL>'{{>'{BL}          { this.begin('packagename'); return 'BEGIN_PACKAGE' }
 <packagename>\w*           { this.popState(); this.begin('package'); return 'PACKAGENAME' }
-<package>'}}'              { this.popState(); return 'END_PACKAGE'; }
+<package>\s*'}}'              { this.popState(); return 'END_PACKAGE'; }
 
 /* [todo] - parse json, not lines */
 <package,packagecontent>{BL}*'{'           { this.begin('packagecontent'); return 'BRACE_OPEN';  }
@@ -37,9 +38,9 @@ BL                    ({EOL}*{WS}*)*
 
 
 
-'---'{NEOL}*               return 'SLIDE_SEPERATOR'
-'???'{NEOL}*               return 'NOTES_SEPERATOR'
-{NEOL}*                    return 'LINE'
+<INITIAL>'{{#???}}'{NEOL}*               { this.begin('expBlock'); return 'BEGIN_EXP'; }
+<expBlock>'{{/???}}'{NEOL}*     { this.popState(); return 'END_EXP'; }
+<*>{NEOL}*                    return 'LINE'
 .                          return 'INVALID'
 
 
@@ -51,33 +52,53 @@ BL                    ({EOL}*{WS}*)*
 
 %% /* language grammar */
 
-MDARKDOWN : SLIDES { return $1; };
+MDARKDOWN: BLOCKS EOF 
+         { 
+          cleanBlocks = (function( bs ){
+            var blocks = [];
+            var l;
+            if( 0 in bs )
+              l = bs[0];
+              
+            for(var i = 1; i<bs.length; i++) {
+              if(bs[i]['md'] && l['md']) {
+                l['md'] += bs[i]['md'];
+                l.to = bs[i].to;
+              } else {
+                blocks.push(l)
+                l = bs[i];
+              }
+            }
+            if( l )
+              blocks.push(l);
+            return blocks;
+          })
+         return cleanBlocks($1); 
+         } ;
 
-SLIDES 
-    : SLIDE SLIDE_SEPERATOR EOS SLIDES
+BLOCKS
+    : BLOCK BLOCKS
       { 
-        var slide = [{ 
-          from: @1.first_line, 
-          to: @1.last_line, 
-          md: $1.md, 
-          notes: $1.notes
-        }];
-        $$ = slide.concat( $4 );
+        var block = $1;
+        block.from = @1.first_line;
+        block.to = @1.last_line;
+        $$ = [$1].concat($2); 
       }
-    | SLIDE
-      { 
-        $$ = [{ 
-          from: @1.first_line, 
-          to: @1.last_line, 
-          md: $1.md, 
-          notes: $1.notes
-          }];
-      }
+    | 
+      { $$ = []; }
     ;
 
-SLIDE
-    : MD NOTES_SEPERATOR OPT_NOTES
+BLOCK
+    : BEGIN_EXP EOS EXP_BLOCK END_EXP EOS
       { 
+        $$ = { exp: $3 };
+      }
+    | BEGIN_PACKAGE PACKAGENAME PACKAGELINES END_PACKAGE EOL
+      { $$ = { package:$2, data: $3 }; }
+    | BEGIN_CODE EOS CODELINES END_CODE EOS
+      { $$ = [$1+$2+$3+$4+($6.length>0?$5:'')]; }
+    | MD
+      {
         cleanMd = (function(arr){
           var o = [];
           var lastStr = "";
@@ -95,42 +116,30 @@ SLIDE
           if( lastStr != '' ) o.push(lastStr);
           return o;
         });
-        $$ = { md: cleanMd($1), notes: $3 }; 
-      }
-    | MD
-      { $$ = { md: $1, notes: [] }; }
+      //$$ = { md: cleanMd($1) }; }
+      $$ = { md: $1 }; }
     ;
 
-OPT_NOTES
-    : EOS NOTES 
-      { $$ = $2; }
-    | EOS
-      { $$ = []; }
-    ;
 
 // TODO: fucking extract sentences
-NOTES
-    : LINE EOS NOTES
+EXP_BLOCK
+    : LINE EOS EXP_BLOCK
       { $$ = [$1].concat($3); }
-    | LINE EOS
-      { $$ = [$1]; }
-    | EOS NOTES
+    | EOS EXP_BLOCK
       { $$ = $2; }
-    | EOS
+    | 
       { $$ = []; }
     ;
 
 MD 
-    : LINE EOS MD
-      { $$ = [$1+($3.length>0?$2:'')].concat($3); }
-    | BEGIN_PACKAGE PACKAGENAME PACKAGELINES END_PACKAGE EOS MD
-      { $$ = [{ type:"package", name: $2, data: $3 }].concat($6); }
-    | BEGIN_CODE EOS CODELINES END_CODE EOS MD
-      { $$ = [$1+$2+$3+$4+($6.length>0?$5:'')].concat($6); }
-    | EOS MD
-      { $$ = [$2.length>0?$1:''].concat($2); }
-    |
-      { $$ = []; }
+    /*: LINE EOL MD*/
+    /*  { $$ = [$1+($3.length>0?$2:'')].concat($3); }*/
+    : LINE EOL
+      { $$ = $1 + $2; }
+    /*| EOL MD*/
+    /*  { $$ = $2; }*/
+    | EOL
+      { $$ = $1; }
     ;
 
 // [todo] - parse package name and opt json option
