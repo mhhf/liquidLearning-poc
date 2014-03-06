@@ -80,6 +80,8 @@ Meteor.methods({
     
     // [TODO] - acl
     var project = Projects.findOne( { _id: _id } );
+    
+    var language = project.language || 'en';
     var ast = project.ast;
     
     // Grab all notes
@@ -95,7 +97,7 @@ Meteor.methods({
     // });
     
     // Result after the sythesize process
-    result = _.map(Syncer.getSyncsForNotes( notes ), function(o){
+    result = _.map(Syncer.getSyncsForNotes( notes, language ), function(o){
       delete o.i;
       return o;
     });
@@ -158,6 +160,7 @@ Meteor.methods({
         right: "admin"
       }],
       ast: {},
+      language: 'en',
       activity: [],
       data: initialData
     });
@@ -244,7 +247,7 @@ Meteor.methods({
   updateProjectSettings: function(o){
     
     // check if all elements are rdy
-    if( !( o.projectId && o.name && o.description && o.public ) ) return false;
+    if( !( o.projectId && o.name && o.description && o.public && o.language ) ) return false;
 
     // grab project
     var project = Projects.findOne({_id: o.projectId });
@@ -258,7 +261,7 @@ Meteor.methods({
     if( !userAcl || userAcl.right != "admin" ) return false;
     
     // pick the right values
-    var obj = _.pick(o, ['name','description','public']);
+    var obj = _.pick(o, ['name','description','public','language']);
 
     Projects.update({ _id: o.projectId }, {$set: obj });
 

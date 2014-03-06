@@ -38,12 +38,14 @@ Template.generalSettings.events = {
     var name = t.find('input[name=name]').value;
     var description = t.find('input[name=description]').value;
     var public = t.find('input[name=public]').checked;
+    var language = t.find('select[name=language]').value;
 
     Meteor.call('updateProjectSettings',{
       projectId: this._id,
       name: name,
       description: description,
-      public: public
+      public: public,
+      language: language
     });
     
   }   
@@ -81,4 +83,12 @@ Template.deleteProject.events = {
       if( succ ) Router.go('/');
     });
   }
+}
+
+Template.generalSettings.language = function(){
+  return ["en","de","sp",'fr','ru'];
+}
+
+Template.generalSettings.isActive = function(a,b,c){
+  return (a.language == b)?'selected':'';
 }

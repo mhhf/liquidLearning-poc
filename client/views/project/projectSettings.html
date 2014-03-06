@@ -1,7 +1,6 @@
 <template name="projectSettings">
 <a href="{{ pathFor 'projectView' }}">... back to project</a>
-<h2>Project "{{name}}" Settings</h2>
-<div class="row-fluid">
+<div id="mainSettings" class="row-fluid">
   <div class="span3">
     <ul class="menue">
       <li class="{{isState 'general'}}"><a class="menueBtn general" href="#">General</a></li>
@@ -86,6 +85,18 @@ Everything has to come to an end.
     <label class="checkbox">
       <input type="checkbox" name="public" {{#if public}} checked {{/if}}/> public
     </label>
+    <span class="help-inline"></span>
+  </div>
+</div>
+
+<div id="publicCG" class="control-group">
+  <label for="textfield5" class="control-label">public</label>
+  <div class="controls">
+    <select name="language" id="language">
+      {{#each language}}
+        <option value="{{this}}" {{isActive .. this}}>{{this}}</option>
+      {{/each}}
+    </select>
     <span class="help-inline"></span>
   </div>
 </div>

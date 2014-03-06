@@ -6,7 +6,7 @@ var Fiber = Npm.require('fibers');
 // 1. synthesize the text to an audio file, if neccecery
 // 2. provides an array of syncObject id's from the database
 //
-var getSyncsForNotesAsync = function( text, cb ){
+var getSyncsForNotesAsync = function( text, lang , cb ){
   var processed = [];
   var queue = 0;
 
@@ -27,12 +27,13 @@ var getSyncsForNotesAsync = function( text, cb ){
           var size = -1;
           var obj = TtsEngine.synthesize({
             text : text[i],
-            lang : "en",
+            lang : lang,
             process: function( buf ){
               size = buf.length;
             }
           });
           obj['size'] = size;
+          obj.lang = lang;
 
           var id = Syncs.insert( obj );
           
