@@ -9,7 +9,11 @@ ul#projectsWrapper {
     margin: 5px;
     overflow: hidden;
     position: relative;
-    -webkit-box-shadow: 0px 0px 2px #888;
+    -webkit-box-shadow: 0px 0px 8px -2px #888; 
+    &:hover {
+      -webkit-box-shadow: 0px 3px 15px -4px #000000; 
+      top: -2px;
+    }
   }
 }
 .projectWrapper {
@@ -21,7 +25,7 @@ ul#projectsWrapper {
   padding-bottom: 10px;
   background: #fff;
   &:hover {
-    background: #fcf6ec;
+    // background: #fcf6ec;
   }
   position: relative;
   h4,p,span {
@@ -90,4 +94,8 @@ table.memberTable {
 
 .notDoneYet, .notDoneYet:hover {
   text-decoration: line-through;
+}
+
+#mainSettings {
+  margin-top: 20px;
 }
