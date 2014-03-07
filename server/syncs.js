@@ -6,7 +6,7 @@ var Fiber = Npm.require('fibers');
 // 1. synthesize the text to an audio file, if neccecery
 // 2. provides an array of syncObject id's from the database
 //
-var getSyncsForNotesAsync = function( text, lang , cb ){
+var getSyncsForNotesAsync = function( text , cb ){
   var processed = [];
   var queue = 0;
 
@@ -14,19 +14,22 @@ var getSyncsForNotesAsync = function( text, lang , cb ){
 
   var hash, tts, mp3Link;
   for(var i=0; i<text.length; i++) {
-    hash = MD5.hash( text[i] ).toString();
+    // [TODO] - hash from text[i].toString() 
+    //          current implementation could cause problems for same sentance and multiple languages/ voices
+    hash = MD5.hash( text[i].text ).toString();
     tts = Syncs.findOne({ hash: hash });
     if(!tts){
       queue++;
-      console.log("synthesize :"+text[i]);
+      console.log("synthesize "+text[i].lang+":"+text[i].text);
       
 
         Fiber( function(){
 
           // get the synth object
           var size = -1;
+          var lang = text[i].lang;
           var obj = TtsEngine.synthesize({
-            text : text[i],
+            text : text[i].text,
             lang : lang,
             process: function( buf ){
               size = buf.length;

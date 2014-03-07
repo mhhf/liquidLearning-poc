@@ -80,16 +80,33 @@ Meteor.methods({
     
     // [TODO] - acl
     var project = Projects.findOne( { _id: _id } );
-    
     var language = project.language || 'en';
+    
+    
     var ast = project.ast;
     
-    // Grab all notes
-    var notes =  _.filter(_.flatten(_.pluck(ast,'exp')), function( s ){
-      return typeof s == 'string';
+    var notes2 = [];
+    
+    ast.forEach( function(obj){
+      if( !obj.exp ) return false;
+      
+      // set lanuage of the explanation block
+      var lang = ( obj.opt && obj.opt[0] ) || language;
+      
+      obj.exp.forEach( function( text ){
+        notes2.push({
+          text: text,
+          lang: lang
+        });
+      });
     });
     
-    notes = _.uniq(notes);
+    // Grab all notes
+    // var notes =  _.filter(_.flatten(_.pluck(ast,'exp')), function( s ){
+    //   return typeof s == 'string';
+    // });
+    // 
+    // notes = _.uniq(notes);
     
     var endResult = [],
     // result = _.sortBy(Syncer.getSyncsForNotes( notes ), function(o){
@@ -97,7 +114,7 @@ Meteor.methods({
     // });
     
     // Result after the sythesize process
-    result = _.map(Syncer.getSyncsForNotes( notes, language ), function(o){
+    result = _.map(Syncer.getSyncsForNotes( notes2 ), function(o){
       delete o.i;
       return o;
     });

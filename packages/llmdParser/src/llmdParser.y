@@ -4,6 +4,7 @@
 %lex
 %x code
 %x expBlock
+%x blockDefinition
 %x package
 %x packagename
 %x packagecontent
@@ -38,7 +39,10 @@ BL                    ({EOL}*{WS}*)*
 
 
 
-<INITIAL>'{{#???}}'{NEOL}*               { this.begin('expBlock'); return 'BEGIN_EXP'; }
+<INITIAL>'{{#'                    { this.begin('blockDefinition'); return 'BLOCK_DEF_START' }
+<blockDefinition>\s+              /* ignore whitespace between definition */
+<blockDefinition>[\w\?]+              { return 'WORD'; }
+<blockDefinition>'}}'{NEOL}*               { this.popState(); this.begin('expBlock'); return 'BEGIN_EXP'; }
 <expBlock>'{{/???}}'{NEOL}*     { this.popState(); return 'END_EXP'; }
 <*>{NEOL}*                    return 'LINE'
 .                          return 'INVALID'
@@ -88,10 +92,18 @@ BLOCKS
       { $$ = []; }
     ;
 
+PARAMS
+    : WORD PARAMS
+      { $$ = [$1].concat($2) }
+    | 
+      { $$ = [] }
+    ;
+
+// TODO: parse default blocks
 BLOCK
-    : BEGIN_EXP EOS EXP_BLOCK END_EXP EOS
+    : BLOCK_DEF_START WORD PARAMS BEGIN_EXP EOS EXP_BLOCK END_EXP EOS
       { 
-        $$ = { exp: $3 };
+        $$ = { exp: $6, opt: $3 };
       }
     | BEGIN_PACKAGE PACKAGENAME PACKAGELINES END_PACKAGE EOL
       { $$ = { package:$2, data: $3 }; }
