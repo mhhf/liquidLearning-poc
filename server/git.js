@@ -4,7 +4,7 @@ var fs = Npm.require('fs');
 
 Git = {
   
-  commit: function( msg, path, project, md ){ 
+  commit: function( msg, path, project, md ) { 
     
     var sig = git.Signature.now(
         Meteor.user().username, 
@@ -57,6 +57,14 @@ Git = {
       
     });
     
+  },
+  
+  // [TODO] - recursive dir list
+  buildTree: function(path, project) {
+    var files = fs.readdirSync(path+project.hash);
+    
+    return _.without(files,'.git');
   }
+  
   
 }

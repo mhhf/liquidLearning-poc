@@ -29,6 +29,9 @@ Meteor.publish('userProjects', function(o){
 
 
 Meteor.methods({
+  buildTree: function(){
+    Git.buildTree('/Users/mhhf/llWd/',{hash:'ee98eecaaa90d7e6560e1d2592927a0e'});
+  },
   openFile: function( projectId ){
     
     // check if project is valid
@@ -43,7 +46,6 @@ Meteor.methods({
   },
   // 
   // [question] - save just markdown or the parsed slides for speed? 
-  // [todo] - commit with commit message
   saveFile: function( _id, o ){
     if( !( o.md && o.slidesLength && typeof o.slidesLength == 'number' && _id ) ) return false;
     
