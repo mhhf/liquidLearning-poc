@@ -55,20 +55,21 @@ Meteor.methods({
   // 
   // [question] - save just markdown or the parsed slides for speed? 
   saveFile: function( _id, o ){
-    if( !( o.md && o.slidesLength && typeof o.slidesLength == 'number' && _id ) ) return false;
+    if( !( o.md && _id && o.filepath ) ) return false;
     
     var project = Projects.findOne({ _id: _id });
     
     // project has to be writable by user
     if( !project || !userHashPermissions(project, 'write') ) return null;
     
-    Git.commit( o.commitMsg, path, project, o.md );
+    Git.commit( o.commitMsg, path, project, o.md, o.filepath );
     
     Projects.update({ _id: _id },{
       $set: { 
         slides: o.slidesLength,
         data: o.md,
-        ast: o.ast
+        ast: o.ast,
+        changed: true
       }
     });
     
@@ -134,7 +135,11 @@ Meteor.methods({
       return o;
     });
     
-    Projects.update({ _id: _id }, {$set: {ast: newAst, state: 'ready'}});
+    Projects.update({ _id: _id }, {$set: {
+      ast: newAst,
+      state: 'ready',
+      changed: false
+    }});
     
     return true;
   },

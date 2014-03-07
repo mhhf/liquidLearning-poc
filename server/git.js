@@ -4,7 +4,7 @@ var fs = Npm.require('fs');
 
 Git = {
   
-  commit: function( msg, path, project, md ) { 
+  commit: function( msg, path, project, data, filepath ) { 
     
     var sig = git.Signature.now(
         Meteor.user().username, 
@@ -14,8 +14,8 @@ Git = {
     git.Repo.open( path + project.hash + '/.git' , function(openReporError, repo) {
       if (openReporError) throw openReporError;
       
-      // [TODO] - commit proces
-      fs.writeFileSync( path + project.hash + '/index.md', md );
+      console.log('saving ' + path + project.hash + '/'+filepath);
+      fs.writeFileSync( path + project.hash + '/'+filepath, data );
       
       repo.openIndex(function(openIndexError, index) {
         if (openIndexError) throw openIndexError;
@@ -23,7 +23,7 @@ Git = {
         index.read(function(readError) {
         if (readError) throw readError;
           
-          index.addByPath('index.md', function(addByPathError) {
+          index.addByPath(filepath, function(addByPathError) {
           if (addByPathError) throw addByPathError;
             
             index.write(function(writeError) {

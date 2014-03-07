@@ -20,6 +20,6 @@ Template.projectView.building = function(){
   return this.state == "building";
 }
 Template.projectView.needBuild = function(){
-  return this.needBuild?'needBuild':'';
+  return this.changed?'needBuild':'';
 }
 
