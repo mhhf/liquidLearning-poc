@@ -108,7 +108,7 @@ Meteor.methods({
     // 
     // notes = _.uniq(notes);
     
-    var endResult = [],
+    // var endResult = [];
     // result = _.sortBy(Syncer.getSyncsForNotes( notes ), function(o){
     //   return o.i;
     // });
