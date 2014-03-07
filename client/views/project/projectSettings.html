@@ -4,6 +4,7 @@
   <div class="span3">
     <ul class="menue">
       <li class="{{isState 'general'}}"><a class="menueBtn general" href="#">General</a></li>
+      <li class="{{isState 'build'}}"><a class="menueBtn build" href="#">Build</a></li>
       <li class="{{isState 'members'}}"><a class="menueBtn members" href="#">Members</a></li>
       <li class="{{isState 'delete'}}"><a class="menueBtn delete" href="#">Delete Project</a></li>
     </ul>
@@ -11,6 +12,10 @@
   <div class="span9">
     {{#if isState 'general'}}
       {{> generalSettings}}
+    {{/if}}
+    
+    {{#if isState 'build'}}
+      {{> buildSettings}}
     {{/if}}
 
     {{#if isState 'members'}}
@@ -103,4 +108,7 @@ Everything has to come to an end.
 
 <button name="submit" class="btn btn-primary">Submit</button>
 <a href="{{ pathFor 'projects' }}" class="btn">Cancel</a>
+</template>
+
+<template name="buildSettings">
 </template>

@@ -1,3 +1,4 @@
+// [TODO] - export to layout view
 var state = 'general';
 var stateDep = new Deps.Dependency;
 var getState = function(){
@@ -28,6 +29,9 @@ Template.projectSettings.events = {
   },
   "click a.menueBtn.delete" : function(){
     setState('delete');
+  },
+  "click a.menueBtn.build" : function(){
+    setState('build');
   }
 }
 
