@@ -101,7 +101,10 @@ Router.map(function() {
     data: function(){
       return { 
         project: Projects.findOne({_id: this.params._id}),
-        fileData: fileData
+        file: {
+          path: this.params.path,
+          data: fileData
+        }
       }
     },
     action: function(){

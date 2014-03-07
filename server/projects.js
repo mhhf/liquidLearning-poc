@@ -88,14 +88,19 @@ Meteor.methods({
   // maps the syncs to the ast notes
   buildProject: function( _id ){
     
+    // [TODO] - check if _id isn't null
+    
     // [TODO] - acl
     var project = Projects.findOne( { _id: _id } );
     var language = project.language || 'en';
     
+    // [TODO] - compile ast server side
+    // var ast = project.ast;
     
-    var ast = project.ast;
+    var data = fs.readFileSync( path+project.hash+'/index.md', "utf8" );
+    var ast = LlmdParser.parse( data+"\n" ); 
     
-    var notes2 = [];
+    var notes = [];
     
     ast.forEach( function(obj){
       if( !obj.exp ) return false;
@@ -104,27 +109,15 @@ Meteor.methods({
       var lang = ( obj.opt && obj.opt[0] ) || language;
       
       obj.exp.forEach( function( text ){
-        notes2.push({
+        notes.push({
           text: text,
           lang: lang
         });
       });
     });
     
-    // Grab all notes
-    // var notes =  _.filter(_.flatten(_.pluck(ast,'exp')), function( s ){
-    //   return typeof s == 'string';
-    // });
-    // 
-    // notes = _.uniq(notes);
-    
-    // var endResult = [];
-    // result = _.sortBy(Syncer.getSyncsForNotes( notes ), function(o){
-    //   return o.i;
-    // });
-    
     // Result after the sythesize process
-    result = _.map(Syncer.getSyncsForNotes( notes2 ), function(o){
+    result = _.map(Syncer.getSyncsForNotes( notes ), function(o){
       delete o.i;
       return o;
     });
@@ -141,7 +134,7 @@ Meteor.methods({
       return o;
     });
     
-    Projects.update({ _id: _id }, {$set: {ast: newAst}});
+    Projects.update({ _id: _id }, {$set: {ast: newAst, state: 'ready'}});
     
     return true;
   },

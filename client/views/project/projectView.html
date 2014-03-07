@@ -1,31 +1,43 @@
 <template name="projectView">
 <div id="projectViewWrapper">
   <!-- <a href="{{ pathFor 'projects' }}">... back to projects</a> -->
+  
+
+  {{#if building}}
+    <center id="buildingIndicator">
+      {{>spinner}}
+      <p> building project...  </p>
+    </center>
+  {{else}}
   <span class="info right">
     {{> star}}
     <a href="{{ pathFor 'projectDiscuss' }}"><i class="icon-comments"></i> discuss</a>
     {{#if currentUser }}
     <a href="#" name="fork" class="notDoneYet"><i class="icon-code-fork"></i> fork</a>
-    <a href="{{ pathFor 'projectPreview' }}"><i class="icon-eye-open"></i> preview</a>
+    <a href="{{ pathFor 'projectPreview' }}"><i class="icon-eye-open"></i> view</a>
+    <a id="buildBtn" href="#" class="{{needBuild}}"><i class="icon-cogs"></i> build</a>
     <!-- <a href="{{ pathFor 'projectEdit' }}"><i class="icon&#45;pencil"></i> edit</a> -->
     <a href="{{ pathFor 'projectSettings' }}"><i class="icon-cog"></i> settings</a>
     {{/if}}
   </span>
-
-
-  <center id="projectViewHead">
-    <h1><img src="blank.gif" class="flag flag-{{language}}"/>  {{name}} </h1>
-    <p>{{description}}</p>
-  </center>
   
-  {{> fsView}}
   
-  <div class="row-fluid">
-    <div class="span12">
-      <h2>History</h2>
-      {{> activities}}
+  <div id="projectInfoWrapper">
+    <center id="projectViewHead">
+      <h1><img src="blank.gif" class="flag flag-{{language}}"/>  {{name}} </h1>
+      <p>{{description}}</p>
+    </center>
+
+    {{> fsView}}
+
+    <div class="row-fluid">
+      <div class="span12">
+        <h2>History</h2>
+        {{> activities}}
+      </div>
     </div>
   </div>
+  {{/if}}
 
 </div>
 </template>
