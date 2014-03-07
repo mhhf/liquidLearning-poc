@@ -91,7 +91,22 @@ Router.map(function() {
   });
   
   this.route('editFile', {
-    path: '/project/:_id/edit/:path'
+    path: '/project/:_id/edit/:path',
+    waitOn: function(){
+      return [
+        Meteor.subscribe('project', this.params._id ),
+        new SyncLoader('text',this.params._id, this.params.path)
+      ];
+    },
+    data: function(){
+      return { 
+        project: Projects.findOne({_id: this.params._id}),
+        fileData: fileData
+      }
+    },
+    action: function(){
+      this.render();
+    }
     
   });
 
@@ -225,7 +240,8 @@ Router.map(function() {
 // Reactive Object to pass to the waitOn function for wait on data is ready
 var id = null;
 var retObj = null;
-SyncLoader = function( id ){
+var fileData = fileData;
+SyncLoader = function( id, _id, filepath ){
   if ( retObj ) return retObj; 
 
   var readyFlag = false ;
@@ -243,12 +259,18 @@ SyncLoader = function( id ){
     console.log(readyFlag);
     readyFlagDep.changed();
   }
-  window.setReady = setReady;
-  window.getReady = ready;
+  // window.setReady = setReady;
+  // window.getReady = ready;
 
-  setTimeout( function(){
+  // setTimeout( function(){
+  //   setReady(true);
+  // },3000);
+  
+  Meteor.call('openFile', _id, filepath, function(err, data){
+    fileData = data;
     setReady(true);
-  },3000);
+  });
+  
 
   retObj = {
     ready: ready

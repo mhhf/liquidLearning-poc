@@ -26,6 +26,11 @@ Meteor.publish('userProjects', function(o){
   return Projects.find({ "user._id":this.userId });
 });
 
+// [TODO] - CRITICAL: ACL checking!!
+Meteor.publish('project', function(o){
+  return Projects.find({ _id: o._id });
+});
+
 
 
 Meteor.methods({
@@ -35,7 +40,7 @@ Meteor.methods({
     var fs = Git.buildTree( path, project );
     Projects.update({_id: 'LyCMjLFyjg82kfAbb' }, {$set:{fs:fs}});
   },
-  openFile: function( projectId ){
+  openFile: function( projectId, filepath ){
     
     // check if project is valid
     var project = Projects.findOne({ _id: projectId });
@@ -44,7 +49,7 @@ Meteor.methods({
     // check if user can read the file
     if( !project.public && !userHashPermissions( project, 'read' )) return null;
     
-    var data = fs.readFileSync( path+project.hash+'/index.md', "utf8" );
+    var data = fs.readFileSync( path+project.hash+'/'+filepath, "utf8" );
     return data;
   },
   // 
