@@ -1,3 +1,19 @@
 <template name="fsView">
-  <div id="fsView"></div>
+<div class="row-fluid">
+<div id="fsView" class="offset2 span8">
+    <table>
+      <tbody>
+        {{#each getFsContext}}
+        <tr>
+          <td class="icon"><i class="icon-file-text"></i></td>
+          <td class="filename">
+            <a href="{{pathFor 'editFile'}}"> {{path}} </a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+  
 </template>

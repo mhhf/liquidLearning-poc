@@ -89,6 +89,11 @@ Router.map(function() {
     },
     layoutTemplate: 'fullLayout'
   });
+  
+  this.route('editFile', {
+    path: '/project/:_id/edit/:path'
+    
+  });
 
   this.route('projectSettings', {
     path: '/project/settings/:_id',

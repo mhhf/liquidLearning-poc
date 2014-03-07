@@ -30,7 +30,10 @@ Meteor.publish('userProjects', function(o){
 
 Meteor.methods({
   buildTree: function(){
-    Git.buildTree('/Users/mhhf/llWd/',{hash:'ee98eecaaa90d7e6560e1d2592927a0e'});
+    var project = Projects.findOne({ _id: 'LyCMjLFyjg82kfAbb'});
+    
+    var fs = Git.buildTree( path, project );
+    Projects.update({_id: 'LyCMjLFyjg82kfAbb' }, {$set:{fs:fs}});
   },
   openFile: function( projectId ){
     
