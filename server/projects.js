@@ -66,13 +66,11 @@ Meteor.methods({
     Git.commit( o.commitMsg, path, project, o.md, o.filepath );
     
     var headState = Git.buildTree( path, project );
-    console.log("hst: ", headState);
     
     Projects.update({ _id: _id },{
       $set: { 
         slides: o.slidesLength,
         data: o.md,
-        ast: o.ast,
         changed: true,
         head: headState
       }
@@ -142,6 +140,9 @@ Meteor.methods({
     
     Projects.update({ _id: _id }, {$set: {
       ast: newAst,
+      build: {
+        date: new Date()
+      },
       state: 'ready',
       changed: false
     }});
