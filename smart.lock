@@ -12,7 +12,11 @@
       "marked": {},
       "GAnalytics": {},
       "bootboxjs": {},
-      "iron-router": {}
+      "iron-router": {
+        "git": "https://github.com/EventedMind/iron-router.git",
+        "branch": "blaze-integration"
+      },
+      "blaze-layout": {}
     },
     "packages": {
       "bootstrap-wysiwyg": {
@@ -55,8 +59,13 @@
       },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
-        "tag": "v0.6.4",
-        "commit": "927bbaed1b87894fb6fb70807f74ff3a5bd89f29"
+        "branch": "blaze-integration",
+        "commit": "f8ffd44bceacc6a55f4ebcc218c072f5a18138b4"
+      },
+      "blaze-layout": {
+        "git": "https://github.com/EventedMind/blaze-layout.git",
+        "tag": "v0.2.1",
+        "commit": "f52f416d6277f27b11832355298553e46b8cc6fd"
       },
       "relocator": {
         "git": "git@bitbucket.org:liquidlearningdev/relocator.git",
