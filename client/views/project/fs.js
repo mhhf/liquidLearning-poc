@@ -1,10 +1,12 @@
 var currentDir = '/';
 var currentDirDep = new Deps.Dependency;
+
 var getcurrentDir = function(){
   currentDirDep.depend();
   return currentDir;
   
 }
+
 var setcurrentDir = function( val ){
   currentDir = val;
   currentDirDep.changed();
@@ -13,13 +15,18 @@ var setcurrentDir = function( val ){
 
 Template.fsView.getFsContext = function(){
   var context = [];
-  console.log(this);
   var _id = this._id;
-  this.fs.forEach( function( path ){
+  this.head.forEach( function( obj ){
     context.push({
       _id: _id,
-      path: path,
+      path: obj.path,
+      msg: obj.msg,
+      date: new Date(obj.timestamp)
     });
   });
   return context;
+}
+
+Template.fsView.getDate = function(){
+  return timeSince(this.date);
 }

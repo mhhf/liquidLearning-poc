@@ -252,14 +252,11 @@ SyncLoader = function( id, _id, filepath ){
 
   var ready = function(){
     readyFlagDep.depend();
-    console.log(readyFlag);
     return readyFlag;
 
   }
   var setReady = function( val ){
-    console.log(readyFlag);
     readyFlag = val;
-    console.log(readyFlag);
     readyFlagDep.changed();
   }
   // window.setReady = setReady;

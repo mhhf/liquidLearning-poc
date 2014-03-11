@@ -34,11 +34,12 @@ Meteor.publish('project', function(o){
 
 
 Meteor.methods({
+  // [TODO] - debug method - replace with server side callings
   buildTree: function(){
     var project = Projects.findOne({ _id: 'LyCMjLFyjg82kfAbb'});
     
-    var fs = Git.buildTree( path, project );
-    Projects.update({_id: 'LyCMjLFyjg82kfAbb' }, {$set:{fs:fs}});
+    var headState = Git.buildTree( path, project );
+    Projects.update({_id: 'LyCMjLFyjg82kfAbb' }, {$set:{head:headState}});
   },
   openFile: function( projectId, filepath ){
     
@@ -64,12 +65,16 @@ Meteor.methods({
     
     Git.commit( o.commitMsg, path, project, o.md, o.filepath );
     
+    var headState = Git.buildTree( path, project );
+    console.log("hst: ", headState);
+    
     Projects.update({ _id: _id },{
       $set: { 
         slides: o.slidesLength,
         data: o.md,
         ast: o.ast,
-        changed: true
+        changed: true,
+        head: headState
       }
     });
     
