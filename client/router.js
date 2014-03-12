@@ -51,8 +51,17 @@ Router.map(function() {
 
   this.route('projectView', {
     path: '/project/:_id',
+    waitOn: function(){
+      return Meteor.subscribe( 'project', this.params._id );
+    },
     data: function(){
       return Projects.findOne({_id:this.params._id});
+    },
+    action: function(){
+      
+    },
+    onData: function(){
+      console.log(this);
     }
   });
 
@@ -90,13 +99,13 @@ Router.map(function() {
     layoutTemplate: 'fullLayout'
   });
   
+  var syncy;
   this.route('editFile', {
     path: '/project/:_id/edit/:path',
     waitOn: function(){
       return [
-        Meteor.subscribe('project', this.params._id ),
-        new SyncLoader('text',this.params._id, this.params.path)
-      ];
+      new SyncLoader('text',this.params._id, this.params.path),
+      Meteor.subscribe('project', this.params._id )];
     },
     data: function(){
       return { 
@@ -108,7 +117,12 @@ Router.map(function() {
       }
     },
     action: function(){
-      this.render();
+      // this.render();
+    },
+    onData: function(){
+      console.log( !!this.data().file.data );
+      if( !!this.data().file.data )
+        this.render();
     }
     
   });
@@ -148,17 +162,17 @@ Router.map(function() {
 		}
 	});
 
-	this.route('editor',{
-    waitOn: function(){
+  // this.route('editor',{
+  //   waitOn: function(){
 
-      return new SyncLoader('text');
-    },
-    action: function(){
-      GAnalytics.pageview("/editor");
-      
-      this.render('editor');
-    }
-  });
+  //     return new SyncLoader('text');
+  //   },
+  //   action: function(){
+  //     GAnalytics.pageview("/editor");
+
+  //     this.render('editor');
+  //   }
+  // });
 
   this.route('projectPreview', {
 
@@ -252,10 +266,11 @@ SyncLoader = function( id, _id, filepath ){
 
   var ready = function(){
     readyFlagDep.depend();
-    return readyFlag;
+    return false;
 
   }
   var setReady = function( val ){
+    console.log('setData');
     readyFlag = val;
     readyFlagDep.changed();
   }

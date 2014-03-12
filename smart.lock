@@ -16,7 +16,10 @@
         "git": "https://github.com/EventedMind/iron-router.git",
         "branch": "blaze-integration"
       },
-      "blaze-layout": {}
+      "blaze-layout": {
+        "git": "https://github.com/EventedMind/blaze-layout.git",
+        "branch": "devel"
+      }
     },
     "packages": {
       "bootstrap-wysiwyg": {
@@ -64,7 +67,7 @@
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
-        "tag": "v0.2.1",
+        "branch": "devel",
         "commit": "f52f416d6277f27b11832355298553e46b8cc6fd"
       },
       "relocator": {
