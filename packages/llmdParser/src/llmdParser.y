@@ -2,9 +2,13 @@
 
 /* lexical grammar */
 %lex
+%{
+  DEBUG = true;
+%}
+
 %x code
-%x expBlock
-%x blockDefinition
+%x block
+%x blockDef
 %x package
 %x packagename
 %x packagecontent
@@ -21,31 +25,36 @@ BL                    ({EOL}*{WS}*)*
 /*%token block*/
 
 
-<*><<EOF>>           return 'EOF'
+<*><<EOF>>                 return 'EOF'
 <*>{EOL}                   return 'EOL'
 
 <INITIAL>'```'{NEOL}*      { this.begin('code'); return 'BEGIN_CODE'; }
 <code>'```'{NEOL}*         { this.popState(); return 'END_CODE'; }
 <code>{NEOL}*              { return 'CODELINE'; }
 
-<INITIAL>'{{>'{BL}          { this.begin('packagename'); return 'BEGIN_PACKAGE' }
-<packagename>\w*           { this.popState(); this.begin('package'); return 'PACKAGENAME' }
-<package>\s*'}}'              { this.popState(); return 'END_PACKAGE'; }
+<INITIAL>'{{>'\s*(\w+)     { this.begin('package'); yytext = this.matches[1]; return 'BEGIN_PACKAGE' }
+<package>\s*'}}'           { this.popState(); return 'END_PACKAGE'; }
+
 
 /* [todo] - parse json, not lines */
 <package,packagecontent>{BL}*'{'           { this.begin('packagecontent'); return 'BRACE_OPEN';  }
-<packagecontent>{BL}'}'{BL} { this.popState(); return 'BRACE_CLOSE'; }
-<packagecontent>[^{}]*     { return 'PACKAGELINE'; }
+<packagecontent>{BL}'}'{BL}                { this.popState(); return 'BRACE_CLOSE'; }
+<packagecontent>[^{}]*                     { return 'PACKAGELINE'; }
+
+<package>\s*([\w\.\=\'\"]+)                    { yytext = this.matches[1]; return 'PARAM'; }             
 
 
 
-<INITIAL>'{{#'                    { this.begin('blockDefinition'); return 'BLOCK_DEF_START' }
-<blockDefinition>\s+              /* ignore whitespace between definition */
-<blockDefinition>[\w\?]+              { return 'WORD'; }
-<blockDefinition>'}}'{NEOL}*               { this.popState(); this.begin('expBlock'); return 'BEGIN_EXP'; }
-<expBlock>'{{/???}}'{NEOL}*     { this.popState(); return 'END_EXP'; }
-<*>{NEOL}*                    return 'LINE'
-.                          return 'INVALID'
+<INITIAL>'{{#'\s*([\w\?]+)        { this.begin('blockDef'); yytext = this.matches[1]; return 'BLOCK_DEF_START' }
+<blockDef>\s+                     /* ignore whitespace in definition */
+<blockDef>[\w\?]+                 { return 'PARAM'; }
+<blockDef>'}}'{NEOL}*             { this.popState(); this.begin('block'); return 'BEGIN_BLOCK'; }
+<block>'{{/'([\w\?]+)'}}'{NEOL}*          { this.popState(); yytext = this.matches[1]; return 'END_BLOCK'; }
+
+
+
+<*>{NEOL}*                        return 'LINE'
+.                                 return 'INVALID'
 
 
 
@@ -84,16 +93,18 @@ BLOCKS
     : BLOCK BLOCKS
       { 
         var block = $1;
-        block.from = @1.first_line;
-        block.to = @1.last_line;
+        if( !DEBUG ) {
+          block.from = @1.first_line;
+          block.to = @1.last_line;
+        }
         $$ = [$1].concat($2); 
       }
     | 
       { $$ = []; }
     ;
 
-PARAMS
-    : WORD PARAMS
+OPT_PARAMS
+    : PARAM OPT_PARAMS
       { $$ = [$1].concat($2) }
     | 
       { $$ = [] }
@@ -101,12 +112,15 @@ PARAMS
 
 // TODO: parse default blocks
 BLOCK
-    : BLOCK_DEF_START WORD PARAMS BEGIN_EXP EOS EXP_BLOCK END_EXP EOS
+    : BLOCK_DEF_START OPT_PARAMS BEGIN_BLOCK EOS EXP_BLOCK END_BLOCK EOS
       { 
-        $$ = { exp: $6, opt: $3 };
+        if( $1 != $END_BLOCK ) {
+          throw new Error("blocks don't match");
+        }
+        $$ = { type: 'block', name: $1, data: $5, opt: $2 };
       }
-    | BEGIN_PACKAGE PACKAGENAME PACKAGELINES END_PACKAGE EOL
-      { $$ = { package:$2, data: $3 }; }
+    | BEGIN_PACKAGE OPT_PARAMS PACKAGELINES END_PACKAGE EOL
+      { $$ = { type:'pkg', name:$1, opt:$2, data: $3 }; }
     | BEGIN_CODE EOS CODELINES END_CODE EOS
       { $$ = [$1+$2+$3+$4+($6.length>0?$5:'')]; }
     | MD
