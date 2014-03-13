@@ -5,7 +5,6 @@ Template.slide.rendered = function(e,t){
   
   var template = this;
   
-  console.log(init);
   if( !init ) {
     init = true;
     Deps.autorun( function(e, t){
@@ -25,7 +24,7 @@ Template.slide.rendered = function(e,t){
       
       
       var ast = _.filter(template.data.ast.slice( lastBlock, currentSlide ), function(block){
-        return block.exp == null;
+        return block.type != 'block' || block.name != '???';
       });
       
       var fragment = buildSlide( ast );
