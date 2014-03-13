@@ -181,15 +181,16 @@ Router.map(function() {
         // inherent blockIndex number to syncs
         _.each( project.ast, function( block, blockIndex ){
           block.index = blockIndex;
-          _.map( block.exp, function( note ){
-            note.slideIndex = blockIndex;
-            return note;
-          });
+          if( block.type == 'block' && block.name == '???' )
+            _.map( block.data , function( note ){
+              note.slideIndex = blockIndex;
+              return note;
+            });
         });
-        var noteSlides = _.filter( project.ast, function(b){ return b.exp != null; });
+        var noteSlides = _.filter( project.ast, function(b){ return b.name == '???'; });
         
         // make a playList from the projectAST
-        syncQue.initSounds( _.flatten(_.pluck(noteSlides,'exp')) );
+        syncQue.initSounds( _.flatten(_.pluck(noteSlides,'data')) );
         
         return { 
           _id: this.params._id,

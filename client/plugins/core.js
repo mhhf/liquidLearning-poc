@@ -30,16 +30,19 @@ buildSlide = function( o ){
   var frag;
   var fragment = document.createElement('div');
   
+  
   o.forEach( function( obj ){
+    
     if( typeof obj.md == 'string' ) { // simple Markdown
       var divWrapper = document.createElement('span');
       divWrapper.innerHTML = marked( obj.md );
       fragment.appendChild( divWrapper );
-    } else if( typeof obj.package == 'string' ){ // package
+    } else if( obj.type == 'pkg' ){ // package
       var packageObject =  JSON.parse( obj.data );
       
+      
       // look for package
-      var plugin = PluginController.getPlugin( obj.package );
+      var plugin = PluginController.getPlugin( obj.name );
       if( !plugin ) return false;
       
       // compile html
@@ -51,6 +54,7 @@ buildSlide = function( o ){
       // talk to syncQue
     }
   });
+  // [TODO] - extend with type=block
   
   return fragment;
 }

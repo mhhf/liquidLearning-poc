@@ -8,6 +8,7 @@ var fs = Npm.require('fs');
 var path = "/Users/mhhf/llWd/";
 
 
+// [TODO] - export to GIT Package Abstraction
 var createRepoAsync = function( name, cb ){
   git.Repo.init(path+name, false, cb );
 }
@@ -87,68 +88,6 @@ Meteor.methods({
   
   
   
-  // [TODO] - "sentance" and "sentance " has different hashes but same mp3url hash? - BUG!
-  // Build the ast
-  // maps the syncs to the ast notes
-  buildProject: function( _id ){
-    
-    // [TODO] - check if _id isn't null
-    
-    // [TODO] - acl
-    var project = Projects.findOne( { _id: _id } );
-    var language = project.language || 'en';
-    
-    // [TODO] - compile ast server side
-    // var ast = project.ast;
-    
-    var data = fs.readFileSync( path+project.hash+'/index.md', "utf8" );
-    var ast = LlmdParser.parse( data+"\n" ); 
-    
-    var notes = [];
-    
-    ast.forEach( function(obj){
-      if( !obj.exp ) return false;
-      
-      // set lanuage of the explanation block
-      var lang = ( obj.opt && obj.opt[0] ) || language;
-      
-      obj.exp.forEach( function( text ){
-        notes.push({
-          text: text,
-          lang: lang
-        });
-      });
-    });
-    
-    // Result after the sythesize process
-    result = _.map(Syncer.getSyncsForNotes( notes ), function(o){
-      delete o.i;
-      return o;
-    });
-    
-    
-    // Substitude the string with the syncs object
-    var newAst = _.map(ast, function(o){ // each slide
-      if( o.exp ) o.exp = _.map(o.exp, function(n) { // each note
-          // Substitude note with syncObject
-          if( typeof n == 'string' )
-            return _.find(result, function(r){ return r.text == n; }); 
-          return n;
-        }); 
-      return o;
-    });
-    
-    Projects.update({ _id: _id }, {$set: {
-      ast: newAst,
-      build: {
-        date: new Date()
-      },
-      state: 'ready',
-      changed: false
-    }});
-    
-    return true;
-  },
   
   projectNew: function(o){
 

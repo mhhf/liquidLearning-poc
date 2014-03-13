@@ -16,28 +16,28 @@ describe('slide Parser', function(){
     done();
 	});
   
-  describe('??? blocks', function(){
-    
-    it('should find empty blocks', function() {
-      parser.parse('{{#???}}\n{{/???}}\n').should.deep.equal([{exp:[]}]);
-    });
-    
-    it('should ignore whitespace', function() {
-      parser.parse('{{#???}}  \n{{/???}}\n').should.deep.equal([{exp:[]}]);
-      parser.parse('{{#???}}\n{{/???}}  \n').should.deep.equal([{exp:[]}]);
-      parser.parse('{{#???}}\t\n{{/???}}\n').should.deep.equal([{exp:[]}]);
-      parser.parse('{{#???}}\n{{/???}}\t\n').should.deep.equal([{exp:[]}]);
-    });
-    
-    it('should find full blocks', function() {
-      parser.parse('{{#???}}\nasd\n{{/???}}\n').should.deep.equal([{exp:["asd"]}]);
-    });
-    
-    it('should ignore empty lines', function() {
-      parser.parse('{{#???}}\nasd\n\nasd\n{{/???}}\n').should.deep.equal([{exp:["asd","asd"]}]);
-    });
-    
-  })
+  // describe('# blocks', function(){
+  //   
+  //   it('should find empty blocks', function() {
+  //     parser.parse('{{#???}}\n{{/???}}\n').should.deep.equal([{exp:[]}]);
+  //   });
+  //   
+  //   it('should ignore whitespace', function() {
+  //     parser.parse('{{#???}}  \n{{/???}}\n').should.deep.equal([{exp:[]}]);
+  //     parser.parse('{{#???}}\n{{/???}}  \n').should.deep.equal([{exp:[]}]);
+  //     parser.parse('{{#???}}\t\n{{/???}}\n').should.deep.equal([{exp:[]}]);
+  //     parser.parse('{{#???}}\n{{/???}}\t\n').should.deep.equal([{exp:[]}]);
+  //   });
+  //   
+  //   it('should find full blocks', function() {
+  //     parser.parse('{{#???}}\nasd\n{{/???}}\n').should.deep.equal([{exp:["asd"]}]);
+  //   });
+  //   
+  //   it('should ignore empty lines', function() {
+  //     parser.parse('{{#???}}\nasd\n\nasd\n{{/???}}\n').should.deep.equal([{exp:["asd","asd"]}]);
+  //   });
+  //   
+  // })
   
   describe('md blocks', function(){
     
@@ -100,21 +100,21 @@ describe('slide Parser', function(){
     
   });
   
-  describe('block interaction', function(){
-    
-    it('should find multiple blocks md,exp', function() {
-      parser.parse('markdown1\n{{#???}}\nexp\n{{/???}}\n').should.deep.equal([{md:"markdown1\n"},{exp:["exp"]}]);
-    });
-    
-    it('should find multiple blocks exp,md', function() {
-      parser.parse('{{#???}}\nexp\n{{/???}}\nmarkdown1\n').should.deep.equal([{exp:["exp"]},{md:"markdown1\n"}]);
-    });
-    
-    it('should find multiple blocks exp,md,exp,md', function() {
-      parser.parse('{{#???}}\nexp\n{{/???}}\nmarkdown1\n{{#???}}\nexp2\n{{/???}}\nmarkdown2\n').should.deep.equal([{exp:["exp"]},{md:"markdown1\n"},{exp:["exp2"]},{md:"markdown2\n"}]);
-    });
-    
-  });
+  // describe('block interaction', function(){
+  //   
+  //   it('should find multiple blocks md,exp', function() {
+  //     parser.parse('markdown1\n{{#???}}\nexp\n{{/???}}\n').should.deep.equal([{md:"markdown1\n"},{exp:["exp"]}]);
+  //   });
+  //   
+  //   it('should find multiple blocks exp,md', function() {
+  //     parser.parse('{{#???}}\nexp\n{{/???}}\nmarkdown1\n').should.deep.equal([{exp:["exp"]},{md:"markdown1\n"}]);
+  //   });
+  //   
+  //   it('should find multiple blocks exp,md,exp,md', function() {
+  //     parser.parse('{{#???}}\nexp\n{{/???}}\nmarkdown1\n{{#???}}\nexp2\n{{/???}}\nmarkdown2\n').should.deep.equal([{exp:["exp"]},{md:"markdown1\n"},{exp:["exp2"]},{md:"markdown2\n"}]);
+  //   });
+  //   
+  // });
   
 });
 
