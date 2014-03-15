@@ -1,0 +1,21 @@
+<template name="newDiscussionPost">
+
+  <div id="nameCG" class="control-group">
+    <label for="textfield5" class="control-label">title</label>
+    <div class="controls">
+      <input type="text" name="title" id="title" placeholder="title..." class="input-xlarge" value="{{title}}">
+      <span class="help-inline"></span>
+    </div>
+  </div>
+
+  <div id="nameCG" class="control-group">
+    <label for="textfield5" class="control-label">message</label>
+    <div class="controls">
+      <textarea name="msg" rows="8" cols="40"></textarea>
+      <span class="help-inline"></span>
+    </div>
+  </div>
+
+  <button name="submit" class="btn btn-primary">Create</button>
+  <a href="{{pathFor 'feedback'}}" name="cancel" class="btn">Cancel</a>
+</template>

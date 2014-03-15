@@ -12,31 +12,23 @@
   
   <div class="span10">
 
-    <ul class="feedback">
-      {{#each feedback}}
-      <li>
-      <span class="iconWrapper"> <i class="{{getIcon}}"></i></span> 
-      <a class="mainTitle" href="{{pathFor 'feedbackPost'}}">
-        {{ title }}
-      </a>
-      <br />
-      <!-- <p>{{message}}</p> -->
-      {{> star }}
-      <span class="comments">
-        <i class="icon-comment"></i>
-        <a href="{{pathFor 'feedbackPost'}}">
-          {{comments}} 
-        </a>
-      </span>
-      <span class="mainInfo">
-        <span class="user"><i class="icon-user"></i> {{user.name}}</span>
-        <span class="time"><i class="icon-time"></i> {{getDate}}</span>
-      </span>
-      </li>
-      {{/each}}
-    </ul>
+    {{> posts }}
+    
   </div>
 </div>
 
+</template>
+
+
+<template name="feedbackPost">
+
+{{> discussionPost}}
+
+</template>
+
+
+<template name="feedbackNew">
+
+{{> newDiscussionPost }}
 
 </template>

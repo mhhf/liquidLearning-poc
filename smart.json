@@ -10,6 +10,7 @@
     "marked": {},
     "GAnalytics": {},
     "bootboxjs": {},
-    "iron-router": {}
+    "iron-router": {},
+    "moment": {}
   }
 }

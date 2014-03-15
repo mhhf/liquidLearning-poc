@@ -1,0 +1,25 @@
+<template name="posts">
+<ul class="feedback">
+  {{#each posts}}
+  <li>
+  <span class="iconWrapper"> <i class="icon-comments"></i></span> 
+  <a class="mainTitle" href="{{pathFor ...postPath}}">
+    {{ title }}
+  </a>
+  <br />
+  <!-- <p>{{message}}</p> -->
+  {{> star }}
+  <span class="comments">
+    <i class="icon-comment"></i>
+    <a href="{{pathFor ...postPath}}">
+      {{comments}} 
+    </a>
+  </span>
+  <span class="mainInfo">
+    <span class="user"><i class="icon-user"></i> {{user.name}}</span>
+    <span class="time"><i class="icon-time"></i> {{getDate}}</span>
+  </span>
+  </li>
+  {{/each}}
+</ul>
+</template>
