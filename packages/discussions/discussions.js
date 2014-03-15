@@ -1,19 +1,10 @@
 DPosts = new Meteor.Collection('dPosts');
 
-if( Meteor.isServer ) {
-  // Meteor.publish('dPosts', function(){
-  //   return DPosts.find({});
-  // });
-}
-if( Meteor.isClient ) {
-  // Meteor.subscribe('dPosts');
-}
 
-
+// [TODO] - security
 Meteor.methods({
   newDPost: function( o ){
     
-    // [TODO] - text if all fields are set
     var obj = _.pick(o,['title','message','ctx']);
     var user = {_id: 'null', name: 'anonymous' };
 
@@ -36,5 +27,18 @@ Meteor.methods({
   updateFeedbackStar: function( _id ){
     var ctx = Feedback.findOne({_id: _id});
     if( ctx ) updateStar(ctx, Feedback);
+  },
+  addComment: function( o ){
+    
+    DPosts.update({_id: o._id},{$push:{comments:{
+      message: o.msg,
+      user: {
+        name: Meteor.user().username,
+        _id: Meteor.userId()
+      },
+      date: new Date()
+    }}});
   }
 });
+
+
