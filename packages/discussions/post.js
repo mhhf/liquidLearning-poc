@@ -8,10 +8,13 @@ Template.discussionPost.events = {
     e.preventDefault();
     var msg = t.find('textarea').value;
     t.find('textarea').value = "";
+    var self = this;
     
     Meteor.call('addComment', {
       _id: this._id,
       msg: msg
+    }, function(err, succ){
+      self.onComment && self.onComment();
     });
   },
   "click a.replyBtn" : function(e,t){

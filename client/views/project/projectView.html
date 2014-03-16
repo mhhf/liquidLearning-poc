@@ -49,6 +49,15 @@
     {{#if save}}
     <span class="iconWrapper"> <i class="icon-save"></i></span>
     {{/if}}
+    
+    {{#if comment}}
+    <span class="iconWrapper"> <i class="icon-comment"></i></span>
+    {{/if}}
+    
+    {{#if post}}
+    <span class="iconWrapper"> <i class="icon-comments"></i></span>
+    {{/if}}
+    
     {{msg}}
     <span class="activityInfo">
       {{user.name}}, &nbsp; {{getDate}} ago

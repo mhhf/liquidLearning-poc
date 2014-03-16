@@ -15,6 +15,13 @@ Template.activities.activity = function(){
 Template.activities.save = function(){
   return this.type == 'save';
 }
+Template.activities.comment = function(){
+  return this.type == 'comment';
+}
+Template.activities.post = function(){
+  return this.type == 'post';
+}
+
 
 Template.projectView.building = function(){
   return this.state == "building";

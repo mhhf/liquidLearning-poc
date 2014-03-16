@@ -87,6 +87,18 @@ Meteor.methods({
   },
   
   
+  postActivity: function(o){
+    
+    postActivity( {
+      _id: o._id,
+      type: o.type,
+      msg: o.msg
+    });
+    
+    return true;
+  },
+  
+  
   
   
   projectNew: function(o){

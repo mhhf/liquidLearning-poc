@@ -11,7 +11,7 @@ Template.newDiscussionPost.events = {
       message: msg,
       ctx: this.ctx
     }, function(err, succ){
-      Router.go(self.reroute, self);
+      self.onSuccess && self.onSuccess();
     });
 
   }
