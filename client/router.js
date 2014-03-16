@@ -24,36 +24,6 @@ Router.configure({
 
 Router.map(function() { 
 
-  //////////////////////////////////////////////////////     FEEDBACK
-  ///////////////////////////////////////////////////////////////////////////
-
-  this.route('feedbackNew', {
-    path: '/feedback/new',
-    data: {
-      ctx: 'feedback'
-    }
-  });
-
-  this.route('feedbackPost', {
-    path: '/feedback/:_id',
-    waitOn: function(){
-      return Meteor.subscribe('feedbackPost', this.params._id);
-    },
-    data: function(){
-      return DPosts.findOne({ '_id': this.params._id });
-    }
-  });
-
-  this.route('feedback', {
-    path: '/feedback',
-    waitOn: function(){
-      return Meteor.subscribe('feedback');
-    },
-    data: {
-      posts: DPosts.find({},{sort: {date:-1}}),
-      postPath: 'feedbackPost'
-    }
-  });
 
   //////////////////////////////////////////////////////     PROJECT
   ///////////////////////////////////////////////////////////////////////////
@@ -128,14 +98,6 @@ Router.map(function() {
 
   this.route('projectSettings', {
     path: '/project/settings/:_id',
-    data: function(){
-      var project = Projects.findOne({_id: this.params._id });
-      return project;
-    }
-  });
-
-  this.route('projectDiscuss', {
-    path: '/project/discuss/:_id',
     data: function(){
       var project = Projects.findOne({_id: this.params._id });
       return project;
