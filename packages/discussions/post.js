@@ -8,7 +8,7 @@ Template.discussionPost.events = {
     e.preventDefault();
     var msg = t.find('textarea').value;
     t.find('textarea').value = "";
-    // [TODO] - export to server as a method
+    
     Meteor.call('addComment', {
       _id: this._id,
       msg: msg

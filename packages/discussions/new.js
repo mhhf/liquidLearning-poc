@@ -3,14 +3,15 @@ Template.newDiscussionPost.events = {
     var title = t.find('input[name=title]').value;
     var msg = t.find('textarea[name=msg]').value;
     
+    var self = this;
+    
     // [TODO] - test if all fields are set
     Meteor.call('newDPost',{
       title: title,
       message: msg,
       ctx: this.ctx
     }, function(err, succ){
-      // [TODO] - reroute
-      Router.go('feedback');
+      Router.go(self.reroute, self);
     });
 
   }
