@@ -24,20 +24,26 @@ Meteor.methods({
 
     return true;
   },
+    
   updateFeedbackStar: function( _id ){
     var ctx = Feedback.findOne({_id: _id});
     if( ctx ) updateStar(ctx, Feedback);
   },
+  
   addComment: function( o ){
     
-    DPosts.update({_id: o._id},{$push:{comments:{
-      message: o.msg,
-      user: {
-        name: Meteor.user().username,
-        _id: Meteor.userId()
+    DPosts.update({_id: o._id},{
+      $push: { comments:{
+        message: o.msg,
+        user: {
+          name: Meteor.user().username,
+          _id: Meteor.userId()
+        },
+        date: new Date()
+        }
       },
-      date: new Date()
-    }}});
+      $set: { date: new Date() }
+    });
   }
 });
 

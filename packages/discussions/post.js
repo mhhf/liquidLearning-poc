@@ -1,6 +1,6 @@
 Template.discussionPost.getDate = function(){
   return moment(this.date).fromNow();
-}
+};
 
 
 Template.discussionPost.events = {
@@ -10,7 +10,7 @@ Template.discussionPost.events = {
     t.find('textarea').value = "";
     var self = this;
     
-    Meteor.call('addComment', {
+    Meteor.call( this.onSubmitMethod || 'addComment', {
       _id: this._id,
       msg: msg
     }, function(err, succ){

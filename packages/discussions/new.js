@@ -6,7 +6,7 @@ Template.newDiscussionPost.events = {
     var self = this;
     
     // [TODO] - test if all fields are set
-    Meteor.call('newDPost',{
+    Meteor.call(this.onSubmitMethod || 'newDPost',{
       title: title,
       message: msg,
       ctx: this.ctx
