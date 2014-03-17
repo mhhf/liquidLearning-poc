@@ -4,7 +4,9 @@ Router.map( function(){
     path: '/feedback/new',
     data: {
       ctx: 'feedback',
-      reroute: 'feedback'
+      onSuccess: function(){
+        Router.go('feedback');
+      }
     }
   });
 

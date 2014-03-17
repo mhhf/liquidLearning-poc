@@ -1,19 +1,14 @@
 Router.map( function(){
 
-  // [TODO] - replace hooks with custom server function which adds posts to the collection - post activity out of this method
   this.route('newProjectDiscussion', {
     path: '/project/:_id/discussion/new',
     data: function(){
       return {
         ctx: this.params._id,
         _id: this.params._id,
+        onSubmitMethod: 'newProjectDiscussion',
         reroute: 'projectDiscuss',
         onSuccess: function(){
-          Meteor.call('postActivity', {
-            type:'post',
-            msg: 'new post',
-            _id: this.ctx
-          });
           Router.go('projectDiscuss', this);
         }
       };
@@ -30,13 +25,8 @@ Router.map( function(){
     },
     data: function(){
       var post = DPosts.findOne({ '_id': this.params._id }); 
-      post.onComment = function(){
-        Meteor.call('postActivity', {
-          type:'comment',
-          msg: 'new comment',
-          _id: this.ctx
-        });
-      };
+      post.onSubmitMethod= 'newProjectComment';
+      
       return {
         post: post,
         project: Projects.findOne({_id: this.params.ctx }),
@@ -55,7 +45,7 @@ Router.map( function(){
     data: function(){
       return {
         project: Projects.findOne({_id: this.params._id }),
-        posts: DPosts.find(),
+        posts: DPosts.find({},{sort: {date:-1}}),
         postPath: 'projectDiscussionPost'
       };
     }
