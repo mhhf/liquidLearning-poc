@@ -28,8 +28,8 @@ Meteor.publish('userProjects', function(o){
 });
 
 // [TODO] - CRITICAL: ACL checking!!
-Meteor.publish('project', function(o){
-  return Projects.find({ _id: o._id });
+Meteor.publish('project', function(_id){
+  return Projects.find({ _id: _id });
 });
 
 
