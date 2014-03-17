@@ -27,9 +27,8 @@ Meteor.publish('userProjects', function(o){
   return Projects.find({ "user._id":this.userId });
 });
 
-// [TODO] - #security - acl checking
 Meteor.publish('project', function(_id){
-  return Projects.find({ _id: _id });
+  return Projects.find({ _id: _id, $or:[{public:true},{'acl._id':this.userId}] });
 });
 
 

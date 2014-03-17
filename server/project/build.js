@@ -11,8 +11,7 @@ Meteor.methods({
     
     if(!_id) return false;
     
-    // [TODO] - acl
-    var project = Projects.findOne( { _id: _id } );
+    var project = Projects.findOne( { _id: _id, $or:[{public:true},{'acl._id':this.userId}] } );
     var language = project.language || 'en';
     
     
