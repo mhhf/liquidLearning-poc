@@ -23,6 +23,10 @@
   
   
   <div id="projectInfoWrapper">
+    
+    <a href="{{ pathFor 'projectView' }}">{{user.name}}</a> /
+    <a href="{{ pathFor 'projectView' }}">{{name}}</a> 
+    
     <center id="projectViewHead">
       <h1><img src="blank.gif" class="flag flag-{{language}}"/>  {{name}} </h1>
       <p>{{description}}</p>
