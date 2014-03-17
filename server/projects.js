@@ -27,7 +27,7 @@ Meteor.publish('userProjects', function(o){
   return Projects.find({ "user._id":this.userId });
 });
 
-// [TODO] - CRITICAL: ACL checking!!
+// [TODO] - #security - acl checking
 Meteor.publish('project', function(_id){
   return Projects.find({ _id: _id });
 });
@@ -35,13 +35,6 @@ Meteor.publish('project', function(_id){
 
 
 Meteor.methods({
-  // [TODO] - debug method - replace with server side callings
-  buildTree: function(){
-    var project = Projects.findOne({ _id: 'LyCMjLFyjg82kfAbb'});
-    
-    var headState = Git.buildTree( path, project );
-    Projects.update({_id: 'LyCMjLFyjg82kfAbb' }, {$set:{head:headState}});
-  },
   openFile: function( projectId, filepath ){
     
     // check if project is valid
@@ -156,7 +149,6 @@ Meteor.methods({
     if( ctx ) updateStar( ctx, Projects );
   },
 
-  // [TODO] - add email support (invite for registration)
   addUserToProject: function( o ){
     
     // check if information is aviable

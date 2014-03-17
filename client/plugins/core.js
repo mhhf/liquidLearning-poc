@@ -23,8 +23,6 @@ PluginControllerClass = function(){
 PluginController = new PluginControllerClass();
 
 
-// [TODO] - build only the last block and leave other untouched
-// [TODO] - export Markdown to a plugin so building happens only via plugins
 // builds the slide structure based on markdown and packages
 buildSlide = function( o ){
   var frag;

@@ -8,7 +8,6 @@ Git = {
     return commit( msg, path, project, data, filepath );
   },
   
-  // [TODO] - recursive dir list
   buildTree: function(path, project) {
     // var files = fs.readdirSync(path+project.hash);
     return buildHeadTree( path, project );
