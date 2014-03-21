@@ -1,3 +1,4 @@
+
 Deps.autorun(function () {
   var current = Router.current();
 
@@ -20,6 +21,8 @@ Router.configure({
   }
 
 });
+
+Router.onBeforeAction('loading');
 
 
 Router.map(function() { 
@@ -99,31 +102,36 @@ Router.map(function() {
     layoutTemplate: 'fullLayout'
   });
   
+  
+  
   var syncy;
   this.route('editFile', {
     path: '/project/:_id/edit/:path',
     waitOn: function(){
-      return [
-      new SyncLoader('text',this.params._id, this.params.path),
-      Meteor.subscribe('project', this.params._id )];
+      return new SyncLoader('text',this.params._id, this.params.path);
+      // return Meteor.subscribe('project', this.params._id );
+      // return [
+      //   new SyncLoader('text',this.params._id, this.params.path),
+      //   Meteor.subscribe('project', this.params._id )
+      // ];
     },
     data: function(){
       return { 
         project: Projects.findOne({_id: this.params._id}),
         file: {
           path: this.params.path,
-          data: fileData
+          data: Session.get('fileData')
         }
       }
     },
-    action: function(){
-      // this.render();
-    },
-    onData: function(){
-      console.log( !!this.data().file.data );
-      if( !!this.data().file.data )
-        this.render();
-    }
+    // action: function(){
+    //   // this.render();
+    // },
+    // onData: function(){
+    //   console.log( !!this.data().file.data );
+    //   if( !!this.data().file.data )
+    //     this.render();
+    // }
     
   });
 
@@ -257,7 +265,6 @@ Router.map(function() {
 // Reactive Object to pass to the waitOn function for wait on data is ready
 var id = null;
 var retObj = null;
-var fileData = fileData;
 SyncLoader = function( id, _id, filepath ){
   if ( retObj ) return retObj; 
 
@@ -266,11 +273,10 @@ SyncLoader = function( id, _id, filepath ){
 
   var ready = function(){
     readyFlagDep.depend();
-    return false;
+    return readyFlag;
 
   }
   var setReady = function( val ){
-    console.log('setData');
     readyFlag = val;
     readyFlagDep.changed();
   }
@@ -282,7 +288,7 @@ SyncLoader = function( id, _id, filepath ){
   // },3000);
   
   Meteor.call('openFile', _id, filepath, function(err, data){
-    fileData = data;
+    Session.set('fileData',data);
     setReady(true);
   });
   

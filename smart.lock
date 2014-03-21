@@ -14,11 +14,7 @@
       "bootboxjs": {},
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
-        "branch": "blaze-integration"
-      },
-      "blaze-layout": {
-        "git": "https://github.com/EventedMind/blaze-layout.git",
-        "branch": "devel"
+        "branch": "dev"
       }
     },
     "packages": {
@@ -62,18 +58,18 @@
       },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
-        "branch": "blaze-integration",
-        "commit": "f8ffd44bceacc6a55f4ebcc218c072f5a18138b4"
-      },
-      "blaze-layout": {
-        "git": "https://github.com/EventedMind/blaze-layout.git",
-        "branch": "devel",
-        "commit": "f52f416d6277f27b11832355298553e46b8cc6fd"
+        "branch": "dev",
+        "commit": "0fc9cab6a939e99bc2aa3425d0ff51a20284fa06"
       },
       "relocator": {
         "git": "git@bitbucket.org:liquidlearningdev/relocator.git",
         "branch": "master",
         "commit": "ea290782d447ff3d57be0e36411ee89dc360f9aa"
+      },
+      "blaze-layout": {
+        "git": "https://github.com/EventedMind/blaze-layout.git",
+        "branch": "master",
+        "commit": "2664f817844fba0fab0455a79bc62782c9091ad0"
       },
       "npm": {
         "git": "https://github.com/arunoda/meteor-npm.git",
