@@ -12,8 +12,10 @@
       "marked": {},
       "GAnalytics": {},
       "bootboxjs": {},
-      "iron-router": {},
-      "moment": {}
+      "iron-router": {
+        "git": "https://github.com/EventedMind/iron-router.git",
+        "branch": "dev"
+      }
     },
     "packages": {
       "bootstrap-wysiwyg": {
@@ -56,13 +58,8 @@
       },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
-        "tag": "v0.7.0",
-        "commit": "05f34bc48c4cad9fdaa366c1ddcabe6980232ece"
-      },
-      "moment": {
-        "git": "https://github.com/acreeger/meteor-moment.git",
-        "tag": "v2.5.1",
-        "commit": "8c9bc5d3fc96705057737cb9743d555417f6e551"
+        "branch": "dev",
+        "commit": "1f65add04c5a83c2d8ebf750953c30e92a78d913"
       },
       "relocator": {
         "git": "git@bitbucket.org:liquidlearningdev/relocator.git",
@@ -76,8 +73,8 @@
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
-        "tag": "v0.2.2",
-        "commit": "8bc53798fe5965669ae67c72f91829fcfdceabfd"
+        "branch": "master",
+        "commit": "eaa6b5f3c2c25f831f6453f8962b33f69d9b21a4"
       },
       "npm": {
         "git": "https://github.com/arunoda/meteor-npm.git",

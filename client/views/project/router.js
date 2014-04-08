@@ -13,7 +13,8 @@ Router.map(function() {
       return Meteor.subscribe('project', this.params._id);
     },
     data: function(){
-      return Projects.findOne({_id:this.params._id});
+      var o = { _id: 'LyCMjLFyjg82kfAbb' };
+      return _.extend(o,Projects.findOne({_id:this.params._id}));
     }
   });
 
@@ -70,18 +71,16 @@ Router.map(function() {
         project: Projects.findOne({_id: this.params._id}),
         file: {
           path: this.params.path,
-          data: fileData
+          data: Session.get('fileData')
         }
       }
-    },
-    action: function(){
-      this.render();
     }
-    
   });
+  
+  
 
   this.route('projectSettings', {
-    path: '/project/settings/:_id',
+    path: '/project/:_id/settings',
     waitOn: function(){
       return Meteor.subscribe('project', this.params._id );
     },
@@ -93,14 +92,13 @@ Router.map(function() {
   
   this.route('projectPreview', {
 
-    path: '/project/preview/:_id',
+    path: '/project/:_id/view',
     
     waitOn: function(a,b){
       return Meteor.subscribe('project', this.params._id );
     },
     
-    before: function(){
-      syncQue = new SyncQue();
+    onBeforeAction: function(){
     },
     
     data: function(){
@@ -118,9 +116,12 @@ Router.map(function() {
               return note;
             });
         });
+        
         var noteSlides = _.filter( project.ast, function(b){ return b.name == '???'; });
         
         // make a playList from the projectAST
+        // 
+        syncQue = new SyncQue();
         syncQue.initSounds( _.flatten(_.pluck(noteSlides,'data')) );
         
         return { 
@@ -176,7 +177,6 @@ Router.map(function() {
 // Reactive Object to pass to the waitOn function for wait on data is ready
 var id = null;
 var retObj = null;
-var fileData = fileData;
 SyncLoader = function( id, _id, filepath ){
   if ( retObj ) return retObj; 
 
@@ -200,7 +200,7 @@ SyncLoader = function( id, _id, filepath ){
   // },3000);
   
   Meteor.call('openFile', _id, filepath, function(err, data){
-    fileData = data;
+    Session.set('fileData',data);
     setReady(true);
   });
   

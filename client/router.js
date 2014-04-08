@@ -21,6 +21,7 @@ Router.configure({
 
 });
 
+Router.onBeforeAction('loading');
 
 Router.map(function() { 
 
@@ -45,16 +46,12 @@ Router.map(function() {
 		}
 	});
 
-	this.route('editor',{
-    waitOn: function(){
+  // this.route('editor',{
+  //   waitOn: function(){
 
-      return new SyncLoader('text');
-    },
-    action: function(){
-      GAnalytics.pageview("/editor");
-      
-      this.render('editor');
-    }
-  });
+  //     return new SyncLoader('text');
+  //   },
+  //   action: function(){
+  //     GAnalytics.pageview("/editor");
 
 });

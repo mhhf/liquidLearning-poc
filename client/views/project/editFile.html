@@ -2,19 +2,17 @@
 <div class="row-fluid">
   <div id="projectEditWrapper" class="projectViewWrapper">
     {{#with project}}
-    <a href="{{ pathFor 'projectView' }}">{{user.name}}</a> /
-    <a href="{{ pathFor 'projectView' }}">{{name}}</a> /
+    <a href="{{ pathFor 'projectView' params=this }}">{{user.name}}</a> /
+    <a href="{{ pathFor 'projectView' params=this }}">{{name}}</a> /
     {{/with}}
     {{file.path}}
     <span class="info right">
       <a class="save" href="#"><i class="icon-save"></i> save</a>
-      <a class="preview" href="#"><i class="icon-eye-open"></i> preview</a>
       <a href="#" class="notDoneYet"><i class="icon-time"></i> history</a>
     </span>
   </div>
 </div>
 <div class="row-fluid">
-  
   <div id="editor" class="span12"></div>
 </div>
 

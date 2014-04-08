@@ -44,9 +44,12 @@ buildSlide = function( o ){
       if( !plugin ) return false;
       
       // compile html
+      // 
       
-      frag = plugin.getFragment( packageObject );
-      fragment.appendChild( frag );
+     UI.insert( UI.renderWithData( Template['pkg_multipleChoice'], packageObject ), fragment ); 
+      
+      // frag = plugin.getFragment( packageObject );
+      // fragment.appendChild( frag );
       
       // prepare event listeners
       // talk to syncQue
