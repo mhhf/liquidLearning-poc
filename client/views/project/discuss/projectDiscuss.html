@@ -1,14 +1,14 @@
 <template name="projectDiscuss">
-  <a href="{{ pathFor 'projectView' project }}">... back to project</a>
+  <a href="{{ pathFor 'projectView' params=project }}">... back to project</a>
   
-  <a class="btn btn-primary newFeedbackBtn" href="{{pathFor 'newProjectDiscussion' project}}">new Topic</a>
+  <a class="btn btn-primary newFeedbackBtn" href="{{pathFor 'newProjectDiscussion' params=project}}">new Topic</a>
   
   {{> posts }}
 </template>
 
 <template name="newProjectDiscussion">
 
-  <a href="{{ pathFor 'projectView' }}">... back to project</a>
+  <a href="{{ pathFor 'projectView' params=this }}">... back to project</a>
 
 {{> newDiscussionPost }}
 
@@ -17,7 +17,7 @@
 
 <template name="projectDiscussionPost">
 
-  <a href="{{ pathFor 'projectView' project }}">... back to project</a>
+  <a href="{{ pathFor 'projectView' params=project }}">... back to project</a>
 
 {{> discussionPost post }}
 

@@ -5,8 +5,6 @@
 
 standard-app-packages
 insecure
-preserve-inputs
-bootstrap
 less
 bootstrap-wysiwyg
 belt-md5
@@ -25,3 +23,4 @@ llmdParser
 iron-router
 moment
 discussions
+blaze-layout

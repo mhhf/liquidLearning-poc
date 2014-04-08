@@ -3,7 +3,7 @@ PluginController.loadPlugin("multipleChoice", {
   getFragment: function( obj ){
     var html = "";
     
-    var tmp = Template.pkg_multipleChoice(obj);
+    var tmp = Template.pkg_multipleChoice.render(obj);
     var docFragment = Meteor.render( tmp );
     
     
@@ -18,6 +18,10 @@ Template.pkg_multipleChoice.answer = function(){
 Template.pkg_multipleChoice.events = {
   "change input": function(e,t){
     e.preventDefault();
-    console.log( t.find('input') );
+    console.log( 'fetttt' );
+  },
+  "click button": function(e,t){
+    e.preventDefault();
+    console.log('buttton feetttt');
   }
 };

@@ -3,7 +3,7 @@
   {{#each posts}}
   <li>
   <span class="iconWrapper"> <i class="icon-comments"></i></span> 
-  <a class="mainTitle" href="{{pathFor ...postPath}}">
+  <a class="mainTitle" href="{{pathFor ../postPath params=this }}">
     {{ title }}
   </a>
   <br />
@@ -11,7 +11,7 @@
   {{> star }}
   <span class="comments">
     <i class="icon-comment"></i>
-    <a href="{{pathFor ...postPath}}">
+    <a href="{{pathFor ../postPath params=this}}">
       {{comments}} 
     </a>
   </span>

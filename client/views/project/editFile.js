@@ -1,9 +1,10 @@
 var editor;
 
 Template.editFile.rendered = function(){
-  if(!editor)
+  console.log(this.data);
+  
   editor = CodeMirror(this.find('#editor'),{
-    value: this.data.file.data,
+    value: this.data.file.data || '',
     mode:  "markdown",
     lineNumbers: true,
     extraKeys: {"Ctrl-J": "autocomplete"}
@@ -35,3 +36,4 @@ Template.editFile.events = {
     
   }
 }
+

@@ -32,7 +32,6 @@ Meteor.publish('project', function(_id){
 });
 
 
-
 Meteor.methods({
   openFile: function( projectId, filepath ){
     
@@ -89,9 +88,6 @@ Meteor.methods({
     
     return true;
   },
-  
-  
-  
   
   projectNew: function(o){
 

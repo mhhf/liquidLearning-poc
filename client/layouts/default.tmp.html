@@ -3,19 +3,18 @@
     <!-- render to the sidebar yield -->
   </aside>
   <nav class="navbar">
-     {{yield 'navbar'}}
+    {{> yield region="navbar"}}
   </nav>
 
   
   <div class="row-fluid">
     <div class="span10 offset1 mainWrapper">
-      {{yield}}
+      {{> yield}}
     </div>
   </div>
 
   <footer>
     <!-- render to the footer yield -->
-    {{yield 'footer'}}
   </footer>
   
 </template>
