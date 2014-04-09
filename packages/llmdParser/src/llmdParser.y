@@ -105,7 +105,11 @@ BLOCKS
 
 OPT_PARAMS
     : PARAM OPT_PARAMS
-      { $$ = [$1].concat($2) }
+      { 
+        var param = $1;
+        if(yy.ctx[param]) param = yy.ctx[param];
+        $$ = [param].concat($2)
+      }
     | 
       { $$ = [] }
     ;
@@ -120,7 +124,8 @@ BLOCK
         $$ = { type: 'block', name: $1, data: $5, opt: $2 };
       }
     | BEGIN_PACKAGE OPT_PARAMS PACKAGELINES END_PACKAGE EOL
-      { $$ = { type:'pkg', name:$1, opt:$2, data: $3 }; }
+      {
+      $$ = { type:'pkg', name:$1, opt:$2, data: $3 }; }
     | BEGIN_CODE EOS CODELINES END_CODE EOS
       { $$ = [$1+$2+$3+$4+($6.length>0?$5:'')]; }
     | MD

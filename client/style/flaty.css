@@ -2142,12 +2142,6 @@ Bordered form layout
 .alert p {
     margin: 9px 0;
 }
-/* Modal ------------------------------------------ */
-.modal {
-    -webkit-border-radius: 0;
-       -moz-border-radius: 0;
-            border-radius: 0;
-}
 
 /* Typehead ------------------------------------------ */
 .typeahead.dropdown-menu li a {

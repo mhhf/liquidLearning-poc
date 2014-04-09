@@ -18,13 +18,6 @@ Router.map(function() {
     }
   });
 
-  // this.route('projectPreview', {
-  //   path: '/project/preview/:_id',
-  //   data: function(){
-  //     return Projects.findOne({_id:this.params._id});
-  //   }
-  // });
-
   this.route('projects', {
     path: '/projects',
     waitOn: function(){
@@ -46,18 +39,6 @@ Router.map(function() {
     }
   });
 
-  // this.route('projectEdit', {
-  //   path: '/project/edit/:_id',
-  //   waitOn: function(){
-  //     return Meteor.subscribe('userProjects');
-  //   },
-  //   data: function(){
-  //     var project = Projects.findOne({_id: this.params._id });
-  //     return project;
-  //   },
-  //   layoutTemplate: 'fullLayout'
-  // });
-  
   this.route('editFile', {
     path: '/project/:_id/edit/:path',
     waitOn: function(){
@@ -105,6 +86,7 @@ Router.map(function() {
       var project = Projects.findOne({ _id: this.params._id });
       window.project = project;
       
+      // [TODO] - export to syncQue
       if( project ) {
        
         // inherent blockIndex number to syncs
@@ -135,34 +117,6 @@ Router.map(function() {
       }
       console.log("err");
       return null;
-    },
-    
-    action: function(data) {
-    
-      // Subtitle Visuals
-      // [TODO] - free from router - wait for shark rendering engine #UI
-      Deps.autorun( function(){
-        var ele = syncQue.getElement();
-        var pointer = syncQue.getPointer();
-        
-        if(ele) {
-          // align the top position of the subtitles
-          $('.textContainer center').css('margin-top',-20*pointer+'px');
-          
-          // mark the current line as active
-          $('.textContainer center span').removeClass('playing');
-          if( pointer != -1 )
-            $('.textContainer center span#text_'+pointer).addClass('playing');
-          
-          
-          // mark the current blob as active
-          $('.processWrapper li').removeClass('playing');
-          $('.processWrapper li#playstate_'+ele.i).addClass('playing');
-        }
-        
-      });
-      
-      this.render();
     },
     
     unload: function(){

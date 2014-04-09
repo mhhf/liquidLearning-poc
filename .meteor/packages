@@ -6,7 +6,6 @@
 standard-app-packages
 insecure
 less
-bootstrap-wysiwyg
 belt-md5
 http
 spin
@@ -24,3 +23,5 @@ iron-router
 moment
 discussions
 blaze-layout
+bootstrap-3
+bootstrap

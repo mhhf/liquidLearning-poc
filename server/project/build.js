@@ -15,17 +15,23 @@ Meteor.methods({
     var language = project.language || 'en';
     
     
+    // Build Context
+    var projectCtx = processContextFiles( path+project.hash+'/' );
+    
     // Build AST with inclusion 
-    var ast = processFile( path+project.hash+'/', 'index.md' );
+    var ast = processFile( path+project.hash+'/', 'index.lmd', projectCtx );
     
-    // Filter ast for notes and generate syncs
-    var newAst = filterNotes( ast, language );
+    var ast = mergeContext( ast, projectCtx );
     
+    // 
+    // // Filter ast for notes and generate syncs
+    // var newAst = filterNotes( ast, language );
+    // 
     Projects.update({ _id: _id }, {$set: {
-      ast: newAst,
-      build: {
-        date: new Date()
-      },
+      // ast: newAst,
+      // build: {
+      //   date: new Date()
+      // },
       state: 'ready',
       changed: false
     }});
@@ -94,4 +100,24 @@ filterNotes = function( ast, language ) {
   });
 
   return newAst;
+}
+
+processContextFilesAsync = function( projectPath, cb ){
+  var ctx = {};
+  fs.readdir( projectPath, function(err, files){
+    files.forEach( function( file ){
+      
+      if(file.match('\.ljs$')) {
+        var data = fs.readFileSync( projectPath+file , "utf8" );
+        ctx = _.extend(ctx, JSON.parse(data));
+      }
+        
+    });
+    cb(null, ctx);
+  });
+}
+processContextFiles = Meteor._wrapAsync( processContextFilesAsync );
+
+mergeContext = function( ast, ctx ){
+  
 }

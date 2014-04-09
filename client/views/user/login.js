@@ -2,7 +2,8 @@ Template.login.events = {
   'submit': function(e,t){
     e.preventDefault();
 
-    switch(e.srcElement.id) {
+    console.log(e);
+    switch(e.target.id) {
       case "form-login":
         var user = t.find('input[name=user]').value;
         var pass = t.find('input[name=password]').value;

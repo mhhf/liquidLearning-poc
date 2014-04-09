@@ -1,12 +1,10 @@
-// [TODO] - simplify with the new rendering engine
-var init = false;
+// [TODO] - export to syncQue
 var lastBlock = 0;
 Template.slide.rendered = function(e,t){
   
   var template = this;
+  lastBlock = 0;
   
-  if( !init ) {
-    init = true;
     Deps.autorun( function(e, t){
       
       // SyncQue must be loaded
@@ -15,7 +13,6 @@ Template.slide.rendered = function(e,t){
         return false;
       
       // [TODO] - rename md to slideObject
-      // 
       var currentSlide = syncQue.getElement().slideIndex;
       var wrapper = template.find('#slideWrapper');
       // check if block was already placed
@@ -43,7 +40,6 @@ Template.slide.rendered = function(e,t){
       
       lastBlock = currentSlide;
     });
-  }
 }
 
 scrollDown = function( wrapper, to ) {

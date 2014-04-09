@@ -28,5 +28,6 @@ do{
 } while ( token != 'EOF' && (i<max || max == -1) )
 console.log('\nOUTPUT:'.green);
 
+parser.yy.ctx = {keks:'a'};
 var output = parser.parse(content);
 console.log(JSON.stringify(output,null,2));
