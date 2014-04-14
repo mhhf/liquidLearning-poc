@@ -8,6 +8,7 @@
   "packages": {
     "llmdParser": {
       "git": "git@bitbucket.org:liquidlearningdev/slideparser.git"
-    }
+    },
+    "tts"
   }
 }

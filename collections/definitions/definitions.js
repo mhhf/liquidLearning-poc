@@ -1,7 +1,5 @@
 Projects = new Meteor.Collection('projects');
 
-Syncs = new Meteor.Collection('syncs');
-
 Consensus = new Meteor.Collection('consensus');
 
 

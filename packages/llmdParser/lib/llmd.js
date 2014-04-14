@@ -1,4 +1,3 @@
-// [TODO] - merge block and package types to plugin types
 LLMD = function() {
   this.currentNode = null;
 }

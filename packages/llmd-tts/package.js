@@ -3,7 +3,7 @@ Package.describe({
 });
 
 Package.on_use(function (api) {
-  api.use('llmdParser','server');
+  api.use(['llmdParser','tts','belt-md5'],'server');
   
   api.add_files("tts.js", ["server"]);
 
