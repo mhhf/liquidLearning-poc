@@ -19,9 +19,8 @@ Template.slide.rendered = function(e,t){
       if( $('#block_'+currentSlide,wrapper).length > 0 )
         return false;
       
-      
       var ast = _.filter(template.data.ast.slice( lastBlock, currentSlide ), function(block){
-        return block.type != 'block' || block.name != '???';
+        return block.name != '???';
       });
       
       var fragment = buildSlide( ast );

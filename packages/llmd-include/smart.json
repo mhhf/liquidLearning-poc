@@ -1,0 +1,13 @@
+{
+  "name": "llmd-include",
+  "description": "dynamicly include files from a dir",
+  "homepage": "git@bitbucket.org:denis_erfurt/llmd-include.git",
+  "version": "0.1.0",
+	"author": "Denis Erfurt <denis.erfurt@gmail.com>",
+  "git": "git@bitbucket.org:denis_erfurt/llmd-include.git",
+  "packages": {
+    "llmdParser": {
+      "git": "git@bitbucket.org:liquidlearningdev/slideparser.git"
+    }
+  }
+}

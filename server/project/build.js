@@ -15,23 +15,29 @@ Meteor.methods({
     var language = project.language || 'en';
     
     
+    console.log(LLMDCompiler);
+    
     // Build Context
     var projectCtx = processContextFiles( path+project.hash+'/' );
     
-    // Build AST with inclusion 
-    var ast = processFile( path+project.hash+'/', 'index.lmd', projectCtx );
+    // Initialize the Parser with the context
+    LlmdParser.yy.ctx = projectCtx;
+    LlmdParser.yy.llmd = new LLMD();
     
-    var ast = mergeContext( ast, projectCtx );
+    // Build AST with inclusion 
+    var ast = processFile( path+project.hash+'/', 'index.lmd' );
+    
+    // var ast = mergeContext( ast, projectCtx );
     
     // 
-    // // Filter ast for notes and generate syncs
-    // var newAst = filterNotes( ast, language );
+    // Filter ast for notes and generate syncs
+    var newAst = filterNotes( ast, language );
     // 
     Projects.update({ _id: _id }, {$set: {
-      // ast: newAst,
-      // build: {
-      //   date: new Date()
-      // },
+      ast: newAst,
+      build: {
+        date: new Date()
+      },
       state: 'ready',
       changed: false
     }});
@@ -46,32 +52,59 @@ processFile = function( path, file ){
   var data = fs.readFileSync( path+file , "utf8" );
   var fileAST = LlmdParser.parse( data+"\n" ); 
   
-  // import files
-  for (var i=0; i < fileAST.length; i++) {
-    if( fileAST[i].type == 'pkg' && fileAST[i].name == 'include' ) 
-    {
-      if( typeof fileAST[i].opt[0] == 'string' ) {
-        retAST = retAST.concat( processFile( path, fileAST[i].opt[0] ) );
-      } else {
-        throw new Error('ERROR: file '+file+' can not be included: no such file.');
-      }
-    } else {
-      retAST.push(fileAST[i]);
-    }
-  }
+  retAST = processNestedAST(fileAST);
   
   return retAST;
 }
+
+processNestedASTASYNC = function( ast, cb ){
+  var retAST = [];
+  var waitFor = 0;
+  var allReady = false;
+  
+  // import files
+  for (var i=0; i < ast.length; i++) {
+    if( LlmdParser.yy.llmd.hasPreprocess( ast ) ) {
+      
+      waitFor ++;
+      retAST.push(null);
+      
+      // Function Wrapper to perserve the right i value
+      (function(i){
+      
+        LlmdParser.yy.llmd.preprocess(ast[i], function(err,ret){
+          // Insert at the right place
+          retAST[i] = ret;
+           
+          // // Test if all preprocessor ready
+          if( --waitFor == 0 && allReady ) {
+            cb( null, _.flatten( retAST ) );
+          }
+        });
+        
+      })(i)
+      
+    } else {
+      retAST.push(ast[i]);
+    }
+  }
+  
+  allReady = true;
+  if( waitFor == 0 ) cb( null, _.flatten( retAST ) );
+  
+}
+processNestedAST = Meteor._wrapAsync( processNestedASTASYNC );
+
 
 // [TODO] - #sync export to SyncQue/ Syncs package
 filterNotes = function( ast, language ) {
   var notes = [];
 
   ast.forEach( function(obj){
-    if( !( obj.type == 'block' && obj.name == '???' ) ) return false;
+    if( !( obj.name == '???' ) ) return false;
 
     // set lanuage of the explanation block
-    var lang = ( obj.opt && obj.opt[0] ) || language;
+    var lang = obj.lang || language;
 
     obj.data.forEach( function( text ){
       notes.push({
@@ -87,10 +120,9 @@ filterNotes = function( ast, language ) {
     return o;
   });
 
-
   // Substitude the string with the syncs object
   var newAst = _.map(ast, function(o){ // each slide
-    if( o.type == 'block' && o.name == '???' ) o.data = _.map(o.data, function(n) { // each note
+    if( o.name == '???' ) o.data = _.map(o.data, function(n) { // each note
       // Substitude note with syncObject
       if( typeof n == 'string' )
       return _.find(result, function(r){ return r.text == n; }); 
@@ -118,6 +150,6 @@ processContextFilesAsync = function( projectPath, cb ){
 }
 processContextFiles = Meteor._wrapAsync( processContextFilesAsync );
 
-mergeContext = function( ast, ctx ){
-  
-}
+// mergeContext = function( ast, ctx ){
+//   
+// }

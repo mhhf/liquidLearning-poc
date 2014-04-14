@@ -6,13 +6,13 @@ bnf = require('ebnf-parser');
 Lexer = require('jison-lex');
 chai = require('chai');
 
+llmd = require('lib/llmd.js')
+
 var grammar = fs.readFileSync('src/llmdParser.y','utf8');
 var content = fs.readFileSync('content.md','utf8');
 
 parser = new Parser(grammar);
 lexer = new Lexer(grammar);
-
-
 
 
 console.log('\nCONTENT:'.green);
@@ -28,6 +28,9 @@ do{
 } while ( token != 'EOF' && (i<max || max == -1) )
 console.log('\nOUTPUT:'.green);
 
-parser.yy.ctx = {keks:'a'};
+parser.yy.ctx = {keks:{wow:'aha?'}};
+parser.yy.llmd = new LLMD();
+
 var output = parser.parse(content);
+
 console.log(JSON.stringify(output,null,2));

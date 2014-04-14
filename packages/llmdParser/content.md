@@ -1,2 +1,5 @@
-{{>en keks}}
-This is a Block.
+{{#if c}}
+true
+{{else}}
+false
+{{/if}}

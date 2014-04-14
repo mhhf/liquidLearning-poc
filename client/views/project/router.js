@@ -1,3 +1,5 @@
+Router.onBeforeAction('loading');
+
 Router.map(function() {
 
   //////////////////////////////////////////////////////     PROJECT
@@ -71,15 +73,13 @@ Router.map(function() {
   });
   
   
+  // [TODO] - bug!! Why does the data get called when there is no project loaded yet?
   this.route('projectPreview', {
 
     path: '/project/:_id/view',
     
-    waitOn: function(a,b){
+    waitOn: function(){
       return Meteor.subscribe('project', this.params._id );
-    },
-    
-    onBeforeAction: function(){
     },
     
     data: function(){
@@ -92,7 +92,7 @@ Router.map(function() {
         // inherent blockIndex number to syncs
         _.each( project.ast, function( block, blockIndex ){
           block.index = blockIndex;
-          if( block.type == 'block' && block.name == '???' )
+          if( block.name == '???' )
             _.map( block.data , function( note ){
               note.slideIndex = blockIndex;
               return note;

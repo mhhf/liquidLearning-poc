@@ -28,25 +28,21 @@ buildSlide = function( o ){
   var frag;
   var fragment = document.createElement('div');
   
-  
   o.forEach( function( obj ){
     
-    if( typeof obj.md == 'string' ) { // simple Markdown
+    if( obj.name == 'md' ) { // simple Markdown
       var divWrapper = document.createElement('span');
-      divWrapper.innerHTML = marked( obj.md );
+      divWrapper.innerHTML = marked( obj.data );
       fragment.appendChild( divWrapper );
-    } else if( obj.type == 'pkg' ){ // package
-      var packageObject =  JSON.parse( obj.data );
-      
+    } else if( obj.name == 'pkg' ){ // package
       
       // look for package
       var plugin = PluginController.getPlugin( obj.name );
       if( !plugin ) return false;
       
-      // compile html
-      // 
+      var packageObject = plugin.data( obj.opt );
       
-     UI.insert( UI.renderWithData( Template['pkg_multipleChoice'], packageObject ), fragment ); 
+     UI.insert( UI.renderWithData( Template[ plugin.template ], packageObject ), fragment ); 
       
       // frag = plugin.getFragment( packageObject );
       // fragment.appendChild( frag );

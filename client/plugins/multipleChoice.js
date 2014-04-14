@@ -1,13 +1,13 @@
 // [TODO] - make template interactive - wait for the new rendering engine
 PluginController.loadPlugin("multipleChoice", {
-  getFragment: function( obj ){
-    var html = "";
+  template: 'pkg_multipleChoice',
+  data: function( o ){
     
-    var tmp = Template.pkg_multipleChoice.render(obj);
-    var docFragment = Meteor.render( tmp );
+    // User has to specify a questions object
+    if( o && o[0] && typeof o[0] == 'object' ) return o[0];
+    else throw new Error('no questions specified');
     
-    
-    return docFragment;
+    return null;
   }
 });
 
@@ -22,6 +22,6 @@ Template.pkg_multipleChoice.events = {
   },
   "click button": function(e,t){
     e.preventDefault();
-    console.log('buttton feetttt');
+    console.log('buttton feetttt', this);
   }
 };
