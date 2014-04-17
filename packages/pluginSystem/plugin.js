@@ -11,17 +11,18 @@ BasicPlugin.prototype.load = function(){
   return {then:function(cb1,cb2){cb1(true);}};
 }
 BasicPlugin.prototype.execute = function(){
-  this._block = false;
+  this._block = !!this.blocking;
 }
 BasicPlugin.prototype.build = function(ctx){
   return true;
 }
 
-BasicPlugin.prototype.buildWrapper = function(ctx){
-  var self = this;
-  self._build = true;
+BasicPlugin.prototype.buildWrapper = function(ctx, last){
+  var build = this.build(ctx, last);
   
-  return this.build(ctx);
+  this._build = !!build;
+  
+  return build;
   
 }
 
@@ -41,22 +42,29 @@ BasicPlugin.prototype.loadingWrapper = function(ctx){
 }
 
 // TODO: timeout?
-BasicPlugin.prototype.executeWrapper = function(execute){
+BasicPlugin.prototype.executeWrapper = function( ctx, execute ){
   
   this._run = true;
   var self = this;
   
+  if( this.template ) 
+    this.ui = UI.renderWithData( Template[ 'pkg_multipleChoice' ], this);
+  
   this.domNode = this.render && this.render();
   execute();
   
-  return new Promise( function(resolve){
+  var promise = new Promise( function(resolve){
     
-    self.execute.apply( self, [ function(){
-      self.unblock();
+    self.executeCallback = function(){
+      self._unblock();
       resolve()
-    }] );
+    };
+    
+    self.execute.apply( self, [ ctx, self.executeCallback] );
 
   });
+  
+  return promise; 
   
 };
 
@@ -78,15 +86,19 @@ BasicPlugin.prototype.isUnblocked = function(){
 BasicPlugin.prototype.block = function(){
   this._block = true;
 }
-BasicPlugin.prototype.unblock = function(){
+BasicPlugin.prototype._unblock = function(){
   this._block = false;
+}
+BasicPlugin.prototype.unblock = function(){
+  this.executeCallback && this.executeCallback();
 }
 
 
 
 
 BasicPlugin.extend = function(properties){
-  var Plugin = function( o ){
+  var Plugin = function( o, ctx ){
+    this.ctx = ctx;
     for(var k in o) {
       this[k] = o[k];
     }

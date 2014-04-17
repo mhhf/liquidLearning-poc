@@ -21,7 +21,12 @@ var build = function( project, cb ){
   // Build AST with inclusion 
   // var ast = processFile( path+project.hash+'/', 'index.lmd' );
 
-  LLMD.preprocess({name:'include',data:'index.lmd'}, cb);
+  LLMD.preprocess({name:'include',data:'index.lmd'}, function(err, ast){
+    cb(null, {
+      ast: ast,
+      ctx: projectCtx
+    });
+  });
 
 }
 

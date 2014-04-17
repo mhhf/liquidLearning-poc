@@ -1,22 +1,16 @@
 TTSPlugin = BasicPlugin.extend({
   load: function( ctx, cb ){
-    // ctx.soundBuffer.preload( ctx, cb );
     
-    setTimeout(function(){
-
-      cb();
-
-    },2000);
+    ctx.mediaHandler.initSounds( this.data, cb );
+      
+    
   },
-  execute: function( cb ){
+  execute: function( ctx, cb ){
     
-    setTimeout( function(){
-      
-      cb();
-      
-    },1000);
+    ctx.mediaHandler.playSounds( this.data, cb );
     
-  }
+  },
+  previewTemplate: 'llmd_preview_tts'
 });
 
 

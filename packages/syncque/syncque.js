@@ -29,8 +29,8 @@ SyncQue = function( o ){
 
 	var _startPlaying = 0; // Time when the player starts to play
 	var _loadingCounter = 0; 
-	var _syncObjects;
-  var _soundBuffersHashMap;
+	var _syncObjects = {};
+  var _soundBuffersHashMap = {};
 	var _preloadQueue;
 	var context;
 
@@ -55,22 +55,27 @@ SyncQue = function( o ){
 	// TODO #loading: build a buffer queue - its not wise to pre buffer an unknown length of sound files
 	this.initSounds = function( o, cb ) {
 
-		_syncObjects = o;
-    _soundBuffersHashMap = {};
+		// _syncObjects = _.extend(_syncObjects,o);
+    // _soundBuffersHashMap = {};
     
-    _.each( _syncObjects, function( syncObject, index ){
-      _soundBuffersHashMap[ syncObject.hash ] = null;
-      syncObject.i = index;
-    });
+    // _.each( _syncObjects, function( syncObject, index ){
+    //   _soundBuffersHashMap[ syncObject.hash ] = null;
+    //   syncObject.i = index;
+    // });
 
-		_loadingCounter = Object.keys(_soundBuffersHashMap).length;
+		// _loadingCounter = Object.keys(_soundBuffersHashMap).length;
+    var loadingCounter = o.length;
 
 		_.each(o, function( ttsO ){
-			loadSound( ttsO, cb );
+			loadSound( ttsO, function(){
+        if( --loadingCounter == 0 ) cb()
+      });
 		});
 	}
 
-
+  this.loadSound = function( ttsO, cb ){
+    loadSound( ttsO, cb );
+  }
 	var loadSound = function( ttsO, cb ) {
 		var request = new XMLHttpRequest();
 		request.open('GET', ttsO.link, true);
@@ -80,6 +85,7 @@ SyncQue = function( o ){
 		request.onload = function(a,b) {
 			context.decodeAudioData( request.response, function(buffer) {
 				insertBuffer(ttsO.hash, buffer);
+        cb();
 				_bufferDataDeps.changed();
 			}, function(e){
 				console.log(request, e,a,b, ttsO.link);
@@ -87,6 +93,17 @@ SyncQue = function( o ){
 		}
 		request.send();
 	}
+  
+  this.playSounds = function( ttsOs, cb ){
+    _bufferPointer = 0;
+    _syncObjects = ttsOs;
+    
+    playNext( cb );
+    
+  };
+  this.playSound = function( hash, cb ){
+    playSound( _soundBuffersHashMap[hash], 0, cb );
+  }
 
 	// TODO #garbageCollection: destroy played sounds after a while
 	var playSound = function( buffer, time, endedCallback ) {
@@ -118,15 +135,15 @@ SyncQue = function( o ){
 	}
 
 
-  var playNext = function(){
+  var playNext = function(cb){
 
-    if( _bufferPointer + 1 in _syncObjects ) {
+    if( _bufferPointer in _syncObjects ) {
       playSound( getNextBuffer(), 0, function(){
 
         // make a little break between sentances
         //
         setTimeout( function(){
-          playNext();
+          playNext(cb);
         },250);
       });
 
@@ -134,6 +151,8 @@ SyncQue = function( o ){
       updatePlayState();
 
       _bufferStateDeps.changed();
+    } else {
+      cb();
     }
 
   }
@@ -172,7 +191,7 @@ SyncQue = function( o ){
   }
   
   var getNextBuffer = function(){
-    return _soundBuffersHashMap[ _syncObjects[++_bufferPointer].hash ];
+    return _soundBuffersHashMap[ _syncObjects[_bufferPointer++].hash ];
   }
   
   var getBuffer = function( i ){

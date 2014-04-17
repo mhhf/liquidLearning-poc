@@ -9,6 +9,7 @@ Package.on_use(function (api) {
   api.use('minimongo', ['client','server']);
   api.use('less', 'client');
   
+  api.add_files("multipleChoice.html", ["client"]);
   api.add_files("multipleChoicePlugin.js", ["client"]);
   
   // if(api)

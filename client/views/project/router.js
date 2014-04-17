@@ -102,29 +102,17 @@ Router.map(function() {
       // [TODO] - export to syncQue
       if( project ) {
         
-        window.interpreter = new LLMDInterpreter( project.ast );
-       
-        // inherent blockIndex number to syncs
-        _.each( project.ast, function( block, blockIndex ){
-          block.index = blockIndex;
-          if( block.name == '???' )
-            _.map( block.data , function( note ){
-              note.slideIndex = blockIndex;
-              return note;
-            });
+        mediaHandler = new SyncQue();
+        var interpreter = window.interpreter = new LLMDInterpreter( project.ast, {
+          mediaHandler: mediaHandler,
+          context: project.ctx
         });
         
-        var noteSlides = _.filter( project.ast, function(b){ return b.name == '???'; });
-        
-        // make a playList from the projectAST
-        // 
-        syncQue = new SyncQue();
-        syncQue.initSounds( _.flatten(_.pluck(noteSlides,'data')) );
-        
         return { 
+          interpreter: interpreter,
           _id: this.params._id,
           ttsObject: Syncs.find(),
-          syncQue: syncQue,
+          syncQue: mediaHandler,
           ast: project.ast,
           syncs: project.syncs,
           project: project

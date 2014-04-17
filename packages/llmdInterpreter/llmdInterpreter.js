@@ -1,4 +1,4 @@
-LLMDInterpreter = function( ast ){
+LLMDInterpreter = function( ast, ctx ){
   this.pointer = 0;
   this.ast = ast;
   this.ast.reverse();
@@ -6,6 +6,10 @@ LLMDInterpreter = function( ast ){
   this.history = [];
   
   this.ts = new TS();
+  
+  this.options = {
+    mute: false 
+  }
   
   this.buildQue = new ReactiveQue({
     ctx: this,
@@ -26,13 +30,23 @@ LLMDInterpreter = function( ast ){
   });
   
   // CTX
-  this.ctx = new CTX();
+  this.ctx = new CTX(ctx);
   var self = this;
   
   Meteor.autorun( function(){
     var ctx = self.ctx.get();
     self.buildQue.test();
   });
+  
+  this.isLoading = function(){
+    var pq = self.playerQue.empty();
+    var bq = self.bufferQue.empty();
+    return (pq && !bq);
+  }
+  
+  this.isPlaying = function(){
+    return self.playerQue.top();
+  }
   
 }
 
@@ -42,21 +56,25 @@ LLMDInterpreter.prototype.buffer = function( num ){
   }
 }
 
+LLMDInterpreter.prototype.valid = function( atom ){
+  return !atom || !( atom.name == '???' && this.options.mute );
+}
+
 // 2. binds the current Context to the ast
 // 
 // [TODO] - Iterator and play controll
 // [TODO] - context binder
 
 LLMDInterpreter.prototype.next = function(){
-  
-  var item = this.ast.pop();
+  var item;
+  while( !this.valid( item = this.ast.pop()) ) {}
   if(!item) return null;
   
   // check if block has a Plugin associated
   if( !PluginHandler.plugin[item.name] ) throw new Error('no Plugin "'+item.name+'" defined');
 
   // create the Plugin
-  var atom = new PluginHandler.plugin[item.name]( item );
+  var atom = new PluginHandler.plugin[item.name]( item, this.ctx );
   var self = this;
   
   this.buildQue.enqueue( atom );
@@ -67,7 +85,7 @@ LLMDInterpreter.prototype.load = function( atom ){
   
   var self = this;
   atom
-  .loadingWrapper()
+  .loadingWrapper(this.ctx.ctx)
   .then( function(suc){
     self.bufferQue.test();
   });
@@ -79,7 +97,7 @@ LLMDInterpreter.prototype.load = function( atom ){
 LLMDInterpreter.prototype.build = function( atom ){
   // console.log('building Atom');
   
-  var build = atom.buildWrapper( this.ctx.get() );
+  var build = atom.buildWrapper( this.ctx.get(), this.isLastBuildBlocking( atom ) );
     
   if( build && build.length ) {
     console.log('new ast chain concat');
@@ -97,16 +115,21 @@ LLMDInterpreter.prototype.build = function( atom ){
     
   } else if( build ){
     this.buildQue.test();
-  } else {
-    console.log('WARN: Build: some context error');
-  }
-  
+  }  
+}
+
+LLMDInterpreter.prototype.isLastBuildBlocking = function(atom){
+  var atomIsLastToBuild = this.buildQue.top() === atom;
+  var loadingQueIsEmpty = this.bufferQue.empty();
+  var playerQueIsEmpty = this.playerQue.empty();
+    
+  return atomIsLastToBuild && loadingQueIsEmpty && playerQueIsEmpty;
 }
 
 
 LLMDInterpreter.prototype.onLoaded = function( atom ){
   
-  console.log(this.ts.get(),' loaded ',atom.name);
+  console.log( atom.name+" loaded "+this.ts.get() );
   
   this.playerQue.enqueue( atom );
   
@@ -114,28 +137,31 @@ LLMDInterpreter.prototype.onLoaded = function( atom ){
 
 LLMDInterpreter.prototype.onBuild = function( atom ){
   
-  console.log(this.ts.get(),' build ',atom.name);
+  console.log( atom.name+" build "+this.ts.get() );
   
   if( !atom._container )
     this.load( atom ); 
 }
 
-LLMDInterpreter.prototype.run = function( instance ){
+LLMDInterpreter.prototype.run = function( atom ){
   
-  console.log(this.ts.get(),' run ',instance.name);
+  console.log( atom.name+" run "+this.ts.get() );
   this.next();
   
   var self = this;
-  instance
-    .executeWrapper(function(){
-      if(instance.domNode)
-        $('#slideWrapper')[0].appendChild( instance.domNode );
+  atom
+    .executeWrapper(this.ctx.ctx, function(){
+      if(atom.domNode) {
+        $('#slideWrapper')[0].appendChild( atom.domNode );
+      }
+      if( atom.ui ) {
+        UI.insert( atom.ui, $('#slideWrapper')[0] ); 
+      }
     })
     .then(function(){
       self.playerQue.test();
+      self.buildQue.test();
     });
-    
-    
   
 }
 
@@ -169,11 +195,22 @@ ReactiveQue = function( o ){
   }
   
   this.top = function(){
+    this.queueDep.depend();
     if( 0 in this.queue )
       return this.queue[0];
     else
       return null;
   }
+  
+  this.getLength = function(){
+    this.queueDep.depend();
+    return this.queue.length;
+  }
+  
+  this.empty = function(){
+    this.queueDep.depend();
+    return this.queue.length == 0;
+  };
   
   this.preHook = function(atom){
     if (!o.isPendingFunction || !atom[o.isPendingFunction]())
@@ -205,8 +242,8 @@ TS = function(){
   }
 }
 
-CTX = function(){
-  this.ctx = {};
+CTX = function(ctx){
+  this.ctx = ctx;
   this.ctxDep = new Deps.Dependency;
   this.get = function(){
     this.ctxDep.depend();
@@ -214,6 +251,11 @@ CTX = function(){
     
   }
   this.change = function(){
+    this.ctxDep.changed();
+  }
+  
+  this.setContext = function( k, v ){
+    this.ctx.context[k] = v;
     this.ctxDep.changed();
   }
 }

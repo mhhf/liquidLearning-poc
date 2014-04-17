@@ -7,10 +7,12 @@ Meteor.methods({
     
     var project = Projects.findOne( { _id: _id, $or:[{public:true},{'acl._id':this.userId}] } );
     
-    var ast = LLMDBuilder.build( project );
+    var build = LLMDBuilder.build( project );
+    
     
     Projects.update({ _id: _id }, {$set: {
-      ast: ast,
+      ast: build.ast,
+      ctx: build.ctx,
       build: {
         date: new Date()
       },

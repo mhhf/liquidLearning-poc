@@ -1,7 +1,8 @@
 <template name="pkg_multipleChoice">
+{{q}}
 {{#each questions}}
 <label>
-  <input type="checkbox" />
+  <input type="checkbox" name="{{id}}"/>
   {{content}}
 </label>
 {{/each}}
