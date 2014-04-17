@@ -107,6 +107,7 @@ Router.map(function() {
           mediaHandler: mediaHandler,
           context: project.ctx
         });
+        interpreter.buffer(4);
         
         return { 
           interpreter: interpreter,

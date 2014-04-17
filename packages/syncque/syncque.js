@@ -1,20 +1,4 @@
-// #SyncQue - An Time-Event Map / Audio Handler
-//
-// Its necessary in the player module to bind events to a time of execution
-// its possible to jump between times for and backwards
-// a preloader (buffer) of media data is importet to provide a fluid workflow
-//
-//
-// Therefore the folowing questions are importent to answer:
-//
-//	 1. what is the best way to load, play and destroy sounds
-//	 	 * what is the best way to handle a dynamic buffer
-//	 2. what is the best way to track time
-//	 	 * dispatch current playing sound
-//	 	 * get next event
-//	 	 * jump to a time position
-//	 	 * ad a event at a given timeframe
-//	 	 
+// #MediaHandler
 
 // [TODO] - indicate dublicate buffer and dont loading it twice
 SyncQue = function( o ){
@@ -22,32 +6,22 @@ SyncQue = function( o ){
 	var _bufferDataDeps = new Deps.Dependency;
 	var _bufferStateDeps = new Deps.Dependency;
 
-	var _intervall; // ticker intervall
-	var _startTime; // current time in the play cycle
-	var _bufferPointer = -1; // pointer, to the current place in the playlist
+	var _bufferPointer = null; // pointer, to the current place in the playlist
 	var _currentSource; // playing audio source
 
-	var _startPlaying = 0; // Time when the player starts to play
-	var _loadingCounter = 0; 
 	var _syncObjects = {};
   var _soundBuffersHashMap = {};
-	var _preloadQueue;
 	var context;
 
 	// GRAB Audio Context
 	try {
 		// Fix up for prefixing
-		window.AudioContext = window.AudioContext||window.webkitAudioContext;
+		window.AudioContext = window.AudioContext || window.webkitAudioContext;
 		context = new AudioContext();
 	}
 	catch(e) {
 		alert('Web Audio API is not supported in this browser');
 	}
-
-	// add an event to the playline
-	this.addEvent = function( e ){
-		
-	};
 
 	////// LOADING AND BUFFERING
 
@@ -55,15 +29,6 @@ SyncQue = function( o ){
 	// TODO #loading: build a buffer queue - its not wise to pre buffer an unknown length of sound files
 	this.initSounds = function( o, cb ) {
 
-		// _syncObjects = _.extend(_syncObjects,o);
-    // _soundBuffersHashMap = {};
-    
-    // _.each( _syncObjects, function( syncObject, index ){
-    //   _soundBuffersHashMap[ syncObject.hash ] = null;
-    //   syncObject.i = index;
-    // });
-
-		// _loadingCounter = Object.keys(_soundBuffersHashMap).length;
     var loadingCounter = o.length;
 
 		_.each(o, function( ttsO ){
@@ -76,6 +41,7 @@ SyncQue = function( o ){
   this.loadSound = function( ttsO, cb ){
     loadSound( ttsO, cb );
   }
+  
 	var loadSound = function( ttsO, cb ) {
 		var request = new XMLHttpRequest();
 		request.open('GET', ttsO.link, true);
@@ -95,12 +61,13 @@ SyncQue = function( o ){
 	}
   
   this.playSounds = function( ttsOs, cb ){
-    _bufferPointer = 0;
+    _bufferPointer = null;
     _syncObjects = ttsOs;
     
     playNext( cb );
     
   };
+  
   this.playSound = function( hash, cb ){
     playSound( _soundBuffersHashMap[hash], 0, cb );
   }
@@ -117,28 +84,13 @@ SyncQue = function( o ){
 	}
 
 	// TODO #sync: rewrite the intervall approach to the native source.currentTime playtime
-	//
-	//
-	// start playing the sounds in the correct order
-	var startPlay = function(){
-
-    _startTime = +new Date();
-    
-    playNext();
-
-    // XXX: da fuck? this should be exported to the synthesizer
-		var time = 0;
-		for(var i=0; i<_syncObjects.length; i++) {
-			_syncObjects[i].t = time;
-			time += getBuffer(i).duration * 1000 + 200;
-		}
-	}
-
 
   var playNext = function(cb){
-
-    if( _bufferPointer in _syncObjects ) {
-      playSound( getNextBuffer(), 0, function(){
+    
+    var buffer;
+    if( buffer = getNextBuffer() ) {
+      
+      playSound( buffer, 0, function(){
 
         // make a little break between sentances
         //
@@ -147,21 +99,19 @@ SyncQue = function( o ){
         },250);
       });
 
-      
-      updatePlayState();
-
-      _bufferStateDeps.changed();
     } else {
       cb();
     }
-
+    
+    // updatePlayState();
+    _bufferStateDeps.changed();
   }
 
 	// inserts the loaded soundBuffer:ArrayBuffer at the right place in the sound
 	// Queue
 	var insertBuffer = function( hash, buffer ) {
     _soundBuffersHashMap[ hash ] = buffer;
-    setStatus( hash, 'loaded' );
+    // setStatus( hash, 'loaded' );
     return true;
 	}
 
@@ -169,7 +119,7 @@ SyncQue = function( o ){
     // set the currentPlayed state
     // XXX: da fuck? rewrite: n -> 1
     for(var i=0; i<_syncObjects.length; i++) {
-      _syncObjects[i].playing = i == _bufferPointer;
+      _syncObjects[i].playing = (i == _bufferPointer);
     }
   }
   
@@ -190,8 +140,16 @@ SyncQue = function( o ){
     return true;
   }
   
+  // Increment the bufferPointer and returns the pointed syncObject
+  // if bufferPointer isn't set, starts with 0
   var getNextBuffer = function(){
-    return _soundBuffersHashMap[ _syncObjects[_bufferPointer++].hash ];
+    
+    if(_bufferPointer === null) _bufferPointer = 0;
+    else _bufferPointer++;
+    
+    var buffer = ( _bufferPointer in _syncObjects ) && _soundBuffersHashMap[ _syncObjects[_bufferPointer].hash ];
+    
+    return buffer;
   }
   
   var getBuffer = function( i ){
@@ -264,11 +222,11 @@ SyncQue = function( o ){
   //////////////////////////////////////////////////////       getElement
   ///////////////////////////////////////////////////////////////////////////
 	this.getElement = function(){
+    // console.log("pointer",_bufferPointer);
 		_bufferStateDeps.depend();
     // XXX: test why sometimes this is called with _bufferPointer == -1
-    if(_bufferPointer != -1)
-      return _syncObjects[_bufferPointer];
-    if(0 in _syncObjects) return _syncObjects[0];
+    return _syncObjects[_bufferPointer];
+    return null;
 	}
   
 }

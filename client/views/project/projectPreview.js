@@ -7,3 +7,5 @@ Template.projectPreview.playing = function(){
   var atom = interpreter.isPlaying();
   return atom && atom.name;
 }
+
+

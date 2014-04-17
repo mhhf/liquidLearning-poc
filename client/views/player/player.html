@@ -1,8 +1,21 @@
 <template name="player">
   {{> slide}}
+  {{> subtitles}}
 	<center class="playerControlls">
-		<a name="stop"><i class="icon-stop"></i></a>
-		<a name="pause"><i class="icon-pause"></i></a>
+    {{#if pause}}
 		<a name="play"><i class="icon-play"></i></a>
+    {{else}}
+		<a name="pause"><i class="icon-pause"></i></a>
+    {{/if}}
 	</center>
+</template>
+
+<template name="subtitles">
+<div class="subtitles">
+  <ul>
+  {{#each tts}}
+    <li id="{{hash}}"> {{text}} </li>
+  {{/each}}
+  </ul>
+</div>
 </template>

@@ -11,6 +11,8 @@ LLMDInterpreter = function( ast, ctx ){
     mute: false 
   }
   
+  // this.pause = true;
+  
   this.buildQue = new ReactiveQue({
     ctx: this,
     isReadyFunction: 'isBuild',
@@ -46,6 +48,20 @@ LLMDInterpreter = function( ast, ctx ){
   
   this.isPlaying = function(){
     return self.playerQue.top();
+  }
+  
+  this._pause = true;
+  var pauseDep = new Deps.Dependency;
+  this.isPause = function(){
+    pauseDep.depend();
+    return self._pause;
+    
+  }
+  this.togglePause = function( val ){
+    if( self.pause === val ) return false;
+    self._pause = val;
+    pauseDep.changed();
+    this.playerQue.test();
   }
   
 }
@@ -145,6 +161,7 @@ LLMDInterpreter.prototype.onBuild = function( atom ){
 
 LLMDInterpreter.prototype.run = function( atom ){
   
+  if(this._pause) return null;
   console.log( atom.name+" run "+this.ts.get() );
   this.next();
   
@@ -162,7 +179,6 @@ LLMDInterpreter.prototype.run = function( atom ){
       self.playerQue.test();
       self.buildQue.test();
     });
-  
 }
 
 // [TODO] - Options - pre ready execution (md)/ post ready execution()
