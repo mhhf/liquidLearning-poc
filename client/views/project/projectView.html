@@ -15,6 +15,7 @@
     {{#if currentUser }}
     <a href="#" name="fork" class="notDoneYet"><i class="icon-code-fork"></i> fork</a>
     <a href="{{ pathFor 'projectPreview' params=this}}"><i class="icon-eye-open"></i> view</a>
+    <a href="{{ pathFor 'projectAstView' params=this}}"><i class="icon-code"></i> ast</a>
     <a id="buildBtn" href="#" class="{{needBuild}}"><i class="icon-cogs"></i> build</a>
     <a href="{{pathFor 'projectSettings' _id=this._id }}"><i class="icon-cog"></i> settings</a>
     {{/if}}

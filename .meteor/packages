@@ -27,3 +27,10 @@ bootstrap-3
 bootstrap
 llmd-include
 llmdBuilder
+llmd-tts
+syncque
+llmdInterpreter
+pluginSystem
+llmd-md
+llmd-multipleChoice
+llmd-common

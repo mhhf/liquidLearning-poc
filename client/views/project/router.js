@@ -15,8 +15,21 @@ Router.map(function() {
       return Meteor.subscribe('project', this.params._id);
     },
     data: function(){
+      // [TODO] - dafuck is o??
       var o = { _id: 'LyCMjLFyjg82kfAbb' };
       return _.extend(o,Projects.findOne({_id:this.params._id}));
+    }
+  });
+  
+  this.route('projectAstView', {
+    path: '/project/:_id/ast',
+    
+    waitOn: function(){
+      return Meteor.subscribe('project', this.params._id);
+    },
+    
+    data: function(){
+      return Projects.findOne({_id: this.params._id});
     }
   });
 
@@ -88,6 +101,8 @@ Router.map(function() {
       
       // [TODO] - export to syncQue
       if( project ) {
+        
+        window.interpreter = new LLMDInterpreter( project.ast );
        
         // inherent blockIndex number to syncs
         _.each( project.ast, function( block, blockIndex ){
@@ -132,7 +147,6 @@ Router.map(function() {
 var id = null;
 var retObj = null;
 SyncLoader = function( id, _id, filepath ){
-  if ( retObj ) return retObj; 
 
   var readyFlag = false ;
   var readyFlagDep = new Deps.Dependency;

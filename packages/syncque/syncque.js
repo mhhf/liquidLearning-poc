@@ -14,8 +14,7 @@
 //	 	 * get next event
 //	 	 * jump to a time position
 //	 	 * ad a event at a given timeframe
-var SoundQueue = new Meteor.Collection('');
-
+//	 	 
 
 // [TODO] - indicate dublicate buffer and dont loading it twice
 SyncQue = function( o ){
