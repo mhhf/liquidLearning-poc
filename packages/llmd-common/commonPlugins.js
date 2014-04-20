@@ -13,7 +13,8 @@ IFPlugin = BasicPlugin.extend({
       return this.f;
     }
     
-  }
+  },
+  astTemplate: 'llmd_ast_if'
 });
 
 

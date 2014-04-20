@@ -1,5 +1,1 @@
-{{#if c}}
-true
-{{else}}
-false
-{{/if}}
+{{> keks a=b haha=true hihi = hihi}}

@@ -1,5 +1,5 @@
+
 <template name="pkg_multipleChoice">
-{{q}}
 {{#each questions}}
 <label>
   <input type="checkbox" name="{{id}}"/>
@@ -7,5 +7,15 @@
 </label>
 {{/each}}
 <button> asd </button>
-{{answer}}
+</template>
+
+<template name="llmd_ast_multipleChoice">
+MultipleChoiceQuestions:
+<ul class="multipleChoice">
+{{#each questions}}
+<li class="{{isCorrect}}">
+    {{content}}
+  </li>
+{{/each}}
+</ul>
 </template>

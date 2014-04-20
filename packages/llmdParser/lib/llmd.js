@@ -59,6 +59,7 @@ LLMD.preprocess = function( ast, cb ){
   
 }
 
+
 // [TODO] - cleanup: with promises?
 LLMD.processNestedASTASYNC = function( ast, cb ){
   var retAST = [];
@@ -97,7 +98,6 @@ LLMD.processNestedASTASYNC = function( ast, cb ){
   if( waitFor == 0 ) cb( null, _.flatten( retAST ) );
   
 }
-LLMD.processNestedAST = Meteor._wrapAsync( LLMD.processNestedASTASYNC );
 
 
 LLMD.prototype.filterRoot = function( rawData ) {
@@ -135,6 +135,7 @@ LLMD.Block = function( type, name, params, data ){
   this.name = name;
   // if the Blocktype has a Data Filter, do the filter, otherwise return the piain data
   var filteredData;
+  params = prefilterData.apply( this, [params] );
   
   if(type && type.dataFilter && (filteredData = type.dataFilter.apply( this, [params, data] ))) this.data = filteredData;
   else if(!type || !type.dataFilter) this.data=data;
@@ -145,6 +146,7 @@ LLMD.Block = function( type, name, params, data ){
 // example data filter for if
 LLMD.Package = function( type, name, data ) {
   this.name = name;
+  data = prefilterData.apply( this, [data] );
   
   if(type && type.dataFilter && (filteredData = type.dataFilter.apply( this, [data] ))) this.data = filteredData;
   else if(!type || !type.dataFilter) this.data=data;
@@ -154,6 +156,20 @@ LLMD.Package = function( type, name, data ) {
 LLMD.Expr = function( key ){
   this.name = 'expr';
   this.key = key;
+}
+
+var prefilterData = function( data ){
+  var retData = [];
+  for(var i in data) {
+    if( data[i].name == 'ass' ) {
+      if(data[i].value == 'true') this[data[i].key] = true;
+      else if(data[i].value == 'false') this[data[i].key] = false;
+      else retData.push( data[i] );
+    } else {
+      retData.push( data[i] );
+    }
+  }
+  return retData;
 }
 
 // [TODO] - only push l if !!l.data.match(/^\s*$/) 

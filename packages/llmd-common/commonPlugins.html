@@ -1,0 +1,9 @@
+<template name="llmd_ast_if">
+<strong>if</strong> ( {{this.c.key}} )
+<div class="iftrue">
+  {{> projectAstView ast=this.t }}
+</div>
+<div class="iffalse">
+  {{> projectAstView ast=this.f }}
+</div>
+</template>

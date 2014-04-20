@@ -53,7 +53,7 @@ var cleanBlocks = function( bs ){
     }
   }
   
-  if( l && l.name && l.name != 'md' || l.name == 'md' && !l.data.match(/^\s*$/) )
+  if( l && l.name && l.name != 'md' || l && l.name == 'md' && !l.data.match(/^\s*$/) )
     blocks.push(l);
   return blocks;
 }

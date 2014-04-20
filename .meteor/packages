@@ -34,3 +34,4 @@ pluginSystem
 llmd-md
 llmd-multipleChoice
 llmd-common
+llmd-wait

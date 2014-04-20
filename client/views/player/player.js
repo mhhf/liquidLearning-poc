@@ -11,7 +11,7 @@ Template.player.events({
 	},
   "click [name=next]": function(){
     var t = interpreter.playerQue.top();
-    if( t.name == "???" && t.isBlocked()  )
+    if( (t.name == "???" || t.name == 'wait') && t.isBlocked()  )
       t.unblock();
   }
 });
@@ -19,8 +19,9 @@ Template.player.pause = function(){
   return interpreter.isPause();
 }
 
-Template.player.mute = function(){
-  return true;
+Template.player.nextable = function(){
+  var t = interpreter.playerQue.top();
+  return t && ( ( interpreter.getOption('mute') && t.name == "???" ) || t.name == 'wait') && t.isBlocked() ;
 }
 
 Template.subtitles.tts = function(t,a){

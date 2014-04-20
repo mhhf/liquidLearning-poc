@@ -47,7 +47,6 @@ var processContextFilesAsync = function( projectPath, cb ){
 }
 var processContextFiles = Meteor._wrapAsync( processContextFilesAsync );
 
-
 LLMDBuilder = {
   build: Meteor._wrapAsync( build )
 }

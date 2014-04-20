@@ -8,10 +8,6 @@ LLMDInterpreter = function( ast, ctx ){
   
   this.ts = new TS();
   
-  this.options = {
-    mute: false 
-  }
-  
   // this.pause = true;
   
   this.buildQue = new ReactiveQue({
@@ -75,12 +71,13 @@ LLMDInterpreter.prototype.buffer = function( num ){
 }
 
 LLMDInterpreter.prototype.valid = function( atom ){
-  return !atom || !( atom.name == '???' && this.options.mute );
+  return !!atom;
 }
 
 LLMDInterpreter.prototype.next = function(){
   var item;
-  while( !this.valid( item = this.ast.pop()) ) {}
+  // while( !this.valid( item = this.ast.pop()) ) { }
+  item = this.ast.pop();
   if(!item) return null;
   
   // check if block has a Plugin associated
@@ -92,6 +89,10 @@ LLMDInterpreter.prototype.next = function(){
   
   this.buildQue.enqueue( atom );
   // this.build( atom );
+}
+
+LLMDInterpreter.prototype.getOption = function(k){
+  return this.ctx.get().options[k];
 }
 
 LLMDInterpreter.prototype.load = function( atom ){
@@ -131,6 +132,7 @@ LLMDInterpreter.prototype.build = function( atom ){
   }  
 }
 
+// needed to hold the build que: if context is provided in the last block and used right after that, the build proccess of the atom has to wait for it
 LLMDInterpreter.prototype.isLastBuildBlocking = function(atom){
   var atomIsLastToBuild = this.buildQue.top() === atom;
   var loadingQueIsEmpty = this.bufferQue.empty();

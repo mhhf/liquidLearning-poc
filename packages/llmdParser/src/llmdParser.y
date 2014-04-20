@@ -18,6 +18,7 @@
 %x package
 %x packagename
 %x packagecontent
+%x varass
 
 RN                    \r\n
 EOL 									\r\n|\r|\n        /* end of line character */
@@ -53,7 +54,9 @@ BL                    ({EOL}*{WS}*)*
 
 <package,blockDef>\s*\'(.*)\'              { yytext = this.matches[1]; return 'STRING'; }             
 <package,blockDef>\s*\"(.*)\"              { yytext = this.matches[1]; return 'STRING'; }             
-<package,blockDef>\s*([\w\.]+)               { yytext = this.matches[1]; return 'VAR'; }             
+<package,blockDef>\s*(\w+)\s*\=            { this.begin('varass'); yytext = this.matches[1]; return 'VARASS';}
+<varass>\s*(\w+)                           { this.popState(); yytext = this.matches[1]; return 'ASS'; }
+<package,blockDef>\s*([\w\.]+)             { yytext = this.matches[1]; return 'VAR'; }             
 
 
 
@@ -105,6 +108,8 @@ OPT_PARAMS
         
         $$ = [yy.llmd.newExpr($VAR)].concat($2)
       }
+    | VARASS ASS OPT_PARAMS
+      { $$ = [{ name: 'ass', key:$1, value: $2 }].concat($3) }
     | STRING OPT_PARAMS
       {
         $$ = [$STRING].concat($2)

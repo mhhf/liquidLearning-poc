@@ -104,7 +104,10 @@ Router.map(function() {
         mediaHandler = new SyncQue();
         var interpreter = window.interpreter = new LLMDInterpreter( project.ast, {
           mediaHandler: mediaHandler,
-          context: project.ctx
+          context: project.ctx,
+          options: {
+            mute: false
+          }
         });
         
         // Prebuffer 4 Elements

@@ -10,15 +10,11 @@ MSPlugin = BasicPlugin.extend({
   },
   blocking: true,
   template: 'pkg_multipleChoice',
+  astTemplate: 'llmd_ast_multipleChoice',
   tmp: true
 });
 
 PluginHandler.registerPlugin( "multipleChoice", MSPlugin );
-
-
-Template.pkg_multipleChoice.answer = function(){
- return Session.get('answer');
-}
 
 Template.pkg_multipleChoice.questions = function(){
   var q = this.data && this.data.questions;
@@ -27,6 +23,16 @@ Template.pkg_multipleChoice.questions = function(){
   }
   return q;
 }
+
+Template.llmd_ast_multipleChoice.questions = function(){
+  var q = this.data && this.data.questions;
+  return q;
+}
+
+Template.llmd_ast_multipleChoice.isCorrect = function(){
+  return this.correct?'istrue':'isfalse';
+}
+
 
 Template.pkg_multipleChoice.events = {
   "change input": function(e,t){

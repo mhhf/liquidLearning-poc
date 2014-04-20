@@ -70,6 +70,8 @@ BasicPlugin.prototype.executeWrapper = function( ctx, execute ){
 
   });
   
+  if(this.blocked === false) this.unblock();
+  
   return promise; 
   
 };
