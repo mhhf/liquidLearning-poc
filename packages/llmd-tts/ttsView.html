@@ -1,9 +1,11 @@
 <template name="pkg_tts_view">
+{{#if mute}}
 <div class="tts">
-  {{#each data}}
+  {{#each getData}}
   <span class="sentance">
     {{text}}
   </span>
   {{/each}}
 </div>
+{{/if}}
 </template>

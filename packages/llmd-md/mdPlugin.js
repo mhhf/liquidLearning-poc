@@ -1,6 +1,6 @@
 MDPlugin = BasicPlugin.extend({
   render: function(){
-    var divWrapper = document.createElement('span');
+    var divWrapper = document.createElement('div');
     divWrapper.innerHTML = marked( this.data );
     return divWrapper;
   }

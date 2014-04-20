@@ -1,4 +1,5 @@
 LLMDInterpreter = function( ast, ctx ){
+  this.renderCounter = 0;
   this.pointer = 0;
   this.ast = ast;
   this.ast.reverse();
@@ -27,6 +28,7 @@ LLMDInterpreter = function( ast, ctx ){
   this.playerQue = new ReactiveQue({ 
     ctx: this, 
     preApply: this.run,
+    postApply: this.onCleanup,
     isReadyFunction: 'isUnblocked',
     isPendingFunction: 'isRun',
   });
@@ -75,11 +77,6 @@ LLMDInterpreter.prototype.buffer = function( num ){
 LLMDInterpreter.prototype.valid = function( atom ){
   return !atom || !( atom.name == '???' && this.options.mute );
 }
-
-// 2. binds the current Context to the ast
-// 
-// [TODO] - Iterator and play controll
-// [TODO] - context binder
 
 LLMDInterpreter.prototype.next = function(){
   var item;
@@ -159,22 +156,52 @@ LLMDInterpreter.prototype.onBuild = function( atom ){
     this.load( atom ); 
 }
 
+// [TODO] - replace with post renderer
+LLMDInterpreter.prototype.onCleanup = function( atom ){
+  console.log( atom.name+ " cleanup "+this.ts.get() );
+  
+  if( atom.tmp ) $( '#atom_'+atom.id ).remove();
+}
+
+LLMDInterpreter.prototype.render = function( atom ){
+  
+  atom.id = this.renderCounter++;
+  
+  var rendered = false;
+  var fragment = document.createElement('div');
+  fragment.className = "atomWrapper";
+  fragment.id = "atom_" + ( atom.id );
+
+  if(atom.domNode) {
+    rendered = true;
+    fragment.appendChild( atom.domNode );
+  }
+  if( atom.ui ) {
+    rendered = true;
+    UI.insert( atom.ui, fragment ); 
+  }
+  
+  $('#slideWrapper #scrollWrapper')[0].appendChild(fragment);
+
+  $(fragment).show( function(){
+    $(fragment).addClass('display');
+  });
+}
+
 LLMDInterpreter.prototype.run = function( atom ){
   
   if(this._pause) return null;
+  var self = this;
   console.log( atom.name+" run "+this.ts.get() );
+  
+  // buffer next
   this.next();
   
-  var self = this;
+  if( atom.renderWrapper() )
+    this.render( atom );
+  
   atom
-    .executeWrapper(this.ctx.ctx, function(){
-      if(atom.domNode) {
-        $('#slideWrapper')[0].appendChild( atom.domNode );
-      }
-      if( atom.ui ) {
-        UI.insert( atom.ui, $('#slideWrapper')[0] ); 
-      }
-    })
+    .executeWrapper(this.ctx.ctx)
     .then(function(){
       self.playerQue.test();
       self.buildQue.test();

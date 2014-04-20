@@ -99,7 +99,6 @@ Router.map(function() {
       var project = Projects.findOne({ _id: this.params._id });
       window.project = project;
       
-      // [TODO] - export to syncQue
       if( project ) {
         
         mediaHandler = new SyncQue();
@@ -107,24 +106,21 @@ Router.map(function() {
           mediaHandler: mediaHandler,
           context: project.ctx
         });
+        
+        // Prebuffer 4 Elements
         interpreter.buffer(4);
         
         return { 
           interpreter: interpreter,
-          _id: this.params._id,
-          ttsObject: Syncs.find(),
-          syncQue: mediaHandler,
-          ast: project.ast,
-          syncs: project.syncs,
+          mediaHandler: mediaHandler,
           project: project
         };
       }
-      console.log("err");
       return null;
     },
     
-    unload: function(){
-      syncQue.stop();
+    onStop: function(){
+      mediaHandler && mediaHandler.stop();
     }
   });
 });

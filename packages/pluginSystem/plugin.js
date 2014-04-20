@@ -3,6 +3,7 @@ BasicPlugin = function( ){
   this._run = false;
   this._build = false;
   this._container = false;
+  
 };
 
 BasicPlugin.prototype._loaded = false;
@@ -41,17 +42,22 @@ BasicPlugin.prototype.loadingWrapper = function(ctx){
   });
 }
 
+BasicPlugin.prototype.renderWrapper = function(){
+  if( this.template ) 
+    this.ui = UI.renderWithData( Template[ this.template ], this);
+  
+  this.domNode = this.render && this.render();
+  
+  return !!this.ui || !!this.domNode;
+}
+
 // TODO: timeout?
 BasicPlugin.prototype.executeWrapper = function( ctx, execute ){
   
   this._run = true;
   var self = this;
   
-  if( this.template ) 
-    this.ui = UI.renderWithData( Template[ 'pkg_multipleChoice' ], this);
-  
-  this.domNode = this.render && this.render();
-  execute();
+  // execute();
   
   var promise = new Promise( function(resolve){
     
@@ -82,6 +88,9 @@ BasicPlugin.prototype.isBuild = function(){
 BasicPlugin.prototype.isUnblocked = function(){
   return !this._block;
 }
+BasicPlugin.prototype.isBlocked = function(){
+  return this._block;
+}
 
 BasicPlugin.prototype.block = function(){
   this._block = true;
@@ -102,6 +111,8 @@ BasicPlugin.extend = function(properties){
     for(var k in o) {
       this[k] = o[k];
     }
+    
+    this.init && this.init();
   }
   Plugin.prototype = new BasicPlugin();
   

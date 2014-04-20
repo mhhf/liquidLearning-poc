@@ -21,18 +21,27 @@
   -webkit-border-radius: 10px;
   border-radius: 10px;
   border: 1px solid #ddd;
+  #scrollWrapper {
+    margin: 50px 0;
+  }
 }
 #slideWrapper div{
   -webkit-transition: all 0.8s ease;
 }
-#slideWrapper div:last-child{
-  margin-top: 100px;
-  margin-bottom: 100px;
-  font-weight: bold;
-  font-size: 1.5em;
-  margin-left: 20%;
-  li {
-    line-height: 1.2em;
+#slideWrapper #scrollWrapper .atomWrapper{
+  
+  -webkit-transition: all 0.2s ease;
+  opacity: 0;
+  &.display {
+    opacity: 1;
   }
+  // margin-top: 100px;
+  // margin-bottom: 100px;
+  // font-weight: bold;
+  // font-size: 1.5em;
+  // margin-left: 20%;
+  // li {
+  //   line-height: 1.2em;
+  // }
 }
 

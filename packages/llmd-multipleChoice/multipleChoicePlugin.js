@@ -9,7 +9,8 @@ MSPlugin = BasicPlugin.extend({
     return false;
   },
   blocking: true,
-  template: 'pkg_multipleChoice'
+  template: 'pkg_multipleChoice',
+  tmp: true
 });
 
 PluginHandler.registerPlugin( "multipleChoice", MSPlugin );

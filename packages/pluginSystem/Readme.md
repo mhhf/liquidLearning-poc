@@ -3,12 +3,14 @@
 Extend your own plugin from the basic plugin:
 ```
 MyPlugin = BasicPlugin.extend({
+  init: function(){ /* initialize the plugin */ },
   build: function( ctx ){ return ast; },
   load: function( ctx, cb ) { cb(); },
   execute: function( cb ) { cb(); },
   render: function(){ return node; },
   blocking: true,
-  template: 'pkg_pluginTemplate'
+  template: 'pkg_pluginTemplate',
+  tmp: true
 });
 ```
 
@@ -28,3 +30,5 @@ Render a node element
 Indicates if the execution is blocking the interpreter untill `plugin.unblock()` is called.
 ### template
 name of the rendered tepmlate
+### tmp
+bool value, indicates if the rendered plugin is removed after the display
