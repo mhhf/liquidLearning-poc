@@ -5,7 +5,7 @@
     "spin": {},
     "jquery-ui": {},
     "tts": {
-      "path": "git@bitbucket.org:liquidlearningdev/tts.git"
+      "git": "git@bitbucket.org:liquidlearningdev/tts.git"
     },
     "marked": {},
     "GAnalytics": {},
