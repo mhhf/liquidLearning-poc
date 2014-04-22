@@ -50,6 +50,12 @@ LLMDInterpreter = function( ast, ctx ){
   
   this._pause = true;
   var pauseDep = new Deps.Dependency;
+  
+  this.isReady = function(){
+    var pq = self.playerQue.empty();
+    var bq = self.bufferQue.empty();
+    return pq && bq && ( this.ast.length == 0 );
+  }
   this.isPause = function(){
     pauseDep.depend();
     return self._pause;

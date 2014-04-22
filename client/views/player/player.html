@@ -2,10 +2,14 @@
   {{> slide}}
   {{> subtitles}}
 	<center class="playerControlls">
-    {{#if pause}}
-		<a name="play"><i class="icon-play"></i></a>
+    {{#if finished}}
+      <a name="reset" href="{{pathFor 'projectView'}}"><i class="icon-fast-backward"></i></a>
     {{else}}
-		<a name="pause"><i class="icon-pause"></i></a>
+      {{#if pause}}
+      <a name="play"><i class="icon-play"></i></a>
+      {{else}}
+      <a name="pause"><i class="icon-pause"></i></a>
+      {{/if}}
     {{/if}}
     
     {{#if nextable}}

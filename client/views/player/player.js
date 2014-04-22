@@ -1,7 +1,8 @@
 Template.player.events({
 	"click [name=back]" : function(){
 	},
-	"click [name=stop]" : function(){
+	"click [name=reset]" : function(e,t){
+    Router.go('projectPreview',t.data.project);
 	},
 	"click [name=pause]" : function(){
     interpreter.togglePause(true);
@@ -18,6 +19,9 @@ Template.player.events({
 });
 Template.player.pause = function(){
   return interpreter.isPause();
+}
+Template.player.finished = function(){
+  return !!interpreter.isReady();
 }
 
 Template.player.nextable = function(){

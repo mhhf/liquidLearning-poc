@@ -1,15 +1,10 @@
 <template name="projectPreview">
   <div id="projectPreviewWrapper">
-    <a href="{{pathFor 'projectView' }}">{{project.user.name}}</a> /
-    <a href="{{pathFor 'projectView' }}">{{project.name}}</a>
+    <a href="{{pathFor 'projectView' params=project}}">... back To Project</a>
     <span class="info right">
     </span>
   </div>
   {{> player}}
-  loading: {{loading}}
-  &nbsp;&nbsp;playing: {{playing}}
-  &nbsp;&nbsp;currentMedia: 
-  
   
 </template>
 
