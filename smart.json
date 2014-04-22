@@ -13,6 +13,10 @@
     "iron-router": {
       "git": "https://github.com/EventedMind/iron-router.git",
       "branch": "dev"
-    }
+    },
+    "editor": {
+      "git": "git@bitbucket.org:liquidlearningdev/editor.git"
+    },
+    "moment"
   }
 }
