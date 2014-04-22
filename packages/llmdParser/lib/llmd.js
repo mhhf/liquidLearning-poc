@@ -164,7 +164,7 @@ var prefilterData = function( data ){
     if( data[i].name == 'ass' ) {
       if(data[i].value == 'true') this[data[i].key] = true;
       else if(data[i].value == 'false') this[data[i].key] = false;
-      else retData.push( data[i] );
+      else this[data[i].key] = { name: 'expr', key: data[i].value }
     } else {
       retData.push( data[i] );
     }
