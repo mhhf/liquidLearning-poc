@@ -7,15 +7,18 @@
       "spin": {},
       "jquery-ui": {},
       "tts": {
-        "path": "../../../../work/meteor/packages/tts"
+        "git": "git@bitbucket.org:liquidlearningdev/tts.git",
+        "branch": "master"
       },
       "marked": {},
       "GAnalytics": {},
       "bootboxjs": {},
-      "iron-router": {
-        "git": "https://github.com/EventedMind/iron-router.git",
-        "branch": "dev"
-      }
+      "iron-router": {},
+      "editor": {
+        "git": "git@bitbucket.org:liquidlearningdev/editor.git",
+        "branch": "master"
+      },
+      "moment": {}
     },
     "packages": {
       "bootstrap-wysiwyg": {
@@ -39,7 +42,9 @@
         "commit": "c437d45edcf1367df8d5ffa8bad2867758030bd2"
       },
       "tts": {
-        "path": "../../../../work/meteor/packages/tts"
+        "git": "git@bitbucket.org:liquidlearningdev/tts.git",
+        "branch": "master",
+        "commit": "6102ad775e6702b35c0ddd27706ccc8149a38fc4"
       },
       "marked": {
         "git": "https://github.com/chuangbo/meteor-marked.git",
@@ -58,8 +63,18 @@
       },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
-        "branch": "dev",
-        "commit": "19e7cfb50679b07d9dd8245af6335abf042036df"
+        "tag": "v0.7.1",
+        "commit": "d1ffb3f06ea4c112132b030f2eb1a70b81675ecb"
+      },
+      "editor": {
+        "git": "git@bitbucket.org:liquidlearningdev/editor.git",
+        "branch": "master",
+        "commit": "74170550db109f3e0fa6df6800e5f1fce99c1b98"
+      },
+      "moment": {
+        "git": "https://github.com/acreeger/meteor-moment.git",
+        "tag": "v2.5.1",
+        "commit": "8c9bc5d3fc96705057737cb9743d555417f6e551"
       },
       "relocator": {
         "git": "git@bitbucket.org:liquidlearningdev/relocator.git",
