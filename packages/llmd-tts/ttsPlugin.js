@@ -18,7 +18,7 @@ TTSPlugin = BasicPlugin.extend({
       ctx.mediaHandler.playSounds( this.data, cb );
     
   },
-  astTemplate: 'pkg_tts_view',
+  astTemplate: 'llmd_ast_tts',
   template: 'pkg_tts_view',
   tmp: true
 });
@@ -27,6 +27,10 @@ TTSPlugin = BasicPlugin.extend({
 PluginHandler.registerPlugin( "???", TTSPlugin );
 
 Template.pkg_tts_view.getData = function(){
+  return this.data;
+}
+
+Template.llmd_ast_tts.getData = function(){
   return this.data;
 }
 Template.pkg_tts_view.mute = function(){

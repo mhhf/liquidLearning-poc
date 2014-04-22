@@ -30,3 +30,22 @@ Template.fsView.getFsContext = function(){
 Template.fsView.getDate = function(){
   return timeSince(this.date);
 }
+
+Template.fsView.events = {
+  "click [name=newfilebtn]": function(e,t){
+    e.preventDefault();
+    
+    var filename = t.find('[name=newfile]').value;
+    
+    if( !(filename.match(/\.lmd$/) || filename.match(/\.ljs/)) )
+      return false;
+    
+    t.find('[name=newfile]').value = '';
+    
+    Meteor.call('saveFile', t.data._id ,{
+      filepath: filename,
+      md: '\n',
+      commitMsg: 'new file'
+    });
+  }
+}

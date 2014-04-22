@@ -9,3 +9,13 @@
 </div>
 {{/if}}
 </template>
+
+<template name="llmd_ast_tts">
+<div class="tts">
+  {{#each getData}}
+  <span class="sentance">
+    {{text}}
+  </span>
+  {{/each}}
+</div>
+</template>

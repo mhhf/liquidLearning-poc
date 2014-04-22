@@ -112,7 +112,7 @@ Meteor.methods({
 
     // create index page
     var initialData = '#Index\nthis is the index page';
-    var index = fs.writeFileSync(path+hash+'/index.md', initialData );
+    // var index = fs.writeFileSync(path+hash+'/index.lmd', initialData );
 
     // extend the object
     // [TODO] - refactor user to creator
@@ -132,11 +132,44 @@ Meteor.methods({
       ast: {},
       language: 'en',
       activity: [],
-      data: initialData
+      // data: initialData,
+      // head: [ {
+      //   msg: 'new',
+      //   path: 'index.lmd',
+      //   timestamp: +(new Date())
+      // } ]
     });
 
-    var id = Projects.insert(o);
-      return { type: 'suc', id: id };
+    var _id = Projects.insert(o);
+    var project = Projects.findOne({_id: _id}); 
+    
+    
+    Git.commit( 'init project', path, project, initialData, 'index.lmd' );
+    
+    var build = LLMDBuilder.build( project );
+    var headState = Git.buildTree( path, project );
+    
+    Projects.update({ _id: _id },{
+      $set: { 
+        data: initialData,
+        head: headState,
+        ast: build.ast,
+        ctx: build.ctx,
+        build: {
+          date: new Date()
+        },
+        state: 'ready',
+        changed: false
+      }
+    });
+    
+    postActivity( {
+      _id: _id,
+      type: 'save',
+      msg: 'create project'
+    });
+    
+    return { type: 'suc', id: _id };
     
   },
   updateProjectStar: function( _id ){

@@ -8,6 +8,7 @@ Template.player.events({
 	},
 	"click [name=play]" : function(){
     interpreter.togglePause(false);
+    
 	},
   "click [name=next]": function(){
     var t = interpreter.playerQue.top();
