@@ -101,6 +101,7 @@ LLMD.processNestedASTASYNC = function( ast, cb ){
 
 
 LLMD.prototype.filterRoot = function( rawData ) {
+  // return rawData;
   return cleanBlocks( rawData );
 }
 
@@ -181,10 +182,13 @@ var cleanBlocks = function( bs ){
     l = bs[0];
 
   for(var i = 1; i<bs.length; i++) {
-    if( ( !bs[i]['name'] || bs[i]['name'] == "md" ) &&
-         ( !l['name'] || l['name'] == "md" ) && (l.name = "md")) {
+    if( ( !bs[i]['name'] || bs[i]['name'] == "md" ) && !bs[i].displaytime &&
+         ( !l['name'] || l['name'] == "md" ) && !l.displaytime &&
+         (l.name = "md") &&
+         (typeof l.data == 'string') && (typeof bs[i].data == 'string')
+         ) {
         l['data'] += bs[i]['data'];
-    } else if( l && l.name && l.name != 'md' || l.name == 'md' && !l.data.match(/^\s*$/) ) {
+    } else if( l && l.name && l.name != 'md' || l.name == 'md' && (typeof l.data == 'string' ) && !l.data.match(/^\s*$/) ) {
       blocks.push(l)
       l = bs[i];
     } else {

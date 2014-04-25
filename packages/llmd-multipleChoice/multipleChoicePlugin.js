@@ -7,7 +7,6 @@ MSPlugin = BasicPlugin.extend({
       return true;
     }
     
-    console.log(this,ctx);
     if( this.questions && this.questions.name == 'expr' ) {
       this.data = ctx.context[this.questions.key];
       return true;

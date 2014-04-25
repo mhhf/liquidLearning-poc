@@ -2,7 +2,6 @@ var fs = Npm.require('fs');
 
 LLMD.registerPackage("include", {
   dataFilter: function( params ){
-    console.log(params);
     return params && params[0] ;
   },
   preprocess: function( ast, cb ){
@@ -28,8 +27,6 @@ processFile = function( file ){
   
   var data = fs.readFileSync( LlmdParser.yy.path+file , "utf8" );
   var fileAST = LlmdParser.parse( data+"\n" ); 
-  console.log(data,fileAST);
-  
   
   retAST = LLMD.processNestedAST(fileAST);
   

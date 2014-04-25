@@ -169,6 +169,9 @@ LLMDInterpreter.prototype.onCleanup = function( atom ){
   console.log( atom.name+ " cleanup "+this.ts.get() );
   
   if( atom.tmp ) $( '#atom_'+atom.id ).remove();
+  if( atom.displaytime ) setTimeout( function(){
+    $( '#atom_'+atom.id ).remove();
+  },parseInt(atom.displaytime.key));
 }
 
 LLMDInterpreter.prototype.render = function( atom ){
