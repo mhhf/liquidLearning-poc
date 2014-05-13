@@ -2,8 +2,12 @@ Router.map( function(){
 
   this.route('feedbackNew', {
     path: '/feedback/new',
+    waitOn: function(){
+      return Meteor.subscribe('tags');
+    },
     data: {
       ctx: 'feedback',
+      tags: Tags.find(),
       onSuccess: function(){
         Router.go('feedback');
       }
@@ -13,10 +17,10 @@ Router.map( function(){
   this.route('feedbackPost', {
     path: '/feedback/:_id',
     waitOn: function(){
-      return Meteor.subscribe('feedbackPost', this.params._id);
+      return Meteor.subscribe('post', this.params._id);
     },
     data: function(){
-      return DPosts.findOne({ '_id': this.params._id });
+      return { post: Posts.findOne({ _id:this.params._id, root: null }) };
     }
   });
 
@@ -26,7 +30,7 @@ Router.map( function(){
       return Meteor.subscribe('feedback');
     },
     data: {
-      posts: DPosts.find({},{sort: {date:-1}}),
+      posts: Posts.find({},{sort: {date:-1}}),
       postPath: 'feedbackPost'
     }
   });

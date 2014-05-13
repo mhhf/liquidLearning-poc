@@ -18,7 +18,10 @@
         "git": "git@bitbucket.org:liquidlearningdev/editor.git",
         "branch": "master"
       },
-      "moment": {}
+      "moment": {},
+      "discussions2": {
+        "path": "../../../../work/havedobe/packages/discussion2"
+      }
     },
     "packages": {
       "bootstrap-wysiwyg": {
@@ -44,7 +47,7 @@
       "tts": {
         "git": "git@bitbucket.org:liquidlearningdev/tts.git",
         "branch": "master",
-        "commit": "6102ad775e6702b35c0ddd27706ccc8149a38fc4"
+        "commit": "a18849f05ed63223ee54fce4167e8afa0d216503"
       },
       "marked": {
         "git": "https://github.com/chuangbo/meteor-marked.git",
@@ -73,13 +76,16 @@
       },
       "moment": {
         "git": "https://github.com/acreeger/meteor-moment.git",
-        "tag": "v2.5.1",
-        "commit": "8c9bc5d3fc96705057737cb9743d555417f6e551"
+        "tag": "v2.6.0",
+        "commit": "26156df681750fd6e6ed77043eef32b6653ebbdf"
+      },
+      "discussions2": {
+        "path": "../../../../work/havedobe/packages/discussion2"
       },
       "relocator": {
         "git": "git@bitbucket.org:liquidlearningdev/relocator.git",
         "branch": "master",
-        "commit": "ea290782d447ff3d57be0e36411ee89dc360f9aa"
+        "commit": "f302e6b32d567a5d0ba2946f6fec08f8bb1d64db"
       },
       "bootstrap-3": {
         "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
@@ -91,15 +97,50 @@
         "tag": "v0.2.4",
         "commit": "b40e9b0612329288d75cf52ad14a7da64bb8618f"
       },
+      "roles": {
+        "git": "https://github.com/alanning/meteor-roles.git",
+        "tag": "v1.2.8",
+        "commit": "68844ba216c348d332bdb840825850f497f515bb"
+      },
       "npm": {
         "git": "https://github.com/arunoda/meteor-npm.git",
         "tag": "v0.2.6",
         "commit": "177ab6118de5bf8cffb19481343d5762ff7a2aaf"
       },
+      "autoform": {
+        "git": "https://github.com/aldeed/meteor-autoform.git",
+        "tag": "v0.8.1",
+        "commit": "385051a5e4bbea3b2a54965800f5f530987ef432"
+      },
+      "accounts-ui-bootstrap-3": {
+        "git": "https://github.com/mangasocial/meteor-accounts-ui-bootstrap-3.git",
+        "tag": "v0.3.0-1",
+        "commit": "93ffa5d0e325dc7026de89f6d90c178fa04bdd3a"
+      },
+      "selectize": {
+        "git": "https://github.com/andrewreedy/meteor-selectize.git",
+        "tag": "v0.0.1",
+        "commit": "2bf47922a6b964ca58ad58cfa0e92c9cf9ea8be3"
+      },
+      "font-awesome": {
+        "git": "https://github.com/nate-strauser/meteor-font-awesome.git",
+        "tag": "v4.0.3",
+        "commit": "61e9361384347547ae144f8228faa4deffda23db"
+      },
       "aws-sdk": {
         "git": "https://github.com/peerlibrary/meteor-aws-sdk.git",
         "tag": "v1.5.1.1",
         "commit": "63efa4ebbe9986bd875f69d5fdf3248c5c44159e"
+      },
+      "simple-schema": {
+        "git": "https://github.com/aldeed/meteor-simple-schema.git",
+        "tag": "v0.4.0",
+        "commit": "2cc6aac0d35a4e00b065c1437d540b2aefba5241"
+      },
+      "collection2": {
+        "git": "https://github.com/aldeed/meteor-collection2.git",
+        "tag": "v0.3.11",
+        "commit": "7e970671305657678e8508d8107d5e6c5e158559"
       },
       "blocking": {
         "git": "https://github.com/peerlibrary/meteor-blocking.git",

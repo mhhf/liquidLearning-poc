@@ -1,3 +1,25 @@
 <template name="dev">
-development
+<a class="btn btn-primary newFeedbackBtn" href="{{pathFor 'devNew' params=this}}">new Post</a>
+
+<div class="row-fluid">
+  <div class="span12">
+
+    {{> Posts }}
+    
+  </div>
+</div>
+</template>
+
+
+<template name="devPost">
+
+{{> Post}}
+
+</template>
+
+
+<template name="devNew">
+
+{{> PostNew }}
+
 </template>

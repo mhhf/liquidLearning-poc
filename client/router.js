@@ -39,11 +39,7 @@ Router.map(function() {
   });
 
   this.route('home', {
-		path: '/',
-		data: function(){
-			var tmpData = { syncs: Syncs.find() }
-			return tmpData;
-		}
+		path: '/'
 	});
 
   // this.route('editor',{
