@@ -19,7 +19,7 @@
         "branch": "master"
       },
       "moment": {},
-      "discussions2": {
+      "redisc": {
         "path": "../../../../work/havedobe/packages/discussion2"
       },
       "server-eval": {}
@@ -57,8 +57,8 @@
       },
       "GAnalytics": {
         "git": "https://github.com/datariot/meteor-ganalytics.git",
-        "tag": "v0.1.1",
-        "commit": "91b19d37687bb2cd7976fb43b482143a53509d7e"
+        "tag": "v0.2.0",
+        "commit": "2d5e48d5cc4c2f88edd40c0b2341d378bd4a702b"
       },
       "bootboxjs": {
         "git": "https://github.com/TimHeckel/meteor-bootboxjs.git",
@@ -80,7 +80,7 @@
         "tag": "v2.6.0",
         "commit": "26156df681750fd6e6ed77043eef32b6653ebbdf"
       },
-      "discussions2": {
+      "redisc": {
         "path": "../../../../work/havedobe/packages/discussion2"
       },
       "server-eval": {
@@ -132,6 +132,11 @@
         "git": "https://github.com/nate-strauser/meteor-font-awesome.git",
         "tag": "v4.0.3",
         "commit": "61e9361384347547ae144f8228faa4deffda23db"
+      },
+      "tags": {
+        "git": "git@github.com:mhhf/meteor-tags.git",
+        "branch": "master",
+        "commit": "828114fbd7d3b6a94c4552d373b587f1cd7a743a"
       },
       "aws-sdk": {
         "git": "https://github.com/peerlibrary/meteor-aws-sdk.git",

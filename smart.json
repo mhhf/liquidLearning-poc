@@ -16,7 +16,7 @@
     },
     "moment": {},
     "redisc": {
-      "path": "/Users/mhhf/work/havedobe/packages/discussion2"
+      "git": "git@github.com:mhhf/meteor-tags.git"
     },
     "server-eval": {}
   }
