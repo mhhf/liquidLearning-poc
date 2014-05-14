@@ -16,7 +16,7 @@
     },
     "moment": {},
     "redisc": {
-      "git": "git@github.com:mhhf/meteor-tags.git"
+      "git": "git@github.com:mhhf/meteor-redisc.git"
     },
     "server-eval": {}
   }
