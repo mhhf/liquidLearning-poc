@@ -17,20 +17,20 @@ Router.map( function(){
   this.route('feedbackPost', {
     path: '/feedback/:_id',
     waitOn: function(){
-      return Meteor.subscribe('post', this.params._id);
+      return Meteor.subscribe('Redisc.Post', this.params._id);
     },
     data: function(){
-      return { post: Posts.findOne({ _id:this.params._id, root: null }) };
+      return { post: Redisc.Posts.findOne({ _id:this.params._id, root: null }) };
     }
   });
 
   this.route('feedback', {
     path: '/feedback',
     waitOn: function(){
-      return Meteor.subscribe('feedback');
+      return Meteor.subscribe('Redisc.Posts', ['feedback']);
     },
     data: {
-      posts: Posts.find({},{sort: {date:-1}}),
+      posts: Redisc.Posts.find({root:null},{sort:{ score:-1, updatedOn: -1, createdOn: -1 }}),
       postPath: 'feedbackPost'
     }
   });

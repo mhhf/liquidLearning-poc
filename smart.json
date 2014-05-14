@@ -14,9 +14,10 @@
     "editor": {
       "git": "git@bitbucket.org:liquidlearningdev/editor.git"
     },
-    "moment":{},
-    "discussions2": {
-      "git": "git@github.com:mhhf/meteor-discussion.git"
-    }
+    "moment": {},
+    "redisc": {
+      "path": "/Users/mhhf/work/havedobe/packages/discussion2"
+    },
+    "server-eval": {}
   }
 }

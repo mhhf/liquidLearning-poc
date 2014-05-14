@@ -1,0 +1,12 @@
+{
+  "name": "Tags",
+  "description": "Tags for everything",
+  "homepage": "",
+  "version": "0.1.0",
+	"author": "Denis Erfurt <denis.erfurt@gmail.com>",
+  "git": "git@github.com:mhhf/meteor-tags.git",
+  "packages": {
+    "roles": {},
+    "collection2": {}
+  }
+}
