@@ -1,63 +1,77 @@
 <template name="navbar">
-<div class="navbar-inner">
+<nav class="navbar navbar-glass">
   <div class="container-fluid">
-    <a href="/" class="brand">
-      <small>
-        <i class="icon-beaker"></i>
-        LiquidLearning
-      </small>
-    </a>
+    <div class="navbar-header">
+      <a href="/" class="navbar-brand">
+        <small>
+          <i class="icon-beaker"></i>
+          LiquidLearning
+        </small>
+      </a>
+    </div>
 
-    <a href="#" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
-      <i class="icon-reorder"></i>
-    </a>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="{{pathFor 'learn'}}">
+            Learn
+          </a>
+        </li>
+        <li>
+          <a href="{{pathFor 'teach'}}">
+            Teach
+          </a>
+        </li>
+      </ul>
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        <!-- {{#if currentUser }} -->
+        <!-- <li class="hidden&#45;phone"> -->
+        <!--   <a href="{{pathFor 'projectNew'}}"> -->
+        <!--     <i class="icon&#45;file&#45;alt"></i> -->
+        <!--     New Project -->
+        <!--   </a> -->
+        <!-- </li> -->
+        <!-- {{/if}} -->
 
-    <ul class="nav flaty-nav pull-right">
-      <!-- {{#if currentUser }} -->
-      <!-- <li class="hidden&#45;phone"> -->
-      <!--   <a href="{{pathFor 'projectNew'}}"> -->
-      <!--     <i class="icon&#45;file&#45;alt"></i> -->
-      <!--     New Project -->
-      <!--   </a> -->
-      <!-- </li> -->
-      <!-- {{/if}} -->
+        <li>
+          <a href="{{pathFor 'projects'}}">
+            <i class="icon-search"></i>
+            Projects
+          </a>
+        </li>
 
-      <li class="hidden-phone">
-        <a href="{{pathFor 'projects'}}">
-          <i class="icon-search"></i>
-          Projects
-        </a>
-      </li>
+        <li>
+          <a href="{{pathFor 'feedback'}}">
+            <i class="icon-comment"></i>
+            Feedback
+          </a>
+        </li>
+        
+        <li>
+          <a href="{{pathFor 'dev'}}">
+            <i class="icon-code"></i>
+            Dev
+          </a>
+        </li>
 
-      <li class="hidden-phone">
-        <a href="{{pathFor 'feedback'}}">
-          <i class="icon-comment"></i>
-          Feedback
-        </a>
-      </li>
-      
-      <li class="hidden-phone">
-        <a href="{{pathFor 'dev'}}">
-          <i class="icon-code"></i>
-          Dev
-        </a>
-      </li>
-
-      
-      {{#if currentUser}}
-      
-      {{> showUser}}
-      
-      {{else}}
-      
-      <li class="hidden-phone">
-        <a href="{{pathFor 'login'}}">
-          <i class="icon-user"></i>
-          login
-        </a>
-      </li>
-      {{/if}}
-    </ul>
+        
+        {{#if currentUser}}
+        
+        {{> showUser}}
+        
+        {{else}}
+        
+        <li class="hidden-phone">
+          <a href="{{pathFor 'login'}}">
+            <i class="icon-user"></i>
+            login
+          </a>
+        </li>
+        {{/if}}
+      </ul>
+    </div>
   </div>
-</div>
+</nav>
 </template>

@@ -2,13 +2,11 @@
   <aside>
     <!-- render to the sidebar yield -->
   </aside>
-  <nav class="navbar">
     {{> yield region="navbar"}}
-  </nav>
 
   
-  <div class="row-fluid">
-    <div class="span10 offset1 mainWrapper">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1 mainWrapper">
       {{> yield}}
     </div>
   </div>

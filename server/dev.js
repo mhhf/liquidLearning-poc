@@ -11,7 +11,7 @@ Meteor.methods({
     var project = Projects.findOne({ _id: projectId });
     if( !project ) return null;
     
-    var headState = Git.buildTree( path, project );
+    var headState = Git.buildTree( path + project.hash );
     
     Projects.update({_id: projectId},{
       $set:{

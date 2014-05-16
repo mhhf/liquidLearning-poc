@@ -2,7 +2,7 @@
 <div class="row-fluid">
   <div id="projectEditWrapper" class="projectViewWrapper">
     {{#with project}}
-    <a href="{{ pathFor 'projectView' params=this }}">{{user.name}}</a> /
+    <a href="{{ pathFor 'projectView' params=this }}">{{owner.name}}</a> /
     <a href="{{ pathFor 'projectView' params=this }}">{{name}}</a> /
     {{/with}}
     {{file.path}}

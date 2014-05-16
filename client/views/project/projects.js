@@ -8,7 +8,7 @@ Template.projectWrapper.helpers({
     return this.name;
   },
   userOwn: function( back ){
-    return this.user && ( Meteor.userId() == this.user._id );
+    return this.owner && ( Meteor.userId() == this.owner._id );
   }
 });
 

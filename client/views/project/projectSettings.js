@@ -85,6 +85,7 @@ Template.deleteProject.events = {
     e.preventDefault();
     Meteor.call('deleteProject',this._id, function(err, succ){
       if( succ ) Router.go('/');
+      if( err ) console.log( err );
     });
   }
 }

@@ -4,22 +4,18 @@ var fs = Npm.require('fs');
 var path = "/Users/mhhf/llWd/";
 
 
-var build = function( project, cb ){
+var build = function( hash, lang , cb ){
 
-  var language = project.language || 'en';
+  var language = lang || 'en';
 
   // Build Context
-  var projectCtx = processContextFiles( path+project.hash+'/' );
+  var projectCtx = processContextFiles( path+hash+'/' );
 
   // Initialize the Parser with the context
   LlmdParser.yy.ctx = projectCtx;
-  LlmdParser.yy.path = path+project.hash+'/';
+  LlmdParser.yy.path = path+hash+'/';
   LlmdParser.yy.lang = language;
   LlmdParser.yy.llmd = new LLMD();
-
-  // 
-  // Build AST with inclusion 
-  // var ast = processFile( path+project.hash+'/', 'index.lmd' );
 
   LLMD.preprocess({name:'include',data:'index.lmd'}, function(err, ast){
     cb(null, {

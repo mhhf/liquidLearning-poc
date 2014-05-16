@@ -1,18 +1,9 @@
 // 
 // [TODO] - provide feedback to the user 
-// http://www.nodegit.org/nodegit/#Repo-init
-var git = Meteor.require('nodegit');
 var fs = Npm.require('fs');
 
 // [TODO] - export path to global settings
 var path = "/Users/mhhf/llWd/";
-
-
-// [TODO] - export to GIT Package Abstraction
-var createRepoAsync = function( name, cb ){
-  git.Repo.init(path+name, false, cb );
-}
-var createRepo = Meteor._wrapAsync(createRepoAsync);
 
 
 // publish public & user projects
@@ -55,15 +46,15 @@ Meteor.methods({
     // project has to be writable by user
     if( !project || !userHashPermissions(project, 'write') ) return null;
     
-    Git.commit( o.commitMsg, path, project, o.md, o.filepath );
+    Git.commit( o.commitMsg, path + project.hash, o.md, o.filepath );
     
-    var headState = Git.buildTree( path, project );
+    var headState = Git.buildTree( path + project.head );
     
     Projects.update({ _id: _id },{
       $set: { 
         slides: o.slidesLength,
         data: o.md,
-        changed: true,
+        state: 'changed',
         head: headState
       }
     });
@@ -102,66 +93,26 @@ Meteor.methods({
     if( Projects.findOne({ name:o.name, 'user._id':Meteor.userId() }) )
       return { type: 'err', subtype: 'name exists'}
       
-    var hash = MD5.hash( Meteor.user().name+"@"+o.name ).toString();
-    var repo = createRepo(hash);
-    if( !repo ) return {
-      type: 'err',
-      subtype: 'can not create repo',
-      object: repo 
-    };
-
+    // var hash = MD5.hash( Meteor.user().name+"_"+o.name ).toString();
+    var hash = Meteor.user().username+"_"+o.name;
+    
     // create index page
-    var initialData = '#Index\nthis is the index page';
-    // var index = fs.writeFileSync(path+hash+'/index.lmd', initialData );
+    Git.init( hash, path );
+    Git.commit( 'init project', path + hash, '#Index\nthis is the index page', 'index.lmd' );
+    var headState = Git.buildTree( path + hash );
+    var build = LLMDBuilder.build( hash, 'en' );
 
     // extend the object
     // [TODO] - refactor user to creator
     o = _.extend(o,{
-      user:{ 
-        name:Meteor.user().username,
-        _id: Meteor.userId(),
-      },
       hash: hash,
-      stars: [],
-      slides: 0,
-      acl: [{
-        _id: Meteor.userId(),
-        name: Meteor.user().username,
-        right: "admin"
-      }],
-      ast: {},
-      language: 'en',
-      activity: [],
-      // data: initialData,
-      // head: [ {
-      //   msg: 'new',
-      //   path: 'index.lmd',
-      //   timestamp: +(new Date())
-      // } ]
+      head: headState,
+      ast: build.ast,
+      ctx: build.ctx,
+      language: 'en'
     });
-
+    
     var _id = Projects.insert(o);
-    var project = Projects.findOne({_id: _id}); 
-    
-    
-    Git.commit( 'init project', path, project, initialData, 'index.lmd' );
-    
-    var build = LLMDBuilder.build( project );
-    var headState = Git.buildTree( path, project );
-    
-    Projects.update({ _id: _id },{
-      $set: { 
-        data: initialData,
-        head: headState,
-        ast: build.ast,
-        ctx: build.ctx,
-        build: {
-          date: new Date()
-        },
-        state: 'ready',
-        changed: false
-      }
-    });
     
     postActivity( {
       _id: _id,
@@ -179,50 +130,26 @@ Meteor.methods({
 
   addUserToProject: function( o ){
     
-    // check if information is aviable
-    if( !( o.user && o.right && o.projectId ) ) return false;
-    
     // check if project exists
     var project = Projects.findOne({_id: o.projectId });
-
-    // check if user is logged in and has the access rights to do so
-    if( !project || !userHashPermissions(project, 'admin') ) return false;
-
-    // look for user in the database
-    var user = Meteor.users.findOne({ username: o.user });
-
-    // if no user found or user is self then exit
-    if( !user || user._id == Meteor.userId() ) return false;
+    ACL( project )
+      .check('admin')
+      .addUser( o.user, o.right, function( acl ){
+        Projects.update({_id: o.projectId}, {$set: {acl: acl }});
+      });
     
-    // remove aclUser if he is already in the list
-    if( _.find(project.acl, function(e){ return e._id == user._id; }) ) {
-      var newAcl = _.filter(project.acl, function(e){ return e._id != user._id; });
-      Projects.update({_id: o.projectId}, {$set: {acl: newAcl }});
-    }
-    
-    var aclUser = {
-      _id: user._id,
-      name: user.username,
-      right: o.right
-    };
-    
-    // update the project
-    Projects.update({ _id: o.projectId }, {$push: { acl: aclUser }});
   },
 
   removeUserFromProject: function(o){
-    //
-    // check if information is aviable
-    if( !( o.userId && o.projectId ) ) return false;
 
     // check if project exists
     var project = Projects.findOne({_id: o.projectId });
+    ACL( project )
+      .check('admin')
+      .removeUser( o.userId, function( acl ){
+        Projects.update({_id: o.projectId}, {$set: {acl: acl }});
+      });
 
-    // check if user is logged in and has the access rights to do so
-    if( !project || !userHashPermissions(project, 'admin') ) return false;
-
-    var newAcl = _.filter(project.acl, function(e){ return e._id != o.userId; });
-    Projects.update({_id: o.projectId}, {$set: {acl: newAcl }});
 
     return true;
 
@@ -233,13 +160,10 @@ Meteor.methods({
     // find project
     var project = Projects.findOne({_id:_id});
 
-    // no project found
-    if( !project ) return false;
-
-    if( !userHashPermissions(project, 'admin')) return false;
+    ACL(project).check('admin');
 
     // remove the repository
-    deleteFolderRecursive( path+project.hash );
+    Git.remove( path + project.hash );
 
     Projects.remove({ _id: _id });
 
@@ -248,59 +172,20 @@ Meteor.methods({
 
   updateProjectSettings: function(o){
     
-    // check if all elements are rdy
-    if( !( o.projectId && o.name && o.description && o.public && o.language ) ) return false;
-
     // grab project
     var project = Projects.findOne({_id: o.projectId });
 
-    // check if project exists and user can admin it
-    if( !project ) return false;
-    var userAcl = _.find(project.acl, function(e){ 
-      return e._id == Meteor.userId(); 
-    });
-    
-    if( !userAcl || userAcl.right != "admin" ) return false;
+    ACL(project).check('admin');
     
     // pick the right values
     var obj = _.pick(o, ['name','description','public','language']);
-
     Projects.update({ _id: o.projectId }, {$set: obj });
 
     return true;
   }
 });
 
-// removes a folder recursivly
-var deleteFolderRecursive = function(path) {
-    var files = [];
-    if( fs.existsSync(path) ) {
-      files = fs.readdirSync(path);
-      files.forEach(function(file,index){
-        var curPath = path + "/" + file;
-        if(fs.statSync(curPath).isDirectory()) { // recurse
-          deleteFolderRecursive(curPath);
-        } else { // delete file
-          fs.unlinkSync(curPath);
-        }
-      });
-      fs.rmdirSync(path);
-    }
-};
 
-
-var userHashPermissions = function( project, right ){
-  var userId = Meteor.userId();
-  var userAcl = _.find(project.acl, function(e){
-    return e._id == userId;
-  });
-  if( !userAcl ) return false;
-
-  return userRightToNumber( userAcl.right ) >= userRightToNumber( right );
-}
-var userRightToNumber = function( right ){
-  return right=='admin'?3:(right=='write'?2:1);
-}
 
 var postActivity = function( o ) {
   Projects.update({ _id: o._id }, {

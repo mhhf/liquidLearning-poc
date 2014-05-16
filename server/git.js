@@ -4,14 +4,20 @@ var fs = Npm.require('fs');
 
 Git = {
   
-  commit: function( msg, path, project, data, filepath ) { 
-    return commit( msg, path, project, data, filepath );
+  init: function( name, path ) {
+    return createRepo( name, path );
   },
   
-  buildTree: function(path, project) {
-    // var files = fs.readdirSync(path+project.hash);
-    return buildHeadTree( path, project );
-    // return _.without(files,'.git');
+  commit: function( msg, path, data, filepath ) { 
+    return commit( msg, path, data, filepath );
+  },
+  
+  buildTree: function( path ) {
+    return buildHeadTree( path );
+  },
+  
+  remove: function( path ){
+    return deleteFolderRecursive( path );
   }
   
   
@@ -25,32 +31,32 @@ Git = {
 //   }
 // });
 
-var buildHeadTreeAsync = function( path, project, cb ){
-    var files = {};
-    git.Repo.open(path+project.hash+'/.git', function(error, repo) {
+var buildHeadTreeAsync = function( path, cb ){
+  var files = {};
+  git.Repo.open(path+'/.git', function(error, repo) {
+    if (error) throw error;
+
+    repo.getMaster(function(error, commit) {
       if (error) throw error;
 
-      repo.getMaster(function(error, commit) {
-        if (error) throw error;
-        
-        var history = commit.history(git.RevWalk.Sort.Time);
-        
-        // Sort relevant fiels via OID
-        commit.getTree( function( err, tree ){
+      var history = commit.history(git.RevWalk.Sort.Time);
 
-          tree.entries().forEach( function( entry ){
-            files[entry.path()] = {
-              oid: entry.oid().toString()
-            }
-          });
+      // Sort relevant fiels via OID
+      commit.getTree( function( err, tree ){
 
-          buildModificationLog( history, files, cb );
-
+        tree.entries().forEach( function( entry ){
+          files[entry.path()] = {
+            oid: entry.oid().toString()
+          }
         });
-        
+
+        buildModificationLog( history, files, cb );
+
       });
 
     });
+
+  });
 }
 var buildHeadTree = Meteor._wrapAsync(buildHeadTreeAsync); 
 
@@ -86,18 +92,19 @@ function buildModificationLog( history, files, cb ) {
 
 
 
-var commitAsync = function( msg, path, project, data, filepath, cb ){
+// [TODO] - change project to id
+var commitAsync = function( msg, path, data, filepath, cb ){
   
     var sig = git.Signature.now(
         Meteor.user().username, 
         Meteor.user().emails[0].address
         );
     
-    git.Repo.open( path + project.hash + '/.git' , function(openReporError, repo) {
+    git.Repo.open( path + '/.git' , function(openReporError, repo) {
       if (openReporError) throw openReporError;
       
-      console.log('saving ' + path + project.hash + '/'+filepath);
-      fs.writeFileSync( path + project.hash + '/'+filepath, data );
+      console.log('saving ' + path + '/'+filepath);
+      fs.writeFileSync( path + '/'+filepath, data );
       
       repo.openIndex(function(openIndexError, index) {
         if (openIndexError) throw openIndexError;
@@ -145,3 +152,27 @@ var commitAsync = function( msg, path, project, data, filepath, cb ){
     });
 }
 var commit = Meteor._wrapAsync(commitAsync);
+
+
+var createRepoAsync = function( name, path, cb ){
+  git.Repo.init(path+name, false, cb );
+}
+var createRepo = Meteor._wrapAsync(createRepoAsync);
+
+
+// removes a folder recursivly
+var deleteFolderRecursive = function(path) {
+    var files = [];
+    if( fs.existsSync(path) ) {
+      files = fs.readdirSync(path);
+      files.forEach(function(file,index){
+        var curPath = path + "/" + file;
+        if(fs.statSync(curPath).isDirectory()) { // recurse
+          deleteFolderRecursive(curPath);
+        } else { // delete file
+          fs.unlinkSync(curPath);
+        }
+      });
+      fs.rmdirSync(path);
+    }
+};

@@ -1,6 +1,5 @@
 {
   "packages": {
-    "bootstrap-wysiwyg": {},
     "belt-md5": {},
     "spin": {},
     "jquery-ui": {},
@@ -18,6 +17,7 @@
     "redisc": {
       "git": "git@github.com:mhhf/meteor-redisc.git"
     },
-    "server-eval": {}
+    "server-eval": {},
+    "bootstrap3-less": {}
   }
 }

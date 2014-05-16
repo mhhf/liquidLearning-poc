@@ -23,8 +23,6 @@ iron-router
 moment
 discussions
 blaze-layout
-bootstrap-3
-bootstrap
 llmd-include
 llmdBuilder
 llmd-tts
@@ -40,3 +38,5 @@ font-awesome
 tags
 server-eval
 redisc
+bootstrap3-less
+collection2
