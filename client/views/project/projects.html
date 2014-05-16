@@ -25,8 +25,8 @@
   <h4> {{ slice name 20 }} </h4>
   <p> {{ slice description 28 }} </p>
   <span class="info left">
-    <span class="star {{#if userStared}} stared {{else}} unstared {{/if}}"> {{ stars.length }} <i class="icon-star-empty"></i></span>
-    <span class="slides"> {{ slides }} <i class="icon-list-alt"></i></span>
+    <span class="star {{#if userStared}} stared {{else}} unstared {{/if}}"> {{ stars.length }} <i class="fa fa-star-o"></i></span>
+    <span class="slides"> {{ slides }} <i class="fa fa-list"></i></span>
   </span>
   <span class="info right">
     {{#if userOwn}}
@@ -41,17 +41,17 @@
 
 <template name="showPublicStatus">
   {{#if public }}
-  <i class="icon-unlock"></i>
+  <i class="fa fa-unlock"></i>
   {{else}}
-  <i class="icon-lock"></i>
+  <i class="fa fa-lock"></i>
   {{/if}}
 </template>
 
 <template name="showContributor">
   {{#if userIsContributor}}
-  <i class="icon-code"></i>
+  <i class="fa fa-code"></i>
   {{/if}}
   {{#if userIsReader}}
-  <i class="icon-eye-open"></i>
+  <i class="fa fa-eye"></i>
   {{/if}}
 </template>

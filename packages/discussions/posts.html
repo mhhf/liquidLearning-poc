@@ -2,7 +2,7 @@
 <ul class="feedback">
   {{#each posts}}
   <li>
-  <span class="iconWrapper"> <i class="icon-comments"></i></span> 
+  <span class="iconWrapper"> <i class="fa fa-comments"></i></span> 
   <a class="mainTitle" href="{{pathFor ../postPath params=this }}">
     {{ title }}
   </a>
@@ -10,14 +10,14 @@
   <!-- <p>{{message}}</p> -->
   {{> star }}
   <span class="comments">
-    <i class="icon-comment"></i>
+    <i class="fa fa-comment"></i>
     <a href="{{pathFor ../postPath params=this}}">
       {{comments}} 
     </a>
   </span>
   <span class="mainInfo">
-    <span class="user"><i class="icon-user"></i> {{user.name}}</span>
-    <span class="time"><i class="icon-time"></i> {{getDate}}</span>
+    <span class="user"><i class="fa fa-user"></i> {{user.name}}</span>
+    <span class="time"><i class="fa fa-time"></i> {{getDate}}</span>
   </span>
   </li>
   {{/each}}

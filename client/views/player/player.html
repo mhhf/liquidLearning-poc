@@ -3,12 +3,12 @@
   {{> subtitles}}
 	<center class="playerControlls">
     {{#if finished}}
-      <a name="reset" href="{{pathFor 'projectView'}}"><i class="icon-fast-backward"></i></a>
+      <a name="reset" href="{{pathFor 'projectView'}}"><i class="fa fa-fast-backward"></i></a>
     {{else}}
       {{#if pause}}
-      <a name="play"><i class="icon-play"></i></a>
+      <a name="play"><i class="fa fa-play"></i></a>
       {{else}}
-      <a name="pause"><i class="icon-pause"></i></a>
+      <a name="pause"><i class="fa fa-pause"></i></a>
       {{/if}}
     {{/if}}
     

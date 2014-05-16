@@ -26,13 +26,6 @@ Git = {
   
 }
 
-// DEBUG ONLEY
-// Meteor.methods({
-//   readAllFiles:function(path, project){
-//     return raf(path, project);
-//   }
-// });
-
 var buildHeadTreeAsync = function( path, cb ){
   var files = {};
   git.Repo.open(path+'/.git', function(error, repo) {

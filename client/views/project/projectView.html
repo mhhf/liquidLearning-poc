@@ -11,13 +11,13 @@
   {{else}}
   <span class="info right">
     {{> star}}
-    <a href="{{pathFor 'projectDiscuss' params=this }}"><i class="icon-comments"></i> discuss</a>
+    <a href="{{pathFor 'projectDiscuss' params=this }}"><i class="fa fa-comments"></i> discuss</a>
     {{#if currentUser }}
-    <a href="#" name="fork" class="notDoneYet"><i class="icon-code-fork"></i> fork</a>
-    <a href="{{ pathFor 'projectPreview' params=this}}"><i class="icon-eye-open"></i> view</a>
-    <a href="{{ pathFor 'projectAstView' params=this}}"><i class="icon-code"></i> ast</a>
-    <a id="buildBtn" href="#" class="{{needBuild}}"><i class="icon-cogs"></i> build</a>
-    <a href="{{pathFor 'projectSettings' _id=this._id }}"><i class="icon-cog"></i> settings</a>
+    <a href="#" name="fork" class="notDoneYet"><i class="fa fa-code-fork"></i> fork</a>
+    <a href="{{ pathFor 'projectPreview' params=this}}"><i class="fa fa-eye"></i> view</a>
+    <a href="{{ pathFor 'projectAstView' params=this}}"><i class="fa fa-code"></i> ast</a>
+    <a id="buildBtn" href="#" class="{{needBuild}}"><i class="fa fa-cogs"></i> build</a>
+    <a href="{{pathFor 'projectSettings' _id=this._id }}"><i class="fa fa-cog"></i> settings</a>
     {{/if}}
   </span>
   
@@ -51,15 +51,15 @@
   {{#each getActivities}}
   <li class="activityWrapper">
     {{#if save}}
-    <span class="iconWrapper"> <i class="icon-save"></i></span>
+    <span class="iconWrapper"> <i class="fa fa-save"></i></span>
     {{/if}}
     
     {{#if comment}}
-    <span class="iconWrapper"> <i class="icon-comment"></i></span>
+    <span class="iconWrapper"> <i class="fa fa-comment"></i></span>
     {{/if}}
     
     {{#if post}}
-    <span class="iconWrapper"> <i class="icon-comments"></i></span>
+    <span class="iconWrapper"> <i class="fa fa-comments"></i></span>
     {{/if}}
     
     {{msg}}
