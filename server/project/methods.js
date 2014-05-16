@@ -1,7 +1,3 @@
-// 
-// [TODO] - provide feedback to the user 
-var fs = Npm.require('fs');
-
 // [TODO] - export path to global settings
 var path = "/Users/mhhf/llWd/";
 
@@ -174,7 +170,29 @@ Meteor.methods({
     Projects.update({ _id: o.projectId }, {$set: obj });
 
     return true;
+  },
+  
+  // Build the Project AST
+  buildProject: function( _id ){
+    
+    if(!_id) return false;
+    
+    var project = Projects.findOne( { _id: _id } );
+    ACL(project).check('write');
+    
+    var build = LLMDBuilder.build( project );
+    
+    
+    Projects.update({ _id: _id }, {$set: {
+      ast: build.ast,
+      ctx: build.ctx,
+      state: 'ready',
+      changed: false
+    }});
+    
+    return true;
   }
+  
 });
 
 
