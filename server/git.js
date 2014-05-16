@@ -18,9 +18,11 @@ Git = {
   
   remove: function( path ){
     return deleteFolderRecursive( path );
+  },
+  
+  openFile: function( path ){
+    return fs.readFileSync( path, "utf8" );
   }
-  
-  
   
 }
 

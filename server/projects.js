@@ -24,27 +24,19 @@ Meteor.publish('project', function(_id){
 
 
 Meteor.methods({
-  openFile: function( projectId, filepath ){
+  openFile: function( _id, filepath ){
     
-    // check if project is valid
-    var project = Projects.findOne({ _id: projectId });
-    if( !project ) return null;
-
-    // check if user can read the file
-    if( !project.public && !userHashPermissions( project, 'read' )) return null;
+    var project = Projects.findOne({ _id: _id });
+    ACL( project ).check( 'read' );
     
-    var data = fs.readFileSync( path+project.hash+'/'+filepath, "utf8" );
-    return data;
+    return Git.openFile( path+project.hash+'/'+filepath );
   },
-  // 
-  // [question] - save just markdown or the parsed slides for speed? 
   saveFile: function( _id, o ){
     if( !( o.md && _id && o.filepath ) ) return false;
     
     var project = Projects.findOne({ _id: _id });
     
-    // project has to be writable by user
-    if( !project || !userHashPermissions(project, 'write') ) return null;
+    ACL(project).check('write');
     
     Git.commit( o.commitMsg, path + project.hash, o.md, o.filepath );
     

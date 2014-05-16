@@ -10,11 +10,3 @@ Meteor.startup( function(){
 	});
 
 });
-
-
-// TODO #filepicker #s3: get rid of filepicker as a transit service
-Meteor.methods({
-	clear: function(){
-		Syncs.remove({});
-	}
-});
