@@ -23,7 +23,8 @@
         "branch": "master"
       },
       "server-eval": {},
-      "bootstrap3-less": {}
+      "bootstrap3-less": {},
+      "percolatestudio-migrations": {}
     },
     "packages": {
       "belt-md5": {
@@ -90,6 +91,11 @@
         "git": "https://github.com/eprochasson/bootstrap3-less",
         "tag": "v0.1.9",
         "commit": "5c812c4d7ce72917a065f0424c3cf54e5ff2d16a"
+      },
+      "percolatestudio-migrations": {
+        "git": "https://github.com/percolatestudio/meteor-migrations.git",
+        "tag": "v0.6.0",
+        "commit": "baa77d4c121f6f06b6aa142ee11f71ace8795f7f"
       },
       "relocator": {
         "git": "git@bitbucket.org:liquidlearningdev/relocator.git",

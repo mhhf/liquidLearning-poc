@@ -22,21 +22,20 @@ Meteor.publish('project', function(_id){
 Meteor.methods({
   openFile: function( _id, filepath ){
     
-    var project = Projects.findOne({ _id: _id });
-    ACL( project ).check( 'read' );
+    var project = new ProjectModel( _id );
+    project.check( 'read' );
     
-    return Git.openFile( path+project.hash+'/'+filepath );
+    return Git.openFile( path+project.ele.hash+'/'+filepath );
   },
   saveFile: function( _id, o ){
     if( !( o.md && _id && o.filepath ) ) return false;
     
-    var project = Projects.findOne({ _id: _id });
+    var project = new ProjectModel( _id );
+    project.check('write');
     
-    ACL(project).check('write');
+    Git.commit( o.commitMsg, path + project.ele.hash, o.md, o.filepath );
     
-    Git.commit( o.commitMsg, path + project.hash, o.md, o.filepath );
-    
-    var headState = Git.buildTree( path + project.head );
+    var headState = Git.buildTree( path + project.ele.hash );
     
     Projects.update({ _id: _id },{
       $set: { 
@@ -119,24 +118,20 @@ Meteor.methods({
   addUserToProject: function( o ){
     
     // check if project exists
-    var project = Projects.findOne({_id: o.projectId });
-    ACL( project )
+    var project = new ProjectModel( o.projectId );
+    project
       .check('admin')
-      .addUser( o.user, o.right, function( acl ){
-        Projects.update({_id: o.projectId}, {$set: {acl: acl }});
-      });
+      .addUser( o.user, o.right );
     
   },
 
   removeUserFromProject: function(o){
 
     // check if project exists
-    var project = Projects.findOne({_id: o.projectId });
-    ACL( project )
+    var project = new ProjectModel( o.projectId );
+    project
       .check('admin')
-      .removeUser( o.userId, function( acl ){
-        Projects.update({_id: o.projectId}, {$set: {acl: acl }});
-      });
+      .removeUser( o.userId );
 
 
     return true;
@@ -145,13 +140,11 @@ Meteor.methods({
 
   deleteProject: function( _id ){
     
-    // find project
-    var project = Projects.findOne({_id:_id});
-
-    ACL(project).check('admin');
+    var project = new ProjectModel( _id );
+    project.check( 'admin' );
 
     // remove the repository
-    Git.remove( path + project.hash );
+    Git.remove( path + project.ele.hash );
 
     Projects.remove({ _id: _id });
 
@@ -160,10 +153,8 @@ Meteor.methods({
 
   updateProjectSettings: function(o){
     
-    // grab project
-    var project = Projects.findOne({_id: o.projectId });
-
-    ACL(project).check('admin');
+    var project = new ProjectModel( o.projectId );
+    project.check('admin');
     
     // pick the right values
     var obj = _.pick(o, ['name','description','public','language']);
@@ -177,10 +168,10 @@ Meteor.methods({
     
     if(!_id) return false;
     
-    var project = Projects.findOne( { _id: _id } );
-    ACL(project).check('write');
+    var project = new ProjectModel( o._id );
+    project.check('write');
     
-    var build = LLMDBuilder.build( project );
+    var build = LLMDBuilder.build( project.ele );
     
     
     Projects.update({ _id: _id }, {$set: {

@@ -18,6 +18,7 @@
       "git": "git@github.com:mhhf/meteor-redisc.git"
     },
     "server-eval": {},
-    "bootstrap3-less": {}
+    "bootstrap3-less": {},
+    "percolatestudio-migrations": {}
   }
 }
