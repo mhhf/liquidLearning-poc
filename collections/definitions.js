@@ -1,10 +1,12 @@
 Projects = new Meteor.Collection('projects', {
-  schema: Schemas.Project
+  schema: new SimpleSchema(Schemas.Project)
 });
 
 Consensus = new Meteor.Collection('consensus');
 
-Units = new Meteor.Collection('units');
+Units = new Meteor.Collection('units', {
+  schema: new SimpleSchema(Schemas.Units)
+});
 
 Lectures = new Meteor.Collection('lectures');
 

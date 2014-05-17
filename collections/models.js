@@ -6,4 +6,8 @@ ProjectModel = function( _id ){
   
   ACLInterface.apply( this );
   
+  if( Meteor.isServer ) {
+    GitInterface.apply( this );
+  }
+  
 }

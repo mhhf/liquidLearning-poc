@@ -24,27 +24,14 @@ Meteor.methods({
     
     var project = new ProjectModel( _id );
     project.check( 'read' );
-    
-    return Git.openFile( path+project.ele.hash+'/'+filepath );
+    return project.openFile( filepath );
   },
   saveFile: function( _id, o ){
     if( !( o.md && _id && o.filepath ) ) return false;
     
     var project = new ProjectModel( _id );
     project.check('write');
-    
-    Git.commit( o.commitMsg, path + project.ele.hash, o.md, o.filepath );
-    
-    var headState = Git.buildTree( path + project.ele.hash );
-    
-    Projects.update({ _id: _id },{
-      $set: { 
-        slides: o.slidesLength,
-        data: o.md,
-        state: 'changed',
-        head: headState
-      }
-    });
+    project.commit( o.commitMsg, o.md, o.filepath );
     
     postActivity( {
       _id: _id,
@@ -142,10 +129,8 @@ Meteor.methods({
     
     var project = new ProjectModel( _id );
     project.check( 'admin' );
-
-    // remove the repository
-    Git.remove( path + project.ele.hash );
-
+    project.removeRepo( );
+    
     Projects.remove({ _id: _id });
 
     return true;
