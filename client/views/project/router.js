@@ -77,6 +77,11 @@ Router.map(function() {
 
   this.route('projectSettings', {
     path: '/project/:_id/settings',
+    layoutTemplate: 'sideLayout',
+    yieldTemplates: {
+      settingsNav: {to: 'aside'},
+      navbar: { to: 'navbar' }
+    },
     waitOn: function(){
       return Meteor.subscribe('project', this.params._id );
     },

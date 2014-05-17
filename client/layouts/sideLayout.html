@@ -1,0 +1,18 @@
+<template name="sideLayout">
+  {{> yield region="navbar"}}
+
+  
+  <div class="row">
+    <div class="col-md-3">
+      {{> yield region="aside"}}
+    </div>
+    <div class="col-md-9 mainWrapper">
+      {{> yield}}
+    </div>
+  </div>
+
+  <footer>
+    <!-- render to the footer yield -->
+  </footer>
+  
+</template>

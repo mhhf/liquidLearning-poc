@@ -1,14 +1,6 @@
 <template name="projectSettings">
 <a href="{{ pathFor 'projectView' }}">... back to project</a>
 <div id="mainSettings" class="row-fluid">
-  <div class="span3">
-    <ul class="menue">
-      <li class="{{isState 'general'}}"><a class="menueBtn general" href="#">General</a></li>
-      <li class="{{isState 'build'}}"><a class="menueBtn build" href="#">Build</a></li>
-      <li class="{{isState 'members'}}"><a class="menueBtn members" href="#">Members</a></li>
-      <li class="{{isState 'delete'}}"><a class="menueBtn delete" href="#">Delete Project</a></li>
-    </ul>
-  </div>
   <div class="span9">
     {{#if isState 'general'}}
       {{> generalSettings}}
@@ -27,6 +19,15 @@
     {{/if}}
   </div>
 </div>
+</template>
+
+<template name="settingsNav">
+<ul class="menue">
+  <li class="{{isState 'general'}}"><a class="menueBtn general" href="#">General</a></li>
+  <li class="{{isState 'build'}}"><a class="menueBtn build" href="#">Build</a></li>
+  <li class="{{isState 'members'}}"><a class="menueBtn members" href="#">Members</a></li>
+  <li class="{{isState 'delete'}}"><a class="menueBtn delete" href="#">Delete Project</a></li>
+</ul>
 </template>
 
 
