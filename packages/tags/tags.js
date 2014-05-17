@@ -1,3 +1,5 @@
+// [TODO] - tags context
+
 Tags = new Meteor.Collection('tags', {
   schema: new SimpleSchema({
     name: {

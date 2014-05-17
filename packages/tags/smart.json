@@ -7,6 +7,7 @@
   "git": "git@github.com:mhhf/meteor-tags.git",
   "packages": {
     "roles": {},
-    "collection2": {}
+    "collection2": {},
+    "selectize": {}
   }
 }

@@ -1,0 +1,19 @@
+<template name="newCourse">
+  <form role="form">
+    
+    {{#fgWrapper label='Name'}}
+      <input type="text" id="name" class="form-control" placeholder="Name..." />
+    {{/fgWrapper}}
+    
+    {{#fgWrapper label='Tags'}}
+      {{> tags}}
+    {{/fgWrapper}}
+    
+    {{#fgWrapper}}
+      <button class="btn btn-default" type="submit">Create</button>
+    {{/fgWrapper}}
+    
+  </form>
+
+</template>
+
