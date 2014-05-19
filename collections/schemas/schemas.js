@@ -32,5 +32,17 @@ Schemas.Lectures = [
   Schemas.Common.Stars,
   Schemas.Common.Activity,
   Schemas.Common.Common,
-  ACLInterface.schema
+  ACLInterface.schema,
+  {
+    sections: {
+      type: [Object],
+      defaultValue: []
+    },
+    'sections.$.name': {
+      type: String
+    },
+    'sections.$.units': {
+      type: [Schemas.Units]
+    }
+  }
 ];

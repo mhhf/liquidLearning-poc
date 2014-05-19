@@ -1,6 +1,8 @@
 <template name="newCourse">
   <form role="form">
     
+    <h1>Create a new Course!</h1>
+    
     {{#fgWrapper label='Name'}}
       <input type="text" id="name" class="form-control" placeholder="Name..." />
     {{/fgWrapper}}
@@ -9,9 +11,14 @@
       {{> tags}}
     {{/fgWrapper}}
     
+    {{#fgWrapper label='Description'}}
+      {{> editorView editor=editorDep}}
+    {{/fgWrapper}}
+    
     {{#fgWrapper}}
       <button class="btn btn-default" type="submit">Create</button>
     {{/fgWrapper}}
+    
     
   </form>
 
