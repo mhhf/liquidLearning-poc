@@ -41,19 +41,22 @@ Template.newCourse.helpers({
 Template.newCourse.events = {
   "submit": function(e,t){
     e.preventDefault();
+    var baseUrl = 'http://ll-poc.s3.amazonaws.com/img/';
     
     var name = t.find('#name').value;
     var tags = this.newtags || []; 
     var description = editor.get().getValue();
+    var imgUrl = baseUrl + S3Store.fileKey(Images.findOne(image.get()));
     
-    console.log(name);
-    console.log(tags);
-    console.log(description);
-    
+    console.log('haha');
     Courses.insert({
       name: name,
+      thumbnail: imgUrl,
       tags: tags,
       description: description
+    }, function(err, succ){
+      if(!err)
+        Router.go('teach');
     });
     
   },

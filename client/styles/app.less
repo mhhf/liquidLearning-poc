@@ -1,10 +1,12 @@
 @textGray: #999;
 @black: #333;
 @grey: #f1f1f1;
+@grey2: #ddd;
 @darkblue: #194c68;
 @blue: #4b8cdc;
 @lightblue: #d3dfed;
 @orange: #fdb756;
+@lightorange: #f6dcb9;
 
 
 @highlight: @orange;
@@ -62,3 +64,22 @@ textarea {
     }
   }
 }
+
+.thumbnail {
+  width: 250px;
+  height: 250px;
+  background: url('loading.gif') center center no-repeat;
+}
+
+.courseWrapper {
+  background: #fff;
+  display: inline-block;
+  padding: 4px;
+  margin: 2px;
+  border: 1px solid @grey2;
+  &:hover {
+    background: @lightblue;
+  }
+}
+
+

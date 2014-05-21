@@ -1,6 +1,6 @@
 FS.debug = false;
 
-var imageStore = new FS.Store.S3("images", {
+S3Store = new FS.Store.S3("images", {
     region: "us-west-2", 
     bucket: "ll-poc",
     folder: 'img',
@@ -20,7 +20,7 @@ var imageStore = new FS.Store.S3("images", {
   });
 
 Images = new FS.Collection("images", {
-  stores: [imageStore]
+  stores: [S3Store]
 });
 
 Images.allow({

@@ -1,7 +1,7 @@
 <template name="teach">
-<a class="btn btn-primary" href="{{pathFor 'newCourse'}}"><i class="fa fa-plus"></i> Create a Course</a>
+  <a class="btn btn-primary" href="{{pathFor 'newCourse'}}"><i class="fa fa-plus"></i> Create a Course</a>
   <hr>
-  {{#each lectures}}
-    l
+  {{#each courses}}
+    <a href="{{pathFor 'editCourse'}}">{{> course}}</a>
   {{/each}}
 </template>

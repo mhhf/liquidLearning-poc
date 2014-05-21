@@ -34,6 +34,9 @@ Schemas.Courses = [
   Schemas.Common.Common,
   ACLInterface.schema,
   {
+    thumbnail: {
+      type: String,
+    },
     tags: {
       type: [String],
       defaultValue: []

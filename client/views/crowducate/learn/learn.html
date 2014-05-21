@@ -1,3 +1,7 @@
 <template name="learn">
-learn
+  {{#each courses}}
+    <a href="{{pathFor 'learnCourse'}}">
+      {{> course}}
+    </a>
+  {{/each}}
 </template>
