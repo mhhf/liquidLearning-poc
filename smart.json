@@ -20,6 +20,9 @@
     },
     "server-eval": {},
     "bootstrap3-less": {},
-    "percolatestudio-migrations": {}
+    "percolatestudio-migrations": {},
+    "collectionFS": {},
+    "cfs-s3": {},
+    "jquery-jcrop": {}
   }
 }

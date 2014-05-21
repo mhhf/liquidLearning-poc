@@ -41,3 +41,8 @@ redisc
 bootstrap3-less
 collection2
 percolatestudio-migrations
+collectionFS
+cfs-s3
+cfs-filesystem
+cfs-graphicsmagick
+jquery-jcrop

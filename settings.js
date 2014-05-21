@@ -1,3 +1,0 @@
-// API's
-//
-FILEPICKER_API_KEY = "A64VCBSSpKplhCYDX8Uvwz";

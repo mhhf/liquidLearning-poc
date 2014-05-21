@@ -3,18 +3,18 @@ Router.map( function(){
   this.route('learn');
   this.route('teach', {
     waitOn: function(){
-      return Meteor.subscribe('ownLectures');
+      return Meteor.subscribe('ownCourses');
     },
     data: function(){
       return {
-        lectures: Lectures.find()
+        courses: Courses.find()
       };
     }
   });
   
   this.route( 'newCourse', {
     waitOn: function(){
-      return Meteor.subscribe('tags');
+      return [ Meteor.subscribe('tags'), Meteor.subscribe('images') ];
     },
     data: {
       tags: Tags.find()

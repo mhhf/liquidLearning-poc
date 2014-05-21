@@ -2,7 +2,8 @@
 @black: #333;
 @grey: #f1f1f1;
 @darkblue: #194c68;
-@blue: #2879a6;
+@blue: #4b8cdc;
+@lightblue: #d3dfed;
 @orange: #fdb756;
 
 
@@ -39,4 +40,25 @@ textarea {
   background: @orange !important;
   box-shadow: none; 
   -webkit-box-shadow: none !important;
+}
+
+#dropzone {
+  height: 100px;
+  width: 100%;
+  display: table;
+  border-radius: 20px;
+  border: 4px #fff dashed;
+  &:before{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    content: 'Drop file here!';
+  }
+  &.hover {
+    border: 4px @blue dashed;
+    background: @lightblue;
+    &:before {
+      content: 'Good!';
+    }
+  }
 }

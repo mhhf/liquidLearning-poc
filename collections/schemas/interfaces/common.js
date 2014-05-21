@@ -29,10 +29,12 @@ Schemas = {
         type: String
       },
       language: {
-        type: String
+        type: String,
+        defaultValue: 'en'
       },
       public: {
-        type: Boolean
+        type: Boolean,
+        defaultValue: false
       }
     }),
     Git: new SimpleSchema({

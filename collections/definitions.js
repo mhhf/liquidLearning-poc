@@ -8,8 +8,8 @@ Units = new Meteor.Collection('units', {
   schema: new SimpleSchema(Schemas.Units)
 });
 
-Lectures = new Meteor.Collection( 'lectures', {
-  schema: new SimpleSchema( Schemas.Lectures )
+Courses = new Meteor.Collection( 'courses', {
+  schema: new SimpleSchema( Schemas.Courses )
 });
 
 

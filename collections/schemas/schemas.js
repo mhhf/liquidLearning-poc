@@ -27,13 +27,17 @@ Schemas.Project = [
   Schemas.Common.Common
 ];
 
-Schemas.Lectures = [
+Schemas.Courses = [
   Schemas.Common.Owner,
   Schemas.Common.Stars,
   Schemas.Common.Activity,
   Schemas.Common.Common,
   ACLInterface.schema,
   {
+    tags: {
+      type: [String],
+      defaultValue: []
+    },
     sections: {
       type: [Object],
       defaultValue: []

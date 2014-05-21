@@ -11,6 +11,15 @@
       {{> tags}}
     {{/fgWrapper}}
     
+    {{#fgWrapper label='Image'}}
+      {{#if uploadedImage}}
+        <img src="{{imageUrl}}" alt="">
+      {{else}}
+        <div id="dropzone"></div>
+      {{/if}}
+    {{/fgWrapper}}
+    
+    
     {{#fgWrapper label='Description'}}
       {{> editorView editor=editorDep}}
     {{/fgWrapper}}

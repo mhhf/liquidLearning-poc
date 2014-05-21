@@ -1,3 +1,4 @@
-Meteor.publish('ownLectures', function(){
-  return Lectures.find({ 'owner._id': this.userId });
+Meteor.publish('ownCourses', function(){
+  // return Courses.find();
+  return Courses.find({ 'owner._id': this.userId });
 });
