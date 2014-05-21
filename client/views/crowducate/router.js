@@ -41,7 +41,27 @@ Router.map( function(){
     },
     data: function(){
       return {
-        data: Courses.findOne()
+        data: Courses.findOne(),
+        section: null
+      };
+    }
+  });
+  
+  this.route('editCourseSection', {
+    template: 'editCourse',
+    path:'course/:_courseId/edit/:section',
+    layoutTemplate: 'sideLayout',
+    yieldTemplates: {
+      'editAside': { to: 'aside' },
+      'navbar': { to: 'navbar' }
+    },
+    waitOn: function(){
+      return [Meteor.subscribe('course', this.params._courseId)];
+    },
+    data: function(){
+      return {
+        data: Courses.findOne(),
+        section: this.params.section
       };
     }
   });

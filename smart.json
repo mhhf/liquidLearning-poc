@@ -23,6 +23,7 @@
     "percolatestudio-migrations": {},
     "collectionFS": {},
     "cfs-s3": {},
-    "jquery-jcrop": {}
+    "jquery-jcrop": {},
+    "sortable": {}
   }
 }
