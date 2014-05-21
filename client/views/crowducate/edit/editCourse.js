@@ -11,6 +11,19 @@ var editMode = {
   }
 }
 
+var newLectureEdit = {
+  dep:	new Deps.Dependency,
+  val: false,
+  get: function(){
+    this.dep.depend();
+    return this.val;
+  },
+  set: function( val ){
+    this.dep.changed();
+    this.val = val;
+  }
+}
+
 
 Template.editAside.events = {
   "click .add-section": function(e,t){
@@ -38,6 +51,25 @@ Template.editAside.events = {
       editMode.set(false);
       Courses.update({_id: t.data.data._id},{$push: {sections: { name: name, units: [] }}});
     }
+  },
+  "click .add-lecture": function(e,t){
+    e.preventDefault();
+    
+    newLectureEdit.set( true );
+    
+  },
+  "submit #newLectureForm": function(e,t){
+    e.preventDefault();
+    
+    var name = t.find('input#newLectureName').value;
+    
+    // unique name required ! check this
+    // 
+    
+    // add new unit
+    
+    console.log(name);
+    
     
   }
 }
@@ -62,5 +94,8 @@ Template.editAside.helpers({
   },
   isSectionActive: function(data){
     return this.name == data.section?'active':'';
+  },
+  isNewLectureEdit: function(){
+    return newLectureEdit.get();
   }
 });

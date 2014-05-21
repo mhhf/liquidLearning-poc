@@ -6,18 +6,28 @@
   <ul class="sortable sections nav nav-pills nav-stacked">
   {{#each getSections}}
     <li class="">
-    <a href="{{pathFor 'editCourseSection' _courseId=../data/_id section=name}}" data-target="{{name}}" class="{{isSectionActive ..}}">{{index}}. {{name}}</a>
-    {{#if isSection this ..}}
-    <div class="unitsContainer">
-      <ul class="units">
-        {{#each units}}
-        <li> <a href="/teach/S6N5btY9uqW5rEgaj/lectures/E6RpnbDHPcpHdjwev">{{name}}</a> </li>
-        {{/each}}
-      </ul>
-      <a class="list-group-item add-lecture"><i class="fa fa-plus"></i> Add Lecture</a>
-    </div>
-    {{/if}}
-      
+      <a href="{{pathFor 'editCourseSection' _courseId=../data/_id section=name}}" data-target="{{name}}" class="{{isSectionActive ..}}">{{index}}. {{name}}</a>
+      {{#if isSection this ..}}
+      <div class="unitsContainer">
+        <ul class="units">
+          {{#each units}}
+          <li> <a href="/teach/S6N5btY9uqW5rEgaj/lectures/E6RpnbDHPcpHdjwev">{{name}}</a> </li>
+          {{/each}}
+        </ul>
+        {{#if isNewLectureEdit }}
+        <form action="" id="newLectureForm">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Name..." id="newLectureName" autofocus/>
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="submit">Add</button>
+            </span>
+          </div>
+        </form>
+        {{else}}
+          <a class="list-group-item add-lecture"><i class="fa fa-plus"></i> Add Lecture</a>
+        {{/if}}
+      </div>
+      {{/if}}
     </li>
   {{/each}}
   </ul>
