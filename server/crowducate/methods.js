@@ -2,7 +2,20 @@ Meteor.methods({
   newUnit: function( o ){
     var course = new CourseModel( o._id );
     
+    
+    var old = _.find( _.pluck( _.flatten( _.pluck(course.ele.sections,'units') ), 'name' ), function( name ){
+      return name === o.name;
+    });
+    
+    if( old ) {
+      console.log('old found');
+      return false;
+    } 
+    
+    
     course.check('write');
+    course.commit( 'init file', '', o.name+'.llmd' );
+    
     
     var sections = _.map(course.ele.sections, function(section){
       if( section.name === o.section ) {
@@ -18,5 +31,25 @@ Meteor.methods({
     Courses.update({_id: o._id }, {$set: { sections: sections }});
     
   
+  },
+  newCourse: function( o ){
+    Courses.insert(o);
+  },
+  openLectureFile: function(_id, name){
+    var course = new CourseModel( _id );
+    
+    course.check('read');
+    
+    return course.openFile( name + '.llmd' );
+    
+  },
+  saveLectureFile: function(_id, o){
+    
+    var course = new CourseModel( _id );
+    course.check('write');
+    course.commit( o.commitMsg, o.md, o.filepath );
+    
   }
+  
+  
 });

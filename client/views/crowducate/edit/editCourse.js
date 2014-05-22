@@ -93,10 +93,12 @@ Template.editAside.helpers({
     return section.name == data.section;
   },
   editState: function( type ){
-    console.log(type, editState.get());
     return editState.get() === type;
   },
   isSectionActive: function(data){
     return this.name == data.section?'active':'';
+  },
+  isLectureActive: function(data){
+    return this.name == data.lecture?'active':'';
   }
 });

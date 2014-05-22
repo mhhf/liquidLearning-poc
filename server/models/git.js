@@ -1,4 +1,4 @@
-var path = "/Users/mhhf/llWd/";
+var path = process.env.LLWD;
 
 GitInterface = {
   schema: null,

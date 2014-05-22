@@ -52,7 +52,13 @@ Schemas = {
       },
       head: {
         type: [Object],
-        defaultValue: []
+        autoValue: function(){
+          if( this.isInsert ) {
+            var path = process.env.LLWD+this.field('hash').value;
+            Git.init( this.field('hash').value );
+            return [];
+          }
+        }
       },
       'head.$': {
         type: Object,

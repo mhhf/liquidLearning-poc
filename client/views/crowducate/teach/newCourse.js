@@ -49,7 +49,7 @@ Template.newCourse.events = {
     var imgUrl = baseUrl + S3Store.fileKey(Images.findOne(image.get()));
     
     console.log('haha');
-    Courses.insert({
+    Meteor.call('newCourse', {
       name: name,
       thumbnail: imgUrl,
       tags: tags,

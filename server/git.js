@@ -4,8 +4,8 @@ var fs = Npm.require('fs');
 
 Git = {
   
-  init: function( name, path ) {
-    return createRepo( name, path );
+  init: function( name) {
+    return createRepo( name );
   },
   
   commit: function( msg, path, data, filepath ) { 
@@ -149,8 +149,8 @@ var commitAsync = function( msg, path, data, filepath, cb ){
 var commit = Meteor._wrapAsync(commitAsync);
 
 
-var createRepoAsync = function( name, path, cb ){
-  git.Repo.init(path+name, false, cb );
+var createRepoAsync = function( name, cb ){
+  git.Repo.init(process.env.LLWD+name, false, cb );
 }
 var createRepo = Meteor._wrapAsync(createRepoAsync);
 
@@ -171,3 +171,5 @@ var deleteFolderRecursive = function(path) {
       fs.rmdirSync(path);
     }
 };
+
+console.log(process.env.LLWD);
