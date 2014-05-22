@@ -1,0 +1,50 @@
+<template name="editAside">
+  <h3>Course: <a href='{{pathFor 'editCourse' _id=data._id}}'>{{data.name}}</a></h3>
+
+  <ul class="sortable sections nav nav-pills nav-stacked">
+  {{#each getSections}}
+    <li class="section">
+      <a href="{{pathFor 'editCourseSection' _courseId=../data/_id section=name}}" data-target="{{name}}" class="{{isSectionActive ..}}">{{index}}. {{name}}</a>
+      {{#if isSection this ..}}
+      <div class="unitsContainer">
+        <ul class="units sortable">
+          {{#each units}}
+          <li class="lecture"> <a href="{{pathFor 'editLecture' _courseId= ../../data/_id lecture=name section=../name}}" class="{{isLectureActive ../..}}">{{../index}}.{{index}} {{name}}</a>  <i class="fa fa-pencil right"></i> </li>
+          {{/each}}
+        </ul>
+        {{#if editState 'lecture' }}
+        <form action="" id="newLectureForm">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Name..." id="newLectureName" autofocus/>
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="submit">Add</button>
+            </span>
+          </div>
+        </form>
+        {{else}}
+          <a class="list-group-item add-lecture" href="#"><i class="fa fa-plus"></i> Add Lecture</a>
+        {{/if}}
+      </div>
+      {{/if}}
+    </li>
+  {{/each}}
+  </ul>
+  
+  <div class="panel panel-default newCoursePanel">
+    <div class="panel-heading">
+      {{#if editState 'section'}}
+      <form action="" id="newSectionForm">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Name..." id="newCourseName" autofocus/>
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">Add</button>
+          </span>
+        </div> 
+        <div id="newSectionNameHelper" class="alert alert-danger hidden"></div>
+      </form>
+      {{else}}
+        <a class="list-group-item add-section" href="#"><i class="fa fa-plus"></i> Add Section</a>
+      {{/if}}
+    </div>
+  </div>
+</template>

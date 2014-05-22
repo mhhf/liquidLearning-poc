@@ -83,12 +83,16 @@ Router.map( function(){
       'navbar': { to: 'navbar' }
     },
     waitOn: function(){
-      return [Meteor.subscribe('course', this.params._courseId)];
+      return [
+        Meteor.subscribe('course', this.params._id),
+        Meteor.subscribe('tags')
+      ];
     },
     data: function(){
       return {
         data: Courses.findOne(),
-        section: this.params.section
+        section: this.params.section,
+        tags: Tags.find()
       };
     }
   });
