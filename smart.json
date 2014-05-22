@@ -24,6 +24,9 @@
     "collectionFS": {},
     "cfs-s3": {},
     "jquery-jcrop": {},
-    "sortable": {}
+    "sortable": {},
+    "tags": {
+      "path": "/Users/mhhf/work/meteor/packages/tags"
+    }
   }
 }
