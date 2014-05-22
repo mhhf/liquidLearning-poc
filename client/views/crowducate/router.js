@@ -34,6 +34,7 @@ Router.map( function(){
     layoutTemplate: 'sideLayout',
     yieldTemplates: {
       'editAside': { to: 'aside' },
+      'editToolbar': { to: 'toolbar' },
       'navbar': { to: 'navbar' }
     },
     waitOn: function(){
@@ -56,7 +57,8 @@ Router.map( function(){
     layoutTemplate: 'sideLayout',
     yieldTemplates: {
       'editAside': { to: 'aside' },
-      'navbar': { to: 'navbar' }
+      'navbar': { to: 'navbar' },
+      'editToolbar': { to: 'toolbar' }
     },
     waitOn: function(){
       return [

@@ -1,5 +1,7 @@
 <template name="editAside">
-  <h3>Course: <a href='{{pathFor 'editCourse' _id=data._id}}'>{{data.name}}</a></h3>
+  <div class="courseTitle">
+    <a href='{{pathFor 'editCourse' _id=data._id}}'>{{data.name}}</a>
+  </div>
 
   <ul class="sortable sections nav nav-pills nav-stacked">
   {{#each getSections}}
