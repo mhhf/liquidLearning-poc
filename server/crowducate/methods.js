@@ -19,7 +19,7 @@ Meteor.methods({
     
     var sections = _.map(course.ele.sections, function(section){
       if( section.name === o.section ) {
-        var index = section.units.length;
+        var index = section.units.length + 1 ;
         section.units.push( { name: o.name, index: index } );
         console.log(section.units);
         return section;

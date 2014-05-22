@@ -42,7 +42,7 @@ Template.editAside.events = {
       $('#newSectionNameHelper').addClass('hidden').html('');
       
       editState.set(null);
-      Courses.update({_id: t.data.data._id},{$push: {sections: { name: name, units: [], index: t.data.data.sections.length }}});
+      Courses.update({_id: t.data.data._id},{$push: {sections: { name: name, units: [], index: t.data.data.sections.length + 1 }}});
     }
   },
   "submit #newLectureForm": function(e,t){
@@ -77,7 +77,7 @@ Template.editAside.events = {
 }
 
 Template.editAside.rendered = function(){
-  new Sortable(this.find('.sortable')); 
+  new Sortable(this.find('.sortable.sections')); 
 }
 
 Template.editAside.helpers({

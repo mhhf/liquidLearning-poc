@@ -19,6 +19,11 @@ LLMD.registerPackage("???", {
   },
   preprocess: function( ast, cb ){
     
+    if( Meteor.isClient ) {
+      console.log(ast);
+      cb( null, ast );
+      return true;
+    }
     getSyncsForNotesAsync( ast.data, function( err, syncs ){
       
       var result = _.map(syncs, function(o){

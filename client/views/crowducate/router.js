@@ -37,12 +37,16 @@ Router.map( function(){
       'navbar': { to: 'navbar' }
     },
     waitOn: function(){
-      return [Meteor.subscribe('course', this.params._id)];
+      return [
+        Meteor.subscribe('course', this.params._id),
+        Meteor.subscribe('tags')
+      ];
     },
     data: function(){
       return {
         data: Courses.findOne(),
-        section: null
+        section: null,
+        tags: Tags.find()
       };
     }
   });

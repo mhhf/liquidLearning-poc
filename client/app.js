@@ -1,0 +1,3 @@
+App = {
+  offline: true
+}

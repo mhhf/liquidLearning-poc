@@ -4,7 +4,7 @@ var fs = Npm.require('fs');
 var path = "/Users/mhhf/llWd/";
 
 
-var build = function( hash, lang , cb ){
+var buildProject = function( hash, lang , cb ){
 
   var language = lang || 'en';
 
@@ -42,6 +42,12 @@ var processContextFilesAsync = function( projectPath, cb ){
 }
 var processContextFiles = Meteor._wrapAsync( processContextFilesAsync );
 
+var buildData = function(cb){
+  
+  cb( null, true );
+}
+
 LLMDBuilder = {
-  build: Meteor._wrapAsync( build )
+  build: Meteor._wrapAsync( buildProject ),
+  buildData: Meteor._wrapAsync( buildData )
 }

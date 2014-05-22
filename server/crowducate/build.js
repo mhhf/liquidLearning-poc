@@ -1,0 +1,5 @@
+Meteor.methods({
+  buildData: function(){
+    
+  }
+});

@@ -34,7 +34,6 @@ llmd-multipleChoice
 llmd-common
 llmd-wait
 selectize
-font-awesome
 tags
 server-eval
 redisc

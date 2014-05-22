@@ -12,7 +12,7 @@ var editor = {
 }
 
 Template.editLecture.rendered = function(){
-  
+  eddy = editor;
 }
 
 Template.editLecture.helpers({
@@ -48,9 +48,14 @@ Template.editLecture.events = {
   "click button.ms-btn": function(e,t){
     e.preventDefault();
     var lastLine = editor.get().lastLine();
+    var x = document.createElement('div');
+    x.innerHTML='<i class="fa fa-times"></i>';
     var d = document.createElement('div');
     d.className = 'ms-display';
     d.appendChild( document.createElement('textarea') );
-    editor.get().addLineWidget(lastLine, d);
+    editor.get().addLineWidget(lastLine -1, d, {
+      noHScroll: true
+    });
+    editor.get().setGutterMarker(lastLine-1, 'close', x );
   }
 };

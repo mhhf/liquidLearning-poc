@@ -1,5 +1,15 @@
 <template name="editCourse">
-  edit Joonge
+    {{#fgWrapper label='Name'}}
+    <input type="text" id="name" class="form-control" value="{{data.name}}" placeholder="Name..." />
+    {{/fgWrapper}}
+    
+    {{#fgWrapper label='Tags'}}
+      {{> tags tags=tags active=data.tags}}
+    {{/fgWrapper}}
+    
+    {{#fgWrapper label='Description'}}
+      {{> editorView editor=editorDep value=data.description}}
+    {{/fgWrapper}}
 </template>
 
 <template name="editAside">
@@ -9,7 +19,7 @@
       <a href="{{pathFor 'editCourseSection' _courseId=../data/_id section=name}}" data-target="{{name}}" class="{{isSectionActive ..}}">{{index}}. {{name}}</a>
       {{#if isSection this ..}}
       <div class="unitsContainer">
-        <ul class="units">
+        <ul class="units sortable">
           {{#each units}}
           <li class="lecture"> <a href="{{pathFor 'editLecture' _courseId= ../../data/_id lecture=name section=../name}}" class="{{isLectureActive ../..}}">{{../index}}.{{index}} {{name}}</a> </li>
           {{/each}}
