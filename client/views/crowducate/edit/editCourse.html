@@ -5,16 +5,16 @@
 <template name="editAside">
   <ul class="sortable sections nav nav-pills nav-stacked">
   {{#each getSections}}
-    <li class="">
+    <li class="section">
       <a href="{{pathFor 'editCourseSection' _courseId=../data/_id section=name}}" data-target="{{name}}" class="{{isSectionActive ..}}">{{index}}. {{name}}</a>
       {{#if isSection this ..}}
       <div class="unitsContainer">
         <ul class="units">
           {{#each units}}
-          <li> <a href="/teach/S6N5btY9uqW5rEgaj/lectures/E6RpnbDHPcpHdjwev">{{name}}</a> </li>
+          <li class="lecture"> <a href="{{pathFor 'editLecture' _courseId= ../../data/_id lecture=name}}">{{../index}}.{{index}} {{name}}</a> </li>
           {{/each}}
         </ul>
-        {{#if isNewLectureEdit }}
+        {{#if editState 'lecture' }}
         <form action="" id="newLectureForm">
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Name..." id="newLectureName" autofocus/>
@@ -24,7 +24,7 @@
           </div>
         </form>
         {{else}}
-          <a class="list-group-item add-lecture"><i class="fa fa-plus"></i> Add Lecture</a>
+          <a class="list-group-item add-lecture" href="#"><i class="fa fa-plus"></i> Add Lecture</a>
         {{/if}}
       </div>
       {{/if}}
@@ -34,7 +34,7 @@
   
   <div class="panel panel-default newCoursePanel">
     <div class="panel-heading">
-      {{#if editMode}}
+      {{#if editState 'section'}}
       <form action="" id="newSectionForm">
         <div class="input-group">
           <input type="text" class="form-control" placeholder="Name..." id="newCourseName" autofocus/>
@@ -45,7 +45,7 @@
         <div id="newSectionNameHelper" class="alert alert-danger hidden"></div>
       </form>
       {{else}}
-        <a class="list-group-item add-section"><i class="fa fa-plus"></i> Add Section</a>
+        <a class="list-group-item add-section" href="#"><i class="fa fa-plus"></i> Add Section</a>
       {{/if}}
     </div>
   </div>

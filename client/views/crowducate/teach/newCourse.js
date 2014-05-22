@@ -57,6 +57,8 @@ Template.newCourse.events = {
     }, function(err, succ){
       if(!err)
         Router.go('teach');
+      else
+        console.log(err);
     });
     
   },

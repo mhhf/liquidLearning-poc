@@ -39,11 +39,20 @@ Schemas = {
     }),
     Git: new SimpleSchema({
       hash: {
-        type: String
+        type: String,
+        autoValue: function(){
+          if( this.isInsert ) {
+            var _id = this.field('owner').value._id;
+            var name = this.field('name').value;
+            var lang = this.field('language').value;
+            var hash = _id+'_'+name+'_'+lang;
+            return hash;
+          }
+        }
       },
       head: {
         type: [Object],
-        blackbox: true
+        defaultValue: []
       },
       'head.$': {
         type: Object,
@@ -70,7 +79,8 @@ Schemas = {
     LLMD: new SimpleSchema({
       ast: {
         type: [Object],
-        blackbox: true
+        blackbox: true,
+        defaultValue: []
       },
       'ast.$': {
         type: Object,
@@ -78,7 +88,8 @@ Schemas = {
       },
       ctx: {
         type: Object,
-        blackbox: true
+        blackbox: true,
+        defaultValue: {}
       }
     })
   }

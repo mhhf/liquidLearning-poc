@@ -1,6 +1,6 @@
-var editMode = {
+var editState = {
   dep:	new Deps.Dependency,
-  val: false,
+  val: null, // null, lecture, section
   get: function(){
     this.dep.depend();
     return this.val;
@@ -10,27 +10,19 @@ var editMode = {
     this.val = val;
   }
 }
-
-var newLectureEdit = {
-  dep:	new Deps.Dependency,
-  val: false,
-  get: function(){
-    this.dep.depend();
-    return this.val;
-  },
-  set: function( val ){
-    this.dep.changed();
-    this.val = val;
-  }
-}
-
 
 Template.editAside.events = {
   "click .add-section": function(e,t){
     var _id = this.data._id;
-    console.log(_id);
     
-    editMode.set(true);
+    editState.set('section');
+    
+  },
+  "click .add-lecture": function(e,t){
+    e.preventDefault();
+    
+    
+    editState.set('lecture');
     
   },
   "submit #newSectionForm": function(e,t){
@@ -48,15 +40,10 @@ Template.editAside.events = {
       $('#newSectionNameHelper').removeClass('hidden').html('The name has to be unique!');
     } else {
       $('#newSectionNameHelper').addClass('hidden').html('');
-      editMode.set(false);
-      Courses.update({_id: t.data.data._id},{$push: {sections: { name: name, units: [] }}});
+      
+      editState.set(null);
+      Courses.update({_id: t.data.data._id},{$push: {sections: { name: name, units: [], index: t.data.data.sections.length }}});
     }
-  },
-  "click .add-lecture": function(e,t){
-    e.preventDefault();
-    
-    newLectureEdit.set( true );
-    
   },
   "submit #newLectureForm": function(e,t){
     e.preventDefault();
@@ -64,9 +51,24 @@ Template.editAside.events = {
     var name = t.find('input#newLectureName').value;
     
     // unique name required ! check this
-    // 
     
-    // add new unit
+    var old = _.find(_.pluck(_.flatten(_.pluck(t.data.data.sections,'units')), 'name'), function(oldName){
+      return oldName === name;
+    });
+    
+    if( old ) {
+      console.log('exits');
+    }
+    
+    editState.set(null);
+    
+    Meteor.call('newUnit', {
+      _id: t.data.data._id,
+      section: t.data.section,
+      name: name
+    }, function(err, succ){
+      console.log(err, succ);
+    })
     
     console.log(name);
     
@@ -81,21 +83,20 @@ Template.editAside.rendered = function(){
 Template.editAside.helpers({
   getSections: function(a,b,c){
     if( !this.data ) return [];
-    return _.map(this.data.sections, function( o, i ){
-      o.index = i;
-      return o;
-    });
+    return this.data.sections;
+    // return _.map(this.data.sections, function( o, i ){
+    //   o.index = i;
+    //   return o;
+    // });
   },
   isSection: function( section, data ){
     return section.name == data.section;
   },
-  editMode: function(){
-    return editMode.get();
+  editState: function( type ){
+    console.log(type, editState.get());
+    return editState.get() === type;
   },
   isSectionActive: function(data){
     return this.name == data.section?'active':'';
-  },
-  isNewLectureEdit: function(){
-    return newLectureEdit.get();
   }
 });

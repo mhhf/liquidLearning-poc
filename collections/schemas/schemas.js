@@ -1,19 +1,4 @@
 // [TODO] - fucking ged rid of units -> units just files in the coruse structure
-Schemas.Units = [
-  {state: {
-    type: String,
-    defaultValue: 'ready'
-  }},
-  Schemas.Common.Git,
-  Schemas.Common.LLMD,
-  Schemas.Common.Activity,
-  ACLInterface.schema,
-  Schemas.Common.Owner,
-  Schemas.Common.Stars,
-  Schemas.Common.Common
-];
-
-
 Schemas.Project = [
   { state: {
       type: String,
@@ -49,8 +34,23 @@ Schemas.Courses = [
     'sections.$.name': {
       type: String
     },
+    'sections.$.index': {
+      type: String
+    },
     'sections.$.units': {
-      type: [Schemas.Units]
+      type: [Object]
+    },
+    'sections.$.units.$.name': {
+      type: String
+    },
+    'sections.$.units.$.index': {
+      type: Number
     }
-  }
+  },
+  {state: {
+    type: String,
+    defaultValue: 'ready'
+  }},
+  Schemas.Common.Git,
+  Schemas.Common.LLMD,
 ];

@@ -96,13 +96,16 @@ textarea {
 
 .nav-pills {
   background: #fff;
-  a {
-    margin: 0px;
-    color: #000!important;
+  li.section > a {
+    text-transform: uppercase;
     &:hover, &.active {
       color: #fff!important;
       background: @blue;
     }
+  }
+  a {
+    margin: 0px;
+    color: @black !important;
   }
   li + li {
     margin-top: 0px !important;
@@ -118,6 +121,18 @@ textarea {
   background: #f7f7f7;
   list-style: none;
   padding: 0px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  li {
+    margin: 5px 0;
+    a:hover {
+      background: inherit;
+    }
+  }
+}
+.list-group-item:hover {
+  color: #fff !important;
+  background: @blue !important;
 }
 
 .newCoursePanel {
