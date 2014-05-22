@@ -33,7 +33,10 @@ Meteor.methods({
   
   },
   newCourse: function( o ){
-    Courses.insert(o);
+    var _id = Courses.insert(o);
+    var course = new CourseModel( _id );
+    course.log('save','new course created');
+    
   },
   openLectureFile: function(_id, name){
     var course = new CourseModel( _id );
@@ -48,6 +51,7 @@ Meteor.methods({
     var course = new CourseModel( _id );
     course.check('write');
     course.commit( o.commitMsg, o.md, o.filepath );
+    course.log('save', o.commitMsg );
     
   }
   

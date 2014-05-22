@@ -1,5 +1,4 @@
-// [TODO] - find better name than activity 
-// 
+// [TODO] - Rename activities to log
 Template.activities.getDate = function(){
   return timeSince( this.date );
 }

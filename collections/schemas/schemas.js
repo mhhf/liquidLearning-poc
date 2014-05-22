@@ -5,19 +5,19 @@ Schemas.Project = [
       defaultValue: 'ready'
   } },
   ACLInterface.schema,
+  ActivityInterface.schema,
   Schemas.Common.Owner,
   Schemas.Common.Git,
   Schemas.Common.Stars,
   Schemas.Common.LLMD,
-  Schemas.Common.Activity,
   Schemas.Common.Common
 ];
 
 Schemas.Courses = [
   Schemas.Common.Owner,
   Schemas.Common.Stars,
-  Schemas.Common.Activity,
   Schemas.Common.Common,
+  ActivityInterface.schema,
   ACLInterface.schema,
   {
     thumbnail: {

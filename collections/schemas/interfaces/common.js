@@ -65,17 +65,6 @@ Schemas = {
         blackbox: true
       }
     }),
-    Activity: new SimpleSchema({
-      activity: {
-        type: [Object],
-        defaultValue: [],
-        blackbox: true
-      },
-      'activity.$': {
-        type: Object,
-        blackbox: true
-      }
-    }),
     Stars: new SimpleSchema({
       stars: {
         type: [String],
@@ -98,5 +87,56 @@ Schemas = {
         defaultValue: {}
       }
     })
+  }
+}
+
+ActivityInterface = {
+  schema: new SimpleSchema({
+    activity: {
+      type: [Object],
+      defaultValue: [],
+    },
+    'activity.$.user': {
+      type: Object
+    },
+    'activity.$.user.name': {
+      type: String,
+      autoValue: function(){
+        return Meteor.user().username
+      }
+    },
+    'activity.$.user._id': {
+      type: String,
+      autoValue: function(){
+        return Meteor.userId();
+      }
+    },
+    'activity.$.date': {
+      type: Date,
+      autoValue: function(){
+        return new Date();
+      }
+    },
+    'activity.$.type': {
+      type: String
+    },
+    'activity.$.msg': {
+      type: String
+    }
+  }),
+  
+  apply: function( o ){
+    
+    o.log = function( type, msg ){
+      this.Collection.update({ _id: this.ele._id }, {
+        $push: {
+          activity: {
+            type: type,
+            msg: msg
+          }
+        }
+      });
+    };
+    
   }
 }

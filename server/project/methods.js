@@ -32,12 +32,13 @@ Meteor.methods({
     var project = new ProjectModel( _id );
     project.check('write');
     project.commit( o.commitMsg, o.md, o.filepath );
+    project.log( 'save', o.commitMsg );
     
-    postActivity( {
-      _id: _id,
-      type: 'save',
-      msg: o.commitMsg
-    });
+    // postActivity( {
+    //   _id: _id,
+    //   type: 'save',
+    //   msg: o.commitMsg
+    // });
     
     return true;
   },
@@ -45,11 +46,8 @@ Meteor.methods({
   
   postActivity: function(o){
     
-    postActivity( {
-      _id: o._id,
-      type: o.type,
-      msg: o.msg
-    });
+    var project = new ProjectModel( o._id );
+    project.log( o.type, o.msg );
     
     return true;
   },
@@ -87,12 +85,8 @@ Meteor.methods({
     });
     
     var _id = Projects.insert(o);
-    
-    postActivity( {
-      _id: _id,
-      type: 'save',
-      msg: 'create project'
-    });
+    var project = new ProjectModel( _id );
+    project.log( 'save', 'create project' );
     
     return { type: 'suc', id: _id };
     
@@ -173,18 +167,3 @@ Meteor.methods({
 
 
 
-var postActivity = function( o ) {
-  Projects.update({ _id: o._id }, {
-    $push: {
-      activity: {
-        user: {
-          name: Meteor.user().username,
-          _id: Meteor.userId()
-        },
-        date: new Date(),
-        type: o.type,
-        msg: o.msg
-      }
-    }
-  });
-}
