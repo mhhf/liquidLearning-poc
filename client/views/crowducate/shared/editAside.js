@@ -11,7 +11,26 @@ var editState = {
   }
 }
 
+var currentSection = {
+  dep:	new Deps.Dependency,
+  val: null,
+  get: function(){
+    this.dep.depend();
+    return this.val;
+  },
+  set: function( val ){
+    this.dep.changed();
+    this.val = val;
+  }
+}
+
 Template.editAside.events = {
+  "click li.section > a": function(e,t){
+    e.preventDefault();
+    
+    var target = e.currentTarget.dataset.target;
+    currentSection.set( target )
+  },
   "click .add-section": function(e,t){
     var _id = this.data._id;
     
@@ -89,14 +108,14 @@ Template.editAside.helpers({
     //   return o;
     // });
   },
-  isSection: function( section, data ){
-    return section.name == data.section;
+  isSection: function(){
+    return this.name == currentSection.get();
   },
   editState: function( type ){
     return editState.get() === type;
   },
   isSectionActive: function(data){
-    return this.name == data.section?'active':'';
+    return this.name == currentSection.get()?'active':'';
   },
   isLectureActive: function(data){
     return this.name == data.lecture?'active':'';

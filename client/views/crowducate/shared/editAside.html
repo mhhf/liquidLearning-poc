@@ -4,8 +4,8 @@
   <ul class="sortable sections nav nav-pills nav-stacked">
   {{#each getSections}}
     <li class="section">
-      <a href="{{pathFor 'editCourseSection' _courseId=../data/_id section=name}}" data-target="{{name}}" class="{{isSectionActive ..}}">{{index}}. {{name}}</a>
-      {{#if isSection this ..}}
+      <a href="#" data-target="{{name}}" class="{{isSectionActive}}">{{index}}. {{name}}</a>
+      {{#if isSection}}
       <div class="unitsContainer">
         <ul class="units sortable">
           {{#each units}}
