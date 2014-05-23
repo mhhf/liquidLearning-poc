@@ -45,3 +45,12 @@ Template.pkg_tts_view.mute = function(){
   var ctx = this.ctx;
   return ctx && ctx.options && ctx.options.mute;
 }
+Template.llmd_edit_tts.rendered = function(){
+  var editor = CodeMirror.fromTextArea(this.find('textarea.editor'),{
+    value: this.data.value || '',
+    mode:  "markdown",
+    lineNumbers: true,
+    extraKeys: {"Ctrl-J": "autocomplete"},
+    lines: 10
+  });
+}

@@ -19,3 +19,14 @@ MultipleChoiceQuestions:
 {{/each}}
 </ul>
 </template>
+
+<template name="llmd_edit_multipleChoice">
+{{#each questions}}
+  {{content}} {{correct}}
+{{/each}}
+
+<input type="text" id="content">
+<input type="checkbox" id="correct">
+<button id="btn-add">Add</button>
+
+</template>

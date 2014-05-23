@@ -39,6 +39,45 @@ Template.llmd_ast_multipleChoice.isCorrect = function(){
   return this.correct?'istrue':'isfalse';
 }
 
+var questions; 
+
+Template.llmd_edit_multipleChoice.helpers({
+  questions: function(){
+    return questions.get();
+  }
+});
+
+Template.llmd_edit_multipleChoice.created = function(){
+  questions= {
+    dep:	new Deps.Dependency,
+    val: [],
+    get: function(){
+      this.dep.depend();
+      return this.val;
+    },
+    set: function( val ){
+      this.dep.changed();
+      this.val = val;
+    }
+  };
+};
+
+Template.llmd_edit_multipleChoice.events = {
+  "click #btn-add": function(e,t){
+    e.preventDefault();
+    
+    var content = t.find('#content').value;
+    var correct = t.find('#correct').checked;
+    
+    t.find('#content').value = "";
+    t.find('#correct').checked = false;
+    
+    questions.val.push({ "content": content, "correct": correct });
+    questions.dep.changed();
+    
+  }
+}
+
 
 Template.pkg_multipleChoice.events = {
   "change input": function(e,t){
