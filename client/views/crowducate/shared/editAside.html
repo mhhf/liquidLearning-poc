@@ -8,25 +8,8 @@
     <li class="section">
       <a href="#" data-target="{{name}}" class="{{isSectionActive}}">{{index}}. {{name}}</a>
       {{#if isSection}}
-      <div class="unitsContainer">
-        <ul class="units sortable">
-          {{#each units}}
-          <li class="lecture"> <a href="{{pathFor 'editLecture' _courseId= ../../data/_id lecture=name section=../name}}" class="{{isLectureActive ../..}}">{{../index}}.{{index}} {{name}}</a>  <i class="fa fa-pencil right"></i> </li>
-          {{/each}}
-        </ul>
-        {{#if editState 'lecture' }}
-        <form action="" id="newLectureForm">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Name..." id="newLectureName" autofocus/>
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="submit">Add</button>
-            </span>
-          </div>
-        </form>
-        {{else}}
-          <a class="list-group-item add-lecture" href="#"><i class="fa fa-plus"></i> Add Lecture</a>
-        {{/if}}
-      </div>
+        {{> openSection}}
+      
       {{/if}}
     </li>
   {{/each}}
@@ -49,4 +32,36 @@
       {{/if}}
     </div>
   </div>
+</template>
+
+<template name="openSection">
+<div class="unitsContainer">
+  <ul class="units sortable">
+    {{#each units}}
+    <li class="lecture"> 
+    <a href="{{pathFor 'editLecture' _courseId= ../../data/_id lecture=name section=../name}}" class="{{isLectureActive ../..}}">
+      {{../index}}.{{index}} {{name}}
+    </a> 
+    <a href="#" class="btn-down">
+      <i class="fa fa-caret-down right"></i> 
+    </a>
+    <a href="#" class="btn-up">
+      <i class="fa fa-caret-up right"></i> 
+    </a>
+    </li>
+    {{/each}}
+  </ul>
+  {{#if editState 'lecture' }}
+  <form action="" id="newLectureForm">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Name..." id="newLectureName" autofocus/>
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">Add</button>
+      </span>
+    </div>
+  </form>
+  {{else}}
+  <a class="list-group-item add-lecture" href="#"><i class="fa fa-plus"></i> Add Lecture</a>
+  {{/if}}
+</div>
 </template>
