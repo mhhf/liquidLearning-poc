@@ -53,4 +53,11 @@ Template.llmd_edit_tts.rendered = function(){
     extraKeys: {"Ctrl-J": "autocomplete"},
     lines: 10
   });
+  
+  var self = this;
+  this.data.ee.on('ready', function(){
+    self.data.atom.name = 'md';
+    self.data.atom.data = editor.getValue();
+  });
+  
 }

@@ -24,7 +24,6 @@ Template.editLecture.helpers({
 
 Template.editLecture.events = {
   "submit #llmdForm": function(e,t){
-    var array = $('form').serializeArray();
     e.preventDefault();
     
     

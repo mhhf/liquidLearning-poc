@@ -1,4 +1,3 @@
-
 <template name="pkg_multipleChoice">
 {{#each questions}}
 <label>
@@ -21,12 +20,23 @@ MultipleChoiceQuestions:
 </template>
 
 <template name="llmd_edit_multipleChoice">
-{{#each questions}}
-  {{content}} {{correct}}
-{{/each}}
+<div class="multipleChoice">
+  <ul class="questions">
+    {{#each questions}}
+    <li> <i class="fa {{getCheckedClass}}"></i> {{content}}  </li>
+    {{/each}}
+  </ul>
 
-<input type="text" id="content">
-<input type="checkbox" id="correct">
-<button id="btn-add">Add</button>
+  <form action="">
+    <input type="checkbox" name="correct">
+    
+    <div class="input-group">
+      <input type="text" name="content" class="form-control">
+      <span class="input-group-btn">
+        <button type="submit" class="btn btn-default">Add</button>
+      </span>
+    </div>
+  </form>
+</div>
 
 </template>

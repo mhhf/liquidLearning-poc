@@ -39,41 +39,48 @@ Template.llmd_ast_multipleChoice.isCorrect = function(){
   return this.correct?'istrue':'isfalse';
 }
 
-var questions; 
-
 Template.llmd_edit_multipleChoice.helpers({
   questions: function(){
-    return questions.get();
+    return this.questions.get();
+  },
+  getCheckedClass: function(){
+    return this.correct?'fa-check-square-o':'fa-square-o';
   }
 });
 
 Template.llmd_edit_multipleChoice.created = function(){
-  questions= {
-    dep:	new Deps.Dependency,
-    val: [],
-    get: function(){
+  this.data.questions = new function(){
+    this.dep =	new Deps.Dependency,
+    this.val= [],
+    this.get= function(){
       this.dep.depend();
       return this.val;
     },
-    set: function( val ){
+    this.set= function( val ){
       this.dep.changed();
       this.val = val;
     }
   };
+  
+  var self = this;
+  this.data.ee.on('ready', function(){
+    self.data.atom.name = "multipleChoice";
+    self.data.atom.questions = self.data.questions;
+  });
 };
 
 Template.llmd_edit_multipleChoice.events = {
-  "click #btn-add": function(e,t){
+  "submit": function(e,t){
     e.preventDefault();
     
-    var content = t.find('#content').value;
-    var correct = t.find('#correct').checked;
+    var content = t.find('[name=content]').value;
+    var correct = t.find('[name=correct]').checked;
     
-    t.find('#content').value = "";
-    t.find('#correct').checked = false;
+    t.find('[name=content]').value = "";
+    t.find('[name=correct]').checked = false;
     
-    questions.val.push({ "content": content, "correct": correct });
-    questions.dep.changed();
+    this.questions.val.push({ "content": content, "correct": correct });
+    this.questions.dep.changed();
     
   }
 }
