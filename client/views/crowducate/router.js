@@ -1,3 +1,19 @@
+EditCourseController = RouteController.extend({
+  
+  layoutTemplate: 'sideLayout',
+  
+  yieldTemplates: {
+    'editAside': { to: 'aside' },
+    'editToolbar': { to: 'toolbar' },
+    'navbar': { to: 'navbar' }
+  },
+                     
+                     
+});
+
+
+
+
 Router.map( function(){
   
   this.route('learn', {
@@ -29,14 +45,22 @@ Router.map( function(){
     }
   });
   
+  this.route('aboutCourse', {
+    path:'course/:_id/about',
+    controller: EditCourseController,
+    waitOn: function(){
+      return [
+        Meteor.subscribe('course', this.params._id)
+      ];
+    },
+    data: function(){
+      return {data:Courses.findOne()};
+    }
+  });
+  
   this.route('editCourse', {
     path:'course/:_id/edit',
-    layoutTemplate: 'sideLayout',
-    yieldTemplates: {
-      'editAside': { to: 'aside' },
-      'editToolbar': { to: 'toolbar' },
-      'navbar': { to: 'navbar' }
-    },
+    controller: EditCourseController,
     waitOn: function(){
       return [
         Meteor.subscribe('course', this.params._id),
@@ -54,16 +78,11 @@ Router.map( function(){
   
   this.route('editLecture', {
     path:'course/:_courseId/edit/:section/:lecture',
-    layoutTemplate: 'sideLayout',
-    yieldTemplates: {
-      'editAside': { to: 'aside' },
-      'navbar': { to: 'navbar' },
-      'editToolbar': { to: 'toolbar' }
-    },
+    controller: EditCourseController,
     waitOn: function(){
       return [
-      Meteor.subscribe('course', this.params._courseId),
-      new SyncLectureLoader('text',this.params._courseId, this.params.lecture)
+        Meteor.subscribe('course', this.params._courseId),
+        new SyncLectureLoader('text',this.params._courseId, this.params.lecture)
       ];
     },
     data: function(){

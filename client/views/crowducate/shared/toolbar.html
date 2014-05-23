@@ -1,6 +1,7 @@
 <template name="editToolbar">
 <div class="toolbar">
-    <a href="#"><i class="fa fa-cog"></i> edit</a>
-    <a href="#"><i class="fa fa-cog"></i> build</a>
+  <a href="{{pathFor 'aboutCourse' _id=data._id}}"><i class="fa fa-eye"></i> about</a>
+  <a href="{{pathFor 'editCourse' _id=data._id}}"><i class="fa fa-cog"></i> edit</a>
+  <a href="#" class="{{needBuild}}"><i class="fa fa-cogs"></i> build</a>
 </div>
 </template>
