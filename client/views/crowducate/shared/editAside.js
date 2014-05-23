@@ -116,8 +116,14 @@ Template.editAside.helpers({
   },
   isSectionActive: function(data){
     return this.name == currentSection.get()?'active':'';
-  },
+  }
+});
+
+Template.openSection.helpers({
   isLectureActive: function(data){
     return this.name == data.lecture?'active':'';
-  }
+  },
+  editState: function( type ){
+    return editState.get() === type;
+  },
 });
