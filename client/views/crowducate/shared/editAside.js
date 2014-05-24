@@ -91,24 +91,31 @@ Template.editAside.events = {
     
     console.log(name);
     
-    
   }
 }
 
 Template.editAside.rendered = function(){
-  new Sortable(this.find('.sortable.sections')); 
+  // new Sortable(this.find('.sortable.sections')); 
+  
 }
 
 Template.editAside.helpers({
-  getSections: function(a,b,c){
-    if( !this.data ) return [];
+  getSections: function(){
+    var c = Courses.findOne();
+    if( !this.data ) return c && c.sections || [];
     return this.data.sections;
     // return _.map(this.data.sections, function( o, i ){
     //   o.index = i;
     //   return o;
     // });
   },
-  isSection: function(){
+  getName: function(){
+    var c = Courses.findOne();
+    if( !this.data ) return c && c.name || 'Project'; 
+    return this.data.name;
+  },
+  isSection: function( o ){
+    if( !currentSection.get() && o && o.section ) currentSection.set( o.section );
     return this.name == currentSection.get();
   },
   editState: function( type ){
@@ -121,7 +128,7 @@ Template.editAside.helpers({
 
 Template.openSection.helpers({
   isLectureActive: function(data){
-    return this.name == data.lecture?'active':'';
+    return (data && this.name == data.lecture)?'active':'';
   },
   editState: function( type ){
     return editState.get() === type;

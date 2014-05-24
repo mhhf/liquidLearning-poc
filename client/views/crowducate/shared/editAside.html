@@ -1,15 +1,14 @@
 <template name="editAside">
   <div class="courseTitle">
-    <a href='{{pathFor 'editCourse' _id=data._id}}'>{{data.name}}</a>
+    <a href='{{pathFor 'editCourse' _id=data._id}}'>{{getName}}</a>
   </div>
 
   <ul class="sortable sections nav nav-pills nav-stacked">
   {{#each getSections}}
     <li class="section">
       <a href="#" data-target="{{name}}" class="{{isSectionActive}}">{{index}}. {{name}}</a>
-      {{#if isSection}}
+      {{#if isSection ..}}
         {{> openSection}}
-      
       {{/if}}
     </li>
   {{/each}}

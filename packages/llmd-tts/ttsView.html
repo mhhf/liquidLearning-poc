@@ -10,7 +10,8 @@
 {{/if}}
 </template>
 
-<template name="llmd_ast_tts">
+<template name="llmd_tts_ast">
+{{#with atom.data}}
 <div class="tts">
   {{#each getData}}
   <span class="sentance">
@@ -18,10 +19,10 @@
   </span>
   {{/each}}
 </div>
+{{/with}}
 </template>
 
-<template name="llmd_edit_tts">
-<div class="tts">
-  <textarea class="editor" name="{{name}}" cols="30" rows="10"></textarea>
-</div>
+
+<template name="llmd_tts_edit">
+<div class="editor"></div>
 </template>

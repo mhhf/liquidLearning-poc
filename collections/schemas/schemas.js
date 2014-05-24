@@ -51,6 +51,5 @@ Schemas.Courses = [
     type: String,
     defaultValue: 'ready'
   }},
-  Schemas.Common.Git,
-  Schemas.Common.LLMD,
+  Schemas.Common.LLMD
 ];

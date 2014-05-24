@@ -1,6 +1,6 @@
-var editor = {
+var asts = {
   dep:	new Deps.Dependency,
-  val: '',
+  val: [],
   get: function(){
     this.dep.depend();
     return this.val;
@@ -8,18 +8,20 @@ var editor = {
   set: function( val ){
     this.dep.changed();
     this.val = val;
+  },
+  push: function( o ){
+    this.val.push(o);
+    this.dep.changed();
   }
 }
 
 Template.editLecture.rendered = function(){
-  eddy = editor;
 }
 
 Template.editLecture.helpers({
-  editorDep: function(){
-    Editor = editor.val;
-    return editor;
-  }
+  asts: function(){
+    return asts;
+  } 
 });
 
 Template.editLecture.events = {

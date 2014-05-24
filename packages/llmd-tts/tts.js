@@ -8,8 +8,7 @@ LLMD.registerPackage("???", {
     
     for( var block in rawData ) {
       // interpret als sentance
-      if( !block.name ) data.push( 
-        {
+      if( !block.name ) data.push({
           text: rawData[block].data ,
           lang: lang
         });

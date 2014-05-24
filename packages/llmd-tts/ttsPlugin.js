@@ -18,7 +18,7 @@ TTSPlugin = BasicPlugin.extend({
       ctx.mediaHandler.playSounds( this.data, cb );
     
   },
-  astTemplate: 'llmd_ast_tts',
+  astTemplate: 'llmd_tts_ast',
   template: 'pkg_tts_view',
   tmp: true
 });
@@ -30,24 +30,26 @@ Template.pkg_tts_view.getData = function(){
   return this.data;
 }
 
-Template.llmd_ast_tts.getData = function(){
-  console.log(this);
-  return this.data;
+Template.llmd_tts_ast.getData = function(){
+  return this;
 }
-Template.llmd_ast_tts.getText = function(){
+Template.llmd_tts_ast.getText = function(){
   if(typeof this.data == 'string' ) {
     return this.data;
-  } else {
+  } else if(typeof this.text == 'string'){
     return this.text; 
+  } else {
+    return this;
   }
 }
 Template.pkg_tts_view.mute = function(){
   var ctx = this.ctx;
   return ctx && ctx.options && ctx.options.mute;
 }
-Template.llmd_edit_tts.rendered = function(){
-  var editor = CodeMirror.fromTextArea(this.find('textarea.editor'),{
-    value: this.data.value || '',
+Template.llmd_tts_edit.rendered = function(){
+  var data = this.data.atom.data.join('\n')
+  var editor = CodeMirror(this.find('.editor'),{
+    value: data || '',
     mode:  "markdown",
     lineNumbers: true,
     extraKeys: {"Ctrl-J": "autocomplete"},
@@ -56,8 +58,8 @@ Template.llmd_edit_tts.rendered = function(){
   
   var self = this;
   this.data.ee.on('ready', function(){
-    self.data.atom.name = 'md';
-    self.data.atom.data = editor.getValue();
+    self.data.atom.name = 'tts';
+    self.data.atom.data = editor.getValue().split('\n');
   });
   
 }

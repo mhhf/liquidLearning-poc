@@ -14,7 +14,7 @@ Meteor.methods({
     
     
     course.check('write');
-    course.commit( 'init file', '', o.name+'.llmd' );
+    // course.commit( 'init file', '', o.name+'.llmd' );
     
     
     var sections = _.map(course.ele.sections, function(section){
@@ -36,24 +36,23 @@ Meteor.methods({
     var _id = Courses.insert(o);
     var course = new CourseModel( _id );
     course.log('save','new course created');
-    
   },
-  openLectureFile: function(_id, name){
-    var course = new CourseModel( _id );
-    
-    course.check('read');
-    
-    return course.openFile( name + '.llmd' );
-    
-  },
-  saveLectureFile: function(_id, o){
-    
-    var course = new CourseModel( _id );
-    course.check('write');
-    course.commit( o.commitMsg, o.md, o.filepath );
-    course.log('save', o.commitMsg );
-    
-  }
+  // openLectureFile: function(_id, name){
+  //   var course = new CourseModel( _id );
+  //   
+  //   course.check('read');
+  //   
+  //   return course.openFile( name + '.llmd' );
+  //   
+  // },
+  // saveLectureFile: function(_id, o){
+  //   
+  //   var course = new CourseModel( _id );
+  //   course.check('write');
+  //   // course.commit( o.commitMsg, o.md, o.filepath );
+  //   course.log('save', o.commitMsg );
+  //   
+  // }
   
   
 });

@@ -7,10 +7,6 @@ CourseModel = function( _id ){
   ACLInterface.apply( this );
   ActivityInterface.apply( this );
   
-  if( Meteor.isServer ){
-    GitInterface.apply( this );
-  }
-  
 }
 
 ProjectModel = function( _id ){
