@@ -16,12 +16,13 @@ Meteor.methods({
     course.check('write');
     // course.commit( 'init file', '', o.name+'.llmd' );
     
+    var _unitId = Units.insert({ name: o.name, memberOf: [ course.ele._id ] });
     
     var sections = _.map(course.ele.sections, function(section){
       if( section.name === o.section ) {
         var index = section.units.length + 1 ;
-        section.units.push( { name: o.name, index: index } );
-        console.log(section.units);
+        console.log('yey');
+        section.units.push( { name: o.name, index: index, _id: _unitId } );
         return section;
       } else {
         return section;
@@ -29,6 +30,7 @@ Meteor.methods({
     });
     
     Courses.update({_id: o._id }, {$set: { sections: sections }});
+    
     
   
   },

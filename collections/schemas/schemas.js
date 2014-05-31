@@ -43,6 +43,9 @@ Schemas.Courses = [
     'sections.$.units.$.name': {
       type: String
     },
+    'sections.$.units.$._id': {
+      type: String
+    },
     'sections.$.units.$.index': {
       type: Number
     }
@@ -53,3 +56,17 @@ Schemas.Courses = [
   }},
   Schemas.Common.LLMD
 ];
+
+Schemas.Units = [
+  Schemas.Common.Owner,
+  ACLInterface.schema,
+  Schemas.Common.LLMD,
+  {
+    name: {
+      type: String
+    },
+    memberOf: {
+      type:[String]
+    }
+  }
+]

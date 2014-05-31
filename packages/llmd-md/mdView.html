@@ -1,0 +1,11 @@
+<template name="llmd_md_edit">
+<div class="editor"></div>
+</template>
+
+<template name="llmd_md_ast">
+{{#with atom.data}}
+{{#markdown}}
+{{this}}
+{{/markdown}}
+{{/with}}
+</template>

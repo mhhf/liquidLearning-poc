@@ -74,7 +74,6 @@ Schemas = {
     LLMD: new SimpleSchema({
       ast: {
         type: [Object],
-        blackbox: true,
         defaultValue: []
       },
       'ast.$': {

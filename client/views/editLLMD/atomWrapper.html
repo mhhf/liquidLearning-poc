@@ -1,0 +1,19 @@
+<template name="atomWrapper">
+  <li class="atomContainer {{editModeClass}}">
+    <label>{{atom.name}}</label>
+    <div class="{{name}} atomWrapper"></div>
+    <div class="actions">
+      {{#unless editMode }}
+      <a href='#' class="edit-btn"><i class="fa fa-pencil"></i></a>
+      <a href='#' class="trash-btn"><i class="fa fa-trash-o"></i></a>
+      {{/unless}}
+      <i class="fa fa-align-justify sort-handle"></i> 
+    </div>
+    {{#if editMode}}
+    <div class="editActions">
+      <a class="save-btn" href="#"><i class="fa fa-check"></i></a>
+      <a class="dismiss-btn" href="#"><i class="fa fa-times"></i></a>
+    </div>
+    {{/if}}
+  </li>
+</template>

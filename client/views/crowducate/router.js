@@ -78,19 +78,26 @@ Router.map( function(){
   
   this.route('editLecture', {
     path:'course/:_courseId/edit/:section/:lecture',
+    template: 'editLLMD',
     controller: EditCourseController,
     waitOn: function(){
       return [
         Meteor.subscribe('course', this.params._courseId),
-        new SyncLectureLoader('text',this.params._courseId, this.params.lecture)
+        Meteor.subscribe('courseUnits', this.params._courseId, this.params.lecture)
       ];
     },
+    onBeforeAction: function(){
+      var model = 'model';
+    },
     data: function(){
+      
       return {
         data: Courses.findOne(),
         section: this.params.section,
         lecture: this.params.lecture,
-        file: Session.get('fileData')
+        unit: this.params.lecture,
+        astModel: UnitModel.get({ name: this.params.lecture })
+        // astModel: new ASTModel( unit._id )
       };
     }
   });

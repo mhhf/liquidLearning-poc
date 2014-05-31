@@ -1,7 +1,7 @@
 @textGray: #999;
 @black: #333;
 @grey: #f1f1f1;
-@grey2: #dcdcdc;
+@grey2: #e5e5e5;
 @darkblue: #194c68;
 @blue: #4b8cdc;
 @lightblue: #d3dfed;
@@ -217,31 +217,82 @@ a {
 }
 
 ul#editorContainer {
-  margin: 15px 0;
+  margin: 0px;
   list-style: none;
   padding-left: 0px;
   
   > li.atomContainer {
+    background: #fff;
     position: relative;
-    margin: 15px 0;
+    margin: @border2 0;
     min-height: 20px;
     
-    border-bottom: 1px @grey2 dotted;
+    > label {
+      text-transform: uppercase;
+      padding: 0 5px;
+      background: @blue;
+      color: #fff;
+      letter-spacing: 0.09em;
+      font-weight: normal;
+    }
+    
+    -webkit-transition: margin 0.6s; /* For Safari 3.1 to 6.0 */
+    transition: margin 0.6s; 
     
     .atomWrapper {
       margin-right: 45px;
+      padding: @border5 @border @border @border5;
     }
     
     .actions{
       position: absolute;
-      top: 2px;
-      right: 0px;
+      top: 0px;
+      right: 4px;
       color: @grey2;
+      
+      a {
+        margin: 0px 2px;
+      }
+      
     }
     
     .editActions {
-      margin: 16px 0;
       text-align: right;
+      position: absolute;
+      bottom: 0px;
+      right: 2px;
+      
+      a {
+        margin: 0px 2px;
+      }
+      
+    }
+    
+    &.edit {
+      border: 1px dotted @blue;
+      margin-top: 50px;
+      margin-bottom: 50px;
+      
+      .atomWrapper {
+        padding-left: @border;
+      }
     }
   }
 }
+
+.btn-glass {
+  border: 0px;
+  margin: 0px 4px;
+  background: #fff;
+  &:hover {
+    background: @blue;
+    color: #fff !important;
+  }
+}
+
+.btn-primary {
+  border: 0px;
+  background: @blue;
+  color: #fff !important;
+}
+

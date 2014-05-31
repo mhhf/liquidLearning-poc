@@ -14,14 +14,18 @@ var asts = {
     this.dep.changed();
   }
 }
-
+// var model;
 Template.editLecture.rendered = function(){
+  // model = new ASTModel({ _id: this.data.unit._id });
 }
 
 Template.editLecture.helpers({
   asts: function(){
     return asts;
-  } 
+  },
+  astModel: function(){
+    return new ASTModel({ name: this.unit });
+  }
 });
 
 Template.editLecture.events = {

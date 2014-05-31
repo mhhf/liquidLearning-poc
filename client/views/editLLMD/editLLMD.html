@@ -1,0 +1,25 @@
+<template name="editLLMD">
+
+<div class="row clear">
+  <ul id="editorContainer">
+    {{#each atoms}}
+    
+      {{> atomWrapper }}
+    
+    {{/each}}
+  </ul>
+  {{#if isAdding}}
+  <div class="btn-group">
+    <button type="button" class="btn btn-glass md-btn"><i class="fa fa-code"></i> Markdown</button>
+    <button type="button" class="btn btn-glass tts-btn"><i class="fa fa-comment-o"></i> TTS</button>
+    <button type="button" class="btn btn-glass ms-btn"><i class="fa fa-list"></i> Multiple Choice</button>
+  </div>
+  {{else}}
+    <button class="btn btn-primary btn-lg btn-block add-btn"><i class="fa fa-plus"></i> ADD</button>
+  {{/if}}
+  
+  
+</div>
+
+  
+</template>
