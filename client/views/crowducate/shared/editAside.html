@@ -49,18 +49,20 @@
     </a>
     </li>
     {{/each}}
+    <li>
+    {{#if editState 'lecture' }}
+    <form action="" id="newLectureForm">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Name..." id="newLectureName" autofocus/>
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="submit">Add</button>
+        </span>
+      </div>
+    </form>
+    {{else}}
+    <a class="add-lecture" href="#"><i class="fa fa-plus"></i> Add Lecture</a>
+    {{/if}}
+    </li>
   </ul>
-  {{#if editState 'lecture' }}
-  <form action="" id="newLectureForm">
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="Name..." id="newLectureName" autofocus/>
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="submit">Add</button>
-      </span>
-    </div>
-  </form>
-  {{else}}
-  <a class="list-group-item add-lecture" href="#"><i class="fa fa-plus"></i> Add Lecture</a>
-  {{/if}}
 </div>
 </template>
