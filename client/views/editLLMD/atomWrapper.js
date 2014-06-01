@@ -18,6 +18,10 @@ Template.atomWrapper.events = {
     this.editHandler.set(true);
     redrawAtom.apply(t);
   },
+  "click .remove-btn": function(e,t){
+    $(t.find('.atomContainer')).fadeOut();
+    this.editHandler.remove();
+  },
   "click .save-btn": function(e,t){
     e.preventDefault();
     
@@ -48,6 +52,6 @@ redrawAtom = function(){
   $(wrapper).empty();
 
   var atomComp = UI.renderWithData(Template['llmd_'+name+'_'+mode], obj);
-  UI.insert( atomComp, wrapper );
+  var what = UI.insert( atomComp, wrapper );
 
 };

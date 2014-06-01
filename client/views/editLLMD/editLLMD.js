@@ -1,62 +1,30 @@
-var adding = {
-  dep:	new Deps.Dependency,
-  val: false,
-  get: function(){
-    this.dep.depend();
-    return this.val;
-  },
-  set: function( val ){
-    this.dep.changed();
-    this.val = val;
-  }
+var astModel = null;
+
+
+Template.editLLMD.created = function(){
+  astModel = new ASTModel( {name: this.data.lectureName} );
 }
 
 Template.editLLMD.helpers({
   atoms: function(){
-    return this.astModel.getAtoms();
+    return astModel.getAtoms();
   },
-  isAdding: function(){
-    return adding.get();
+  astModel: function(){
+    return astModel;
   }
 });
+
 
 Template.editLLMD.rendered = function(){
   console.log(this.data);
   new Sortable(this.find('#editorContainer'), {
-    handle: '.sort-handle'
+    handle: '.sort-handle',
+    onUpdate: function(e,a){
+      var oldPos = e.srcElement.dataset.index;
+      var newPos = e.srcElement.previousElementSibling && e.srcElement.previousElementSibling.dataset.index - 1 || 0;
+      var parent = e.srcElement.parentElement;
+      console.log(e);
+    }
   });
 }
 
-Template.editLLMD.events({
-  "click .add-btn": function(e,t){
-    e.preventDefault();
-    
-    adding.set(true);
-    
-  },
-  "click .md-btn": function(e,t){
-    e.preventDefault();
-    
-    t.data.astModel.add( LLMD.packageTypes['md'].skeleton );
-    adding.set(false);
-    
-    // t.data.asts.push( obj );
-    
-  },
-  "click .tts-btn": function(e,t){
-    e.preventDefault();
-    
-    t.data.astModel.add( LLMD.packageTypes['tts'].skeleton );
-    adding.set(false);
-    // t.data.asts.push( obj );
-    
-  },
-  "click .ms-btn": function(e,t){
-    e.preventDefault();
-    
-    adding.set(false);
-    var obj = ASTGetherer.newContext( {name:'multipleChoice', data: [] } );
-    t.data.asts.push( obj );
-    
-  }
-});

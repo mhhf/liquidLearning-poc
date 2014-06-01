@@ -1,19 +1,3 @@
-UnitModel = (function( ){
-  
-  var instance;
-  
-  return {
-    get: function( selector ){
-      if( !instance ) {
-        instance = new ASTModel( selector );
-      }
-      
-      return instance;
-    }
-  };
-  
-})();
-
 
 ASTModel = function( selector ){
   
@@ -25,17 +9,24 @@ ASTModel = function( selector ){
   if( !unit ) throw new Error('wtf?');
   var _id = unit._id;
   
-  // init
-  if( !self.ast ) {
-    unit.ast.forEach( function( a, i ){
-      var atomModel = new AtomModel( a, i, false );
-      console.log();
+  
+  var setupAtom = function( atomModel ){
       atomModel.onChange( function( atom, index ){
         var obj = {};
         obj['ast.'+index] = atom;
         Units.update({_id: _id}, {$set: obj});
       });
+      atomModel.onRemove( function( atom, index ){
+        Units.update({_id: _id}, {$pull: {'ast':atom} });
+      });
       self.atomModels.push( atomModel );
+  } 
+  
+  // init
+  if( !self.ast ) {
+    unit.ast.forEach( function( a, i ){
+      var atomModel = new AtomModel( a, i, false );
+      setupAtom( atomModel );
     });
   }
   
@@ -50,19 +41,12 @@ ASTModel = function( selector ){
     
     var index = this.ast.length;
     var atomModel = new AtomModel( atom, index, true );
-    atomModel.onChange( function( atom, index ){
-      var obj = {};
-      obj['ast.'+index] = atom;
-      Units.update({_id: _id}, {$set: obj});
-    });
-    
-    this.atomModels.push( atomModel );
+    setupAtom( atomModel );
     Units.update({_id: _id},{$push: {ast: atom}});
     atomDeps.changed();
   }
   
   // changeIndex
-  // remove
   
 }
 
@@ -91,6 +75,9 @@ AtomModel = function( m, index, editMode ){
     },
     this.dismiss = function(){
       this.set(false);
+    },
+    this.remove = function(){
+      self._onRemove( self.atom, self.index );
     }
   };
   
@@ -98,6 +85,12 @@ AtomModel = function( m, index, editMode ){
   this.onChange = function( f ){
     this._onChange = f;
   }
+  
+  this._onRemove = null;
+  this.onRemove = function( f ){
+    this._onRemove = f;
+  }
+  
   
   
 }

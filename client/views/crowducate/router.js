@@ -96,7 +96,8 @@ Router.map( function(){
         section: this.params.section,
         lecture: this.params.lecture,
         unit: this.params.lecture,
-        astModel: UnitModel.get({ name: this.params.lecture })
+        lectureName: this.params.lecture
+        // astModel: UnitModel.get({ name: this.params.lecture })
         // astModel: new ASTModel( unit._id )
       };
     }
