@@ -25,15 +25,11 @@ Template.llmd_md_edit.rendered = function(){
     lines: 10
   });
   
-  var self = this;
-  this.data.updateChange = function(){
-    self.data.atom.name = 'md';
-    self.data.atom.data = editor.getValue();
-    self.data.change();
+  this.data.buildAtom = function(){
+    return {
+      name: 'md',
+      data: editor.getValue()
+    }
   }
   
-  // this.data.ee.on('ready', function(){
-  //   self.data.atom.name = 'md';
-  //   self.data.atom.data = editor.getValue();
-  // });
 }

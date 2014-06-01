@@ -24,7 +24,7 @@ TTSPlugin = BasicPlugin.extend({
 });
 
 
-PluginHandler.registerPlugin( "???", TTSPlugin );
+PluginHandler.registerPlugin( "tts", TTSPlugin );
 
 Template.pkg_tts_view.getData = function(){
   return this.data;
@@ -46,8 +46,11 @@ Template.pkg_tts_view.mute = function(){
   var ctx = this.ctx;
   return ctx && ctx.options && ctx.options.mute;
 }
+
+// [TODO] - rewrite data filter for the whole block, not just for lines
 Template.llmd_tts_edit.rendered = function(){
-  var data = this.data.atom.data.join('\n')
+  var data = _.pluck(this.data.atom.data,'text').join('\n')
+    
   var editor = CodeMirror(this.find('.editor'),{
     value: data || '',
     mode:  "markdown",
@@ -57,9 +60,14 @@ Template.llmd_tts_edit.rendered = function(){
   });
   
   var self = this;
-  this.data.ee.on('ready', function(){
-    self.data.atom.name = 'tts';
-    self.data.atom.data = editor.getValue().split('\n');
-  });
-  
+  this.data.buildAtom = function(){
+    
+    var data = editor.getValue().split('\n');
+    data = _.map( data, function( o ) { return { data: o }; });
+    
+    return {
+      name: 'tts',
+      data: LLMD.packageTypes['tts'].dataFilter( null, data )
+    }
+  }
 }

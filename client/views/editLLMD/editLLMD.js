@@ -37,7 +37,7 @@ Template.editLLMD.events({
   "click .md-btn": function(e,t){
     e.preventDefault();
     
-    t.data.astModel.add( {name:'md', data: '' } );
+    t.data.astModel.add( LLMD.packageTypes['md'].skeleton );
     adding.set(false);
     
     // t.data.asts.push( obj );
@@ -46,9 +46,9 @@ Template.editLLMD.events({
   "click .tts-btn": function(e,t){
     e.preventDefault();
     
-    var obj = ASTGetherer.newContext( {name:'tts', data: [] } );
+    t.data.astModel.add( LLMD.packageTypes['tts'].skeleton );
     adding.set(false);
-    t.data.asts.push( obj );
+    // t.data.asts.push( obj );
     
   },
   "click .ms-btn": function(e,t){

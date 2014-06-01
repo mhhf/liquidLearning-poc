@@ -66,12 +66,13 @@ ASTModel = function( selector ){
   
 }
 
+// [TODO] - refactor editMode to editHandler 
 AtomModel = function( m, index, editMode ){
   var self = this;
   
   this.atom = m;
   this.index = index;
-  this.editMode = new function(){
+  this.editHandler = new function(){
     this.dep =	new Deps.Dependency,
     this.val = editMode,
     this.get = function(){
@@ -81,6 +82,15 @@ AtomModel = function( m, index, editMode ){
     this.set = function( val ){
       this.dep.changed();
       this.val = val;
+    },
+    this.save = function(){
+      var atom = self.buildAtom();
+      self.atom = atom;
+      self._onChange( atom, self.index );
+      this.set(false);
+    },
+    this.dismiss = function(){
+      this.set(false);
     }
   };
   
@@ -89,8 +99,5 @@ AtomModel = function( m, index, editMode ){
     this._onChange = f;
   }
   
-  this.change = function(){
-    this._onChange && this._onChange( this.atom, this.index );
-  }
   
 }

@@ -1,6 +1,9 @@
-var Fiber = Npm.require('fibers');
+if( Meteor.isServer ){
+  var Fiber = Npm.require('fibers');
+}
 
-LLMD.registerPackage("???", {
+LLMD.registerPackage("tts", {
+  skeleton: {name: 'tts', data: []},
   dataFilter: function( params, rawData ){
     var data = [];
     

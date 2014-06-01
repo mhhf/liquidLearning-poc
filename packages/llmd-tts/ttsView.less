@@ -1,5 +1,31 @@
+@textGray: #999;
+@black: #333;
+@grey: #f1f1f1;
+@grey2: #e5e5e5;
+@darkblue: #194c68;
+@blue: #4b8cdc;
+@lightblue: #d3dfed;
+@orange: #fdb756;
+@lightorange: #f6dcb9;
+
+
+@highlight: @orange;
+@neutral: @grey;
+@bg: @grey;
+@neutral: @grey;
+
+@border: 2px;
+@border2: 4px;
+@border3: 6px;
+@border4: 10px;
+@border5: 16px;
+@border6: 26px;
+
+
 .tts {
   background: #fff;
+  margin-bottom: 16px;
+  border: 2px solid @grey2;
   padding: 10px 15px;
   -webkit-border-radius: 10px;
   position: relative;
@@ -11,8 +37,20 @@
   &:before {
     content: "";
     position: absolute;
+    bottom: -12px;
+    left: 38px;
+    border-width: 12px 12px 0;
+    border-style: solid;
+    border-color: @grey2 transparent;
+    display: block;
+    width: 0;
+  }
+  
+  &:after{
+    content: "";
+    position: absolute;
     bottom: -10px;
-    right: 40px;
+    left: 40px;
     border-width: 10px 10px 0;
     border-style: solid;
     border-color: #fff transparent;

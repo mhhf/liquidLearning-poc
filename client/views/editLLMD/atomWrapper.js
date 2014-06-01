@@ -1,34 +1,33 @@
 Template.atomWrapper.helpers({
   editMode: function(){
-    return this.editMode.get();
+    return this.editHandler.get();
   },
   editModeClass: function(){
-    return this.editMode.get()?'edit':'';
+    return this.editHandler.get()?'edit':'';
   }
 });
 
 Template.atomWrapper.events = {
   "click .edit-btn": function(e,t){
+    e.preventDefault();
     
+    // perserve height
     var ele = t.find('li');
-    
     $(ele).css('min-height',ele.clientHeight + "px");
     
-    e.preventDefault();
-    this.editMode.set(true);
+    this.editHandler.set(true);
     redrawAtom.apply(t);
   },
   "click .save-btn": function(e,t){
     e.preventDefault();
     
-    this.updateChange();
-    this.editMode.set(false);
+    this.editHandler.save();
     redrawAtom.apply(t);
   },
   "click .dismiss-btn": function(e,t){
     e.preventDefault();
     
-    this.editMode.set(false);
+    this.editHandler.dismiss();
     redrawAtom.apply(t);
   }
   
@@ -44,7 +43,7 @@ redrawAtom = function(){
   var name = this.data.atom.name;
   var wrapper = this.find('.atomWrapper');
   var obj = this.data;
-  var editMode = this.data.editMode.get();
+  var editMode = this.data.editHandler.get();
   var mode = ( editMode )?'edit':'ast';
   $(wrapper).empty();
 
