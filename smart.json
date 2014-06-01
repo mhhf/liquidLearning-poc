@@ -2,7 +2,6 @@
   "packages": {
     "belt-md5": {},
     "spin": {},
-    "jquery-ui": {},
     "tts": {
       "git": "git@bitbucket.org:liquidlearningdev/tts.git"
     },
@@ -11,12 +10,11 @@
     "bootboxjs": {},
     "iron-router": {},
     "editor": {
-      "path": "/Users/mhhf/work/meteor/packages/editor",
-      "git": "git@bitbucket.org:liquidlearningdev/editor.git"
+      "path": "/Users/mhhf/work/meteor/packages/editor"
     },
     "moment": {},
     "redisc": {
-      "git": "git@github.com:mhhf/meteor-redisc.git"
+      "path": "/Users/mhhf/work/meteor/packages/meteor-redisc"
     },
     "server-eval": {},
     "bootstrap3-less": {},
@@ -26,7 +24,7 @@
     "jquery-jcrop": {},
     "sortable": {},
     "tags": {
-      "path": "/Users/mhhf/work/meteor/packages/tags"
+      "git": "git@github.com:mhhf/meteor-tags.git"
     }
   }
 }

@@ -227,6 +227,8 @@ ul#editorContainer {
     margin: @border2 0;
     min-height: 20px;
     
+    
+    
     > label {
       text-transform: uppercase;
       padding: 0 5px;
@@ -275,6 +277,16 @@ ul#editorContainer {
       
       .atomWrapper {
         padding-left: @border;
+      }
+    }
+    
+    &.inactive {
+      background: #f7f7f7;
+      border-left: 6px solid #ccc;
+      
+      > label {
+        background: #ccc;
+        color: #333;
       }
     }
   }
