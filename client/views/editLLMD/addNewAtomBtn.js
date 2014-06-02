@@ -27,9 +27,7 @@ Template.addNewAtomBtn.events({
   "click .md-btn": function(e,t){
     e.preventDefault();
     
-    var _id = Units.findOne()._id;
-    var atom =  LLMD.packageTypes['md'].skeleton;
-    Units.update({_id: _id},{$push: {ast: atom}});
+    addAtom( 'ms' );
     
     adding.set(false);
     
@@ -37,9 +35,7 @@ Template.addNewAtomBtn.events({
   "click .tts-btn": function(e,t){
     e.preventDefault();
     
-    var _id = Units.findOne()._id;
-    var atom =  LLMD.packageTypes['tts'].skeleton;
-    Units.update({_id: _id},{$push: {ast: atom}});
+    addAtom( 'tts' );
     
     adding.set(false);
     
@@ -47,9 +43,19 @@ Template.addNewAtomBtn.events({
   "click .ms-btn": function(e,t){
     e.preventDefault();
     
-    adding.set(false);
-    var obj = ASTGetherer.newContext( {name:'multipleChoice', data: [] } );
-    t.data.asts.push( obj );
+    addAtom( 'multipleChoice' );
     
-  }
+    adding.set(false);
+    
+  },
 });
+
+addAtom = function( name ){
+  var unit = Units.findOne();
+  var atom =  LLMD.packageTypes[ name ].skeleton;
+  atom.index = unit.ast.length;
+  atom.name = name;
+  atom.parent = '';
+  atom.active = true;
+  Units.update({_id: unit._id},{$push: {ast: atom}});
+}

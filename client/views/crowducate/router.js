@@ -90,7 +90,6 @@ Router.map( function(){
       var model = 'model';
     },
     data: function(){
-      console.log('data');
       
       return {
         data: Courses.findOne(),

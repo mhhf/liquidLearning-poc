@@ -40,6 +40,12 @@ Template.atomWrapper.helpers({
   editModeClass: function(){
     return ( editHandler.get() === this )?'edit':'';
   },
+  getActivateClass: function(){
+    return ( this.atom.active )?'':'inactive';
+  },
+  isActive: function(){
+    return ( this.atom.active );
+  },
   dynamicTemplate: function(){
     
     var editMode = editHandler.get() === this;
@@ -72,12 +78,21 @@ Template.atomWrapper.events = {
     e.preventDefault();
     
     var atom = this.buildAtom();
+    atom.name = this.atom.name;
+    atom.index = this.index;
+    atom.parent = '';
     editHandler.save( atom, this.index );
   },
   "click .dismiss-btn": function(e,t){
     e.preventDefault();
     
     editHandler.dismiss();
+  },
+  "click .activate-toggle-btn": function(e,t){
+    e.preventDefault();
+    var atom = this.atom;
+    atom.active = !atom.active;
+    editHandler.save( atom, this.index );
   }
   
 }

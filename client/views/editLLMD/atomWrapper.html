@@ -1,5 +1,6 @@
 <template name="atomWrapper">
-  <li class="atomContainer  {{editModeClass}}" data-index="{{index}}">
+
+  <li class="atomContainer {{editModeClass}} {{getActivateClass}}" data-index="{{index}}">
     <label>{{atom.name}}</label>
     <div class="{{name}} atomWrapper">
       {{> dynamicTemplate}}
@@ -8,6 +9,7 @@
       {{#unless editMode }}
       <a href='#' class="edit-btn"><i class="fa fa-pencil"></i></a>
       <a href='#' class="remove-btn"><i class="fa fa-trash-o"></i></a>
+      <a href='#' class="activate-toggle-btn"><i class="fa fa-square-o"></i></a>
       {{/unless}}
       <i class="fa fa-align-justify sort-handle"></i> 
     </div>
@@ -18,4 +20,5 @@
     </div>
     {{/if}}
   </li>
+  
 </template>

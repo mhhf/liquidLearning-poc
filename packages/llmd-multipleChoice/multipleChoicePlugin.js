@@ -1,3 +1,8 @@
+LLMD.registerPackage("multipleChoice", {
+  skeleton: {name: 'multipleChoice', questions: []}
+});
+
+
 MSPlugin = BasicPlugin.extend({
   build: function(ctx){
     
@@ -30,16 +35,16 @@ Template.pkg_multipleChoice.questions = function(){
   return q;
 }
 
-Template.llmd_ast_multipleChoice.questions = function(){
+Template.llmd_multipleChoice_ast.questions = function(){
   var q = this.data;
   return q;
 }
 
-Template.llmd_ast_multipleChoice.isCorrect = function(){
+Template.llmd_multipleChoice_ast.isCorrect = function(){
   return this.correct?'istrue':'isfalse';
 }
 
-Template.llmd_edit_multipleChoice.helpers({
+Template.llmd_multipleChoice_edit.helpers({
   questions: function(){
     return this.questions.get();
   },
@@ -48,7 +53,7 @@ Template.llmd_edit_multipleChoice.helpers({
   }
 });
 
-Template.llmd_edit_multipleChoice.created = function(){
+Template.llmd_multipleChoice_edit.created = function(){
   this.data.questions = new function(){
     this.dep =	new Deps.Dependency,
     this.val= [],
@@ -63,13 +68,12 @@ Template.llmd_edit_multipleChoice.created = function(){
   };
   
   var self = this;
-  this.data.ee.on('ready', function(){
-    self.data.atom.name = "multipleChoice";
-    self.data.atom.questions = self.data.questions;
-  });
+  this.data.buildAtom = function(){
+    return { questions: self.data.questions };
+  }
 };
 
-Template.llmd_edit_multipleChoice.events = {
+Template.llmd_multipleChoice_edit.events = {
   "submit": function(e,t){
     e.preventDefault();
     
