@@ -90,14 +90,16 @@ Router.map( function(){
       var model = 'model';
     },
     data: function(){
+      console.log('data');
       
       return {
         data: Courses.findOne(),
         section: this.params.section,
         lecture: this.params.lecture,
         unit: this.params.lecture,
-        lectureName: this.params.lecture
-        // astModel: UnitModel.get({ name: this.params.lecture })
+        lectureName: this.params.lecture,
+        unit: Units.findOne({ name: this.params.lecture }),
+        index: 0
         // astModel: new ASTModel( unit._id )
       };
     }

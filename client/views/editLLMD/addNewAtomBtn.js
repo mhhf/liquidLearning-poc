@@ -27,18 +27,21 @@ Template.addNewAtomBtn.events({
   "click .md-btn": function(e,t){
     e.preventDefault();
     
-    this.astModel.add( LLMD.packageTypes['md'].skeleton );
-    adding.set(false);
+    var _id = Units.findOne()._id;
+    var atom =  LLMD.packageTypes['md'].skeleton;
+    Units.update({_id: _id},{$push: {ast: atom}});
     
-    // t.data.asts.push( obj );
+    adding.set(false);
     
   },
   "click .tts-btn": function(e,t){
     e.preventDefault();
     
-    this.astModel.add( LLMD.packageTypes['tts'].skeleton );
+    var _id = Units.findOne()._id;
+    var atom =  LLMD.packageTypes['tts'].skeleton;
+    Units.update({_id: _id},{$push: {ast: atom}});
+    
     adding.set(false);
-    // t.data.asts.push( obj );
     
   },
   "click .ms-btn": function(e,t){

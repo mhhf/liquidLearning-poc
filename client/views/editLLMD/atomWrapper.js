@@ -1,9 +1,51 @@
+var editHandler = new function(){
+  this.dep =	new Deps.Dependency,
+  this.val = null,
+  this.get = function(){
+    this.dep.depend();
+    return this.val;
+  },
+  this.set = function( val ){
+    this.dep.changed();
+    this.val = val;
+  },
+  this.save = function( atom, index ){
+    var _id = Units.findOne()._id;
+    var obj = {};
+    obj['ast.'+index] = atom;
+    console.log('save', obj);
+    Units.update({_id: _id}, {$set: obj});
+    this.set(null);
+  },
+  this.dismiss = function(){
+    this.set(null);
+  },
+  this.remove = function( atom ){
+    var _id = Units.findOne()._id;
+    Units.update({_id: _id}, {$pull: {'ast':atom} });
+  }
+}
+
+
+
+
+Template.atomWrapper.rendered = function(){
+}
+
+
 Template.atomWrapper.helpers({
   editMode: function(){
-    return this.editHandler.get();
+    return editHandler.get() === this;
   },
   editModeClass: function(){
-    return this.editHandler.get()?'edit':'';
+    return ( editHandler.get() === this )?'edit':'';
+  },
+  dynamicTemplate: function(){
+    
+    var editMode = editHandler.get() === this;
+    var mode = ( editMode )?'edit':'ast';
+    var template = Template['llmd_'+this.atom.name+'_'+mode];
+    return template;
   }
 });
 
@@ -15,43 +57,30 @@ Template.atomWrapper.events = {
     var ele = t.find('li');
     $(ele).css('min-height',ele.clientHeight + "px");
     
-    this.editHandler.set(true);
-    redrawAtom.apply(t);
+    editHandler.set(this);
   },
   "click .remove-btn": function(e,t){
-    $(t.find('.atomContainer')).fadeOut();
-    this.editHandler.remove();
+    var self = this;
+    console.log('removing',this.index);
+    console.log(t.find('.atomContainer'));
+    $(t.find('.atomContainer')).fadeOut(400, function(){
+      editHandler.remove( self.atom );
+      $(t.find('.atomContainer')).css('display','block');
+    });
   },
   "click .save-btn": function(e,t){
     e.preventDefault();
     
-    this.editHandler.save();
-    redrawAtom.apply(t);
+    var atom = this.buildAtom();
+    editHandler.save( atom, this.index );
   },
   "click .dismiss-btn": function(e,t){
     e.preventDefault();
     
-    this.editHandler.dismiss();
-    redrawAtom.apply(t);
+    editHandler.dismiss();
   }
   
 }
 
-Template.atomWrapper.rendered = function(){
-  redrawAtom.apply(this);
-}
 
 
-redrawAtom = function(){
-
-  var name = this.data.atom.name;
-  var wrapper = this.find('.atomWrapper');
-  var obj = this.data;
-  var editMode = this.data.editHandler.get();
-  var mode = ( editMode )?'edit':'ast';
-  $(wrapper).empty();
-
-  var atomComp = UI.renderWithData(Template['llmd_'+name+'_'+mode], obj);
-  var what = UI.insert( atomComp, wrapper );
-
-};

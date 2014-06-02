@@ -27,6 +27,7 @@ TTSPlugin = BasicPlugin.extend({
 PluginHandler.registerPlugin( "tts", TTSPlugin );
 
 Template.pkg_tts_view.getData = function(){
+  console.log(this);
   return this.data;
 }
 

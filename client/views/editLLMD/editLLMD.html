@@ -2,14 +2,14 @@
 
 <div class="row clear">
   <ul id="editorContainer">
-    {{#each atoms}}
+    {{#each unit.ast}}
     
-      {{> atomWrapper }}
+      {{> atomWrapper getData .. }}
     
     {{/each}}
   </ul>
   
-  {{> addNewAtomBtn astModel=astModel }}
+  {{> addNewAtomBtn }}
   
 </div>
 

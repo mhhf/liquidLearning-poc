@@ -1,7 +1,9 @@
 <template name="atomWrapper">
   <li class="atomContainer  {{editModeClass}}" data-index="{{index}}">
     <label>{{atom.name}}</label>
-    <div class="{{name}} atomWrapper"></div>
+    <div class="{{name}} atomWrapper">
+      {{> dynamicTemplate}}
+    </div>
     <div class="actions">
       {{#unless editMode }}
       <a href='#' class="edit-btn"><i class="fa fa-pencil"></i></a>
