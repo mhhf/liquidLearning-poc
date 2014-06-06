@@ -1,17 +1,7 @@
 <template name="editLLMD">
 
 <div class="row clear">
-  <ul id="editorContainer">
-    {{#each unit.ast}}
-    
-    {{#if isComment}}
-      {{> commentWrapper }}
-    {{else}}
-      {{> atomWrapper getData .. }}
-    {{/if}}
-    
-    {{/each}}
-  </ul>
+  {{> llmd_seq_edit getRoot}}
   
   {{> addNewAtomBtn }}
   
@@ -39,4 +29,18 @@
 <li class="commentContainer">
   {{>Comment postData }}
 </li>
+</template>
+
+<template name="llmd_seq_edit">
+  <ul id="editorContainer">
+    {{#each atoms}}
+    
+    {{#if isComment}}
+      {{> commentWrapper }}
+    {{else}}
+      {{> atomWrapper getData .. }}
+    {{/if}}
+    
+    {{/each}}
+  </ul>
 </template>

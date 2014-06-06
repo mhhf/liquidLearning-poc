@@ -21,13 +21,13 @@ Template.addNewAtomBtn.events({
   "click .add-btn": function(e,t){
     e.preventDefault();
     
+    
     adding.set(true);
     
   },
   "click .md-btn": function(e,t){
     e.preventDefault();
-    
-    addAtom( 'md' );
+    addAtom.apply( this, ['md'] );
     
     adding.set(false);
     
@@ -35,7 +35,7 @@ Template.addNewAtomBtn.events({
   "click .tts-btn": function(e,t){
     e.preventDefault();
     
-    addAtom( 'tts' );
+    addAtom.apply( this, ['tts'] );
     
     adding.set(false);
     
@@ -43,7 +43,7 @@ Template.addNewAtomBtn.events({
   "click .ms-btn": function(e,t){
     e.preventDefault();
     
-    addAtom( 'multipleChoice' );
+    addAtom.apply( this, ['multipleChoice'] );
     
     adding.set(false);
     
@@ -51,7 +51,8 @@ Template.addNewAtomBtn.events({
   "click .comment-btn": function(e,t){
     e.preventDefault();
     
-    addAtom( 'comment' );
+    // addAtom.apply( this, ['multipleChoice'] );
+    // addAtom( 'comment', t.data.unit.rootId );
     
     adding.set(false);
   }
@@ -67,15 +68,16 @@ addAtom = function( name ){
       atom.index = unit.ast.length;
       atom.name = name;
       atom._id = _id;
-      atom.parent = '';
       Units.update({_id: unit._id},{$push: {ast: atom}});
     });
   } else {
+    var commit = new CommitModel( unit._id );
+    
     var atom =  LLMD.packageTypes[ name ].skeleton;
     atom.active = true;
-    atom.index = unit.ast.length;
     atom.name = name;
-    atom.parent = '';
-    Units.update({_id: unit._id},{$push: {ast: atom}});
+    commit.add( atom, [commit.ele.rootId] );
+    
+    Units.update({_id: unit._id},{$set: {commitId: commit.ele._id}});
   }
 }

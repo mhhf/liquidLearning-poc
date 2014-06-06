@@ -81,7 +81,7 @@ Template.editAside.events = {
     
     editState.set(null);
     
-    Meteor.call('newUnit', {
+    Meteor.call('unit.new', {
       _id: t.data.data._id,
       section: currentSection.get(),
       name: name

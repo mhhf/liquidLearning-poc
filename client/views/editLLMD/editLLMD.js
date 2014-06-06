@@ -1,18 +1,15 @@
 
 Template.editLLMD.helpers({
-  getData: function( ctx ){
-    return {
-      atom: this,
-      index: ctx.unit.ast.indexOf(this)
-    }
+  getRoot: function(){
+    var commit = Commits.findOne({ _id: this.unit.commitId });
+    var root = Atoms.findOne({ _id: commit.rootId });
+    return root;
   },
-  isComment: function(){
-    return this.name === 'comment';
-  }
+  
 });
 
 
-Template.editLLMD.rendered = function(){
+Template.llmd_seq_edit.rendered = function(){
   new Sortable(this.find('#editorContainer'), {
     handle: '.sort-handle',
     onUpdate: function(e,a){
@@ -33,3 +30,24 @@ Template.commentWrapper.helpers({
     return null;
   }
 });
+
+Template.llmd_seq_edit.helpers({
+  getData: function( ctx ){
+    return {
+      atom: this,
+      index: ctx.data.indexOf(this),
+      seqId: ctx._id 
+    }
+  },
+  isComment: function(){
+    return this.name === 'comment';
+  },
+  atoms: function(){
+    var atoms = _.map( this.data, function(_id,a){
+      var atom = Atoms.findOne({_id: _id});
+      atom.parent = this._id;
+      return atom;
+    });
+    return atoms;
+  }
+})

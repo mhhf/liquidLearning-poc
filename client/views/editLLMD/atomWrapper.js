@@ -9,20 +9,24 @@ var editHandler = new function(){
     this.dep.changed();
     this.val = val;
   },
-  this.save = function( atom, index ){
-    var _id = Units.findOne()._id;
+  this.save = function( atom, ids ){
+    var unit = Units.findOne();
     var obj = {};
-    obj['ast.'+index] = atom;
-    console.log('save', obj);
-    Units.update({_id: _id}, {$set: obj});
+    
+    var commit = new CommitModel( unit._id );
+    
+    commit.change(_.omit(atom,'_id'), ids);
+      
     this.set(null);
   },
   this.dismiss = function(){
     this.set(null);
   },
-  this.remove = function( atom ){
+  this.remove = function( ids ){
     var _id = Units.findOne()._id;
-    Units.update({_id: _id}, {$pull: {'ast':atom} });
+    
+    var commit = new CommitModel( _id );
+    commit.remove( ids );
   }
 }
 
@@ -67,10 +71,9 @@ Template.atomWrapper.events = {
   },
   "click .remove-btn": function(e,t){
     var self = this;
-    console.log('removing',this.index);
-    console.log(t.find('.atomContainer'));
+    console.log('removing',this);
     $(t.find('.atomContainer')).fadeOut(400, function(){
-      editHandler.remove( self.atom );
+      editHandler.remove( [self.seqId, self.atom._id] );
       $(t.find('.atomContainer')).css('display','block');
     });
   },
@@ -79,10 +82,9 @@ Template.atomWrapper.events = {
     
     var atom = this.buildAtom();
     atom.name = this.atom.name;
-    atom.index = this.index;
     atom.active = this.atom.active;
-    atom.parent = '';
-    editHandler.save( atom, this.index );
+    editHandler.save( atom, [ this.seqId, this.atom._id ] );
+    
   },
   "click .dismiss-btn": function(e,t){
     e.preventDefault();
@@ -93,7 +95,7 @@ Template.atomWrapper.events = {
     e.preventDefault();
     var atom = this.atom;
     atom.active = !atom.active;
-    editHandler.save( atom, this.index );
+    editHandler.save( atom, [ this.seqId, this.atom._id ] );
   }
   
 }

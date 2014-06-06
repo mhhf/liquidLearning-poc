@@ -1,5 +1,5 @@
 Meteor.methods({
-  newUnit: function( o ){
+  'unit.new': function( o ){
     var course = new CourseModel( o._id );
     
     
@@ -15,13 +15,25 @@ Meteor.methods({
     
     course.check('write');
     // course.commit( 'init file', '', o.name+'.llmd' );
+    // 
     
-    var _unitId = Units.insert({ name: o.name, memberOf: [ course.ele._id ] });
+    var root = LLMD.packageTypes.seq.skeleton;
+    var rootId = Atoms.insert( root );
+    
+    var commitId = Commits.insert({
+      rootId: rootId,
+      previous: null
+    });
+    
+    var _unitId = Units.insert({ 
+      name: o.name, 
+      memberOf: [ course.ele._id ],
+      commitId: commitId
+    });
     
     var sections = _.map(course.ele.sections, function(section){
       if( section.name === o.section ) {
         var index = section.units.length + 1 ;
-        console.log('yey');
         section.units.push( { name: o.name, index: index, _id: _unitId } );
         return section;
       } else {

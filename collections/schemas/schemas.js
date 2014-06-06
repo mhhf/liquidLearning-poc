@@ -60,13 +60,15 @@ Schemas.Courses = [
 Schemas.Units = [
   Schemas.Common.Owner,
   ACLInterface.schema,
-  Schemas.Common.LLMD,
   {
     name: {
       type: String
     },
     memberOf: {
       type:[String]
+    },
+    commitId: {
+      type: String
     }
   }
 ]

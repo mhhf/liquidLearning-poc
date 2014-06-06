@@ -25,7 +25,7 @@ if (Meteor.isServer) {
     return Atoms.find();
   });
   Meteor.publish('commits', function(){
-    return Atoms.find();
+    return Commits.find();
   });
 }
 
