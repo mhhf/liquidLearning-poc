@@ -15,3 +15,23 @@ Courses = new Meteor.Collection( 'courses', {
 
 // Packages structuraze the interactive Slides/ Image Generation on Presentation
 // Packages = new Meteor.Collection('packages');
+
+Atoms = new Meteor.Collection( 'atoms' );
+Commits = new Meteor.Collection( 'commits' );
+
+// Dev
+if (Meteor.isServer) {
+  Meteor.publish('atoms', function(){
+    return Atoms.find();
+  });
+  Meteor.publish('commits', function(){
+    return Atoms.find();
+  });
+}
+
+if (Meteor.isClient) {
+  Meteor.subscribe('atoms');
+  Meteor.subscribe('commits');
+}
+
+

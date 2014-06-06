@@ -58,3 +58,7 @@ var cleanBlocks = function( bs ){
   return blocks;
 }
 
+
+LLMD.registerPackage('seq', {
+  skeleton: {name: 'seq', data: []}
+});
