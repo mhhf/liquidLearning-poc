@@ -5,7 +5,6 @@
 
 standard-app-packages
 insecure
-less
 belt-md5
 http
 spin
@@ -48,3 +47,4 @@ jquery-jcrop
 sortable
 rlogParser
 fontawesome4
+less
