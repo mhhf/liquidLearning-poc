@@ -21,22 +21,42 @@ MultipleChoiceQuestions:
 
 <template name="llmd_multipleChoice_edit">
 <div class="multipleChoice">
-  <ul class="questions">
-    {{#each questions}}
-    <li> <i class="fa {{getCheckedClass}}"></i> {{content}}  </li>
-    {{/each}}
-  </ul>
-
+  
   <form action="">
-    <input type="checkbox" name="correct">
-    
-    <div class="input-group">
-      <input type="text" name="content" class="form-control">
-      <span class="input-group-btn">
-        <button type="submit" class="btn btn-default">Add</button>
-      </span>
-    </div>
-  </form>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Question</th>
+        <th class="checkboxCol">Correct</th>
+        <th class="actionsCol">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each questions}}
+      <tr>
+        <td>{{index ..}}</td>
+        <td>{{content}}</td>
+        <td>{{correct}}</td>
+        <td></td>
+      </tr>
+      {{/each}}
+      
+      <tr>
+        <td colspan="2">
+          <input type="text" name="content" class="form-control" id="question" placeholder="question...">
+        </td>
+        <td>
+          <input type="checkbox" id="correct" name="correct">
+        </td>
+        <td>
+          <button type="submit" class="btn btn-default">Add</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+  
 </div>
 
 </template>

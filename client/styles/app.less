@@ -261,19 +261,19 @@ ul#editorContainer {
     .editActions {
       text-align: right;
       position: absolute;
-      bottom: 0px;
-      right: 2px;
+      bottom: -39px;
+      right: -1px;
       
       a {
-        margin: 0px 2px;
+        margin: 0px;
       }
       
     }
     
     &.edit {
       border: 1px dotted @blue;
-      margin-top: 50px;
-      margin-bottom: 50px;
+      margin-top: 55px;
+      margin-bottom: 89px;
       
       .atomWrapper {
         padding-left: @border;
@@ -293,7 +293,12 @@ ul#editorContainer {
         content: "\f046";
       }
     }
-  }
+  } // li
+  
+} // ul
+
+.addNewAtomWrapper {
+  margin-top: 55px;
 }
 
 .btn-glass {
@@ -312,3 +317,8 @@ ul#editorContainer {
   color: #fff !important;
 }
 
+.btn-lg {
+  font-size: 18px;
+  line-height: 24px;
+  padding: 8px 12px;
+}

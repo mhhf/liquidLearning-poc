@@ -80,6 +80,7 @@ Template.atomWrapper.events = {
     var atom = this.buildAtom();
     atom.name = this.atom.name;
     atom.index = this.index;
+    atom.active = this.atom.active;
     atom.parent = '';
     editHandler.save( atom, this.index );
   },

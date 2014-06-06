@@ -36,8 +36,7 @@ Template.pkg_multipleChoice.questions = function(){
 }
 
 Template.llmd_multipleChoice_ast.questions = function(){
-  var q = this.data;
-  return q;
+  return this.atom.questions;
 }
 
 Template.llmd_multipleChoice_ast.isCorrect = function(){
@@ -46,7 +45,7 @@ Template.llmd_multipleChoice_ast.isCorrect = function(){
 
 Template.llmd_multipleChoice_edit.helpers({
   questions: function(){
-    return this.questions.get();
+    return _.map(this.questions.get(), function(q,i){ q.index = i+1; return q; });
   },
   getCheckedClass: function(){
     return this.correct?'fa-check-square-o':'fa-square-o';
@@ -54,9 +53,11 @@ Template.llmd_multipleChoice_edit.helpers({
 });
 
 Template.llmd_multipleChoice_edit.created = function(){
+  var questions = this.data.atom.questions;
+  
   this.data.questions = new function(){
     this.dep =	new Deps.Dependency,
-    this.val= [],
+    this.val= questions,
     this.get= function(){
       this.dep.depend();
       return this.val;
@@ -69,7 +70,7 @@ Template.llmd_multipleChoice_edit.created = function(){
   
   var self = this;
   this.data.buildAtom = function(){
-    return { questions: self.data.questions };
+    return { questions: self.data.questions.get() };
   }
 };
 

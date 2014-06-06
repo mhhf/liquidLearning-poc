@@ -27,7 +27,7 @@ Template.addNewAtomBtn.events({
   "click .md-btn": function(e,t){
     e.preventDefault();
     
-    addAtom( 'ms' );
+    addAtom( 'md' );
     
     adding.set(false);
     
@@ -48,14 +48,34 @@ Template.addNewAtomBtn.events({
     adding.set(false);
     
   },
+  "click .comment-btn": function(e,t){
+    e.preventDefault();
+    
+    addAtom( 'comment' );
+    
+    adding.set(false);
+  }
 });
 
 addAtom = function( name ){
   var unit = Units.findOne();
-  var atom =  LLMD.packageTypes[ name ].skeleton;
-  atom.index = unit.ast.length;
-  atom.name = name;
-  atom.parent = '';
-  atom.active = true;
-  Units.update({_id: unit._id},{$push: {ast: atom}});
+  if( name === 'comment' ) {
+    var atom = {};
+    Meteor.call('post.new', {title:'comment', data:'omgdata'}, function(err, _id ){
+      console.log(_id);
+      atom.active = true;
+      atom.index = unit.ast.length;
+      atom.name = name;
+      atom._id = _id;
+      atom.parent = '';
+      Units.update({_id: unit._id},{$push: {ast: atom}});
+    });
+  } else {
+    var atom =  LLMD.packageTypes[ name ].skeleton;
+    atom.active = true;
+    atom.index = unit.ast.length;
+    atom.name = name;
+    atom.parent = '';
+    Units.update({_id: unit._id},{$push: {ast: atom}});
+  }
 }

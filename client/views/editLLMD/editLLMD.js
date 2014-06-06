@@ -5,6 +5,9 @@ Template.editLLMD.helpers({
       atom: this,
       index: ctx.unit.ast.indexOf(this)
     }
+  },
+  isComment: function(){
+    return this.name === 'comment';
   }
 });
 
@@ -21,3 +24,12 @@ Template.editLLMD.rendered = function(){
   });
 }
 
+Template.commentWrapper.helpers({
+  postData: function(){
+    if( this._id ) {
+      Meteor.subscribe('Redisc.Post', this._id);
+      return {post: Redisc.Posts.findOne({_id: this._id})};
+    }
+    return null;
+  }
+});
