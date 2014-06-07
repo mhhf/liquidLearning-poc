@@ -9,7 +9,6 @@
 </template>
 
 <template name="llmd_multipleChoice_ast">
-MultipleChoiceQuestions:
 <ul class="multipleChoice">
 {{#each questions}}
 <li class="{{isCorrect}}">
@@ -17,12 +16,16 @@ MultipleChoiceQuestions:
   </li>
 {{/each}}
 </ul>
+{{atom.score}} = &lt;score&gt;
 </template>
 
 <template name="llmd_multipleChoice_edit">
 <div class="multipleChoice">
   
   <form action="">
+    <label for="">Score variable:</label>
+    <input type="text" name="score" value="{{atom.score}}" placeholder="variable where the score result is saved" class="form-control">
+    
   <table class="table">
     <thead>
       <tr>

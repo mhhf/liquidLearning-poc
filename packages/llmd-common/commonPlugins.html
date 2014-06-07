@@ -1,9 +1,33 @@
-<template name="llmd_ast_if">
-<strong>if</strong> ( {{this.c.key}} )
-<div class="iftrue">
-  {{> projectAstView ast=this.t }}
+<template name="llmd_if_ast">
+<strong>if</strong> ( {{atom.c}} )
+{{> llmd_if_body }}
+</template>
+
+<template name="llmd_if_edit">
+<div class="head"> <strong>if</strong> ( {{atom.c}} ) </div>
+{{> llmd_if_body }}
+</template>
+
+<template name="llmd_if_body">
+<div class="iftrue hatched">
+  {{> llmd_seq_edit getTrue}}
 </div>
-<div class="iffalse">
-  {{> projectAstView ast=this.f }}
+<div class="iffalse hatched">
+  {{> llmd_seq_edit getFalse}}
 </div>
+</template>
+
+
+<template name="llmd_seq_edit">
+<div class="editorContainerWrapper">
+  <ul id="editorContainer">
+    {{#each atoms}}
+
+    {{> getWrapper getData ..}}
+
+    {{/each}}
+  </ul>
+  {{> addNewAtomBtn }}
+</div>
+  
 </template>

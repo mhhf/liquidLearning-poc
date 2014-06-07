@@ -1,23 +1,14 @@
-var adding = {
-  dep:	new Deps.Dependency,
-  val: false,
-  get: function(){
-    this.dep.depend();
-    return this.val;
-  },
-  set: function( val ){
-    this.dep.changed();
-    this.val = val;
-  }
-}
-
-Template.addNewAtomBtn.helpers({
-  isAdding: function(){
-    return adding.get();
+var parents;
+Template.addNewAtomBtn.events({
+  "click .add-btn": function(e,t){
+    e.preventDefault();
+    
+    parents = this.parents.concat( this.atom._id );
   }
 });
 
-Template.addNewAtomBtn.events({
+
+Template.editLLMD.events({
   "click .add-btn": function(e,t){
     e.preventDefault();
     
@@ -55,29 +46,38 @@ Template.addNewAtomBtn.events({
     // addAtom( 'comment', t.data.unit.rootId );
     
     adding.set(false);
+  },
+  "click .if-btn": function(e,t){
+    e.preventDefault();
+    
+    addAtom.apply( this, ['if'] );
+    // addAtom( 'comment', t.data.unit.rootId );
+    
+    adding.set(false);
   }
 });
 
 addAtom = function( name ){
   var unit = Units.findOne();
-  if( name === 'comment' ) {
-    var atom = {};
-    Meteor.call('post.new', {title:'comment', data:'omgdata'}, function(err, _id ){
-      console.log(_id);
-      atom.active = true;
-      atom.index = unit.ast.length;
-      atom.name = name;
-      atom._id = _id;
-      Units.update({_id: unit._id},{$push: {ast: atom}});
-    });
-  } else {
+  // if( name === 'comment' ) {
+  //   var atom = {};
+  //   Meteor.call('post.new', {title:'comment', data:'omgdata'}, function(err, _id ){
+  //     console.log(_id);
+  //     atom.active = true;
+  //     atom.index = unit.ast.length;
+  //     atom.name = name;
+  //     atom._id = _id;
+  //     Units.update({_id: unit._id},{$push: {ast: atom}});
+  //   });
+  // } else {
     var commit = new CommitModel( unit._id );
     
-    var atom =  LLMD.packageTypes[ name ].skeleton;
+    var atom =  new LLMD.packageTypes[ name ].skeleton();
+    console.log('add', parents );
     atom.active = true;
     atom.name = name;
-    commit.add( atom, [commit.ele.rootId] );
+    commit.add( atom, parents );
     
     Units.update({_id: unit._id},{$set: {commitId: commit.ele._id}});
-  }
+  // }
 }

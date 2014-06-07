@@ -213,13 +213,36 @@ a {
   padding: 15px;
 }
 
-#editorContainer {
+.editorContainerWrapper {
+  position: relative;
 }
 
 ul#editorContainer {
   margin: 0px;
   list-style: none;
   padding-left: 0px;
+  padding-bottom: 34px;
+  width: 100%;
+  
+  > li{
+    -webkit-box-shadow: -4px 4px 5px -5px #aaa; 
+    box-shadow: -4px 4px 5px -5px #aaa; 
+  }
+  // > li {
+  //   min-height: 42px;
+  // }
+  
+  > li.ifWrapper {
+    background: #fff;
+    border-left: 6px solid #fff;
+    border-bottom: 4px solid #fff; 
+    margin: 4px 0;
+    > .head {
+      background: #fff;
+      width: 100%;
+      padding: 12px 4px 2px 2px;
+    }
+  }
   
   > li.atomContainer {
     background: #fff;
@@ -298,7 +321,13 @@ ul#editorContainer {
 } // ul
 
 .addNewAtomWrapper {
-  margin-top: 55px;
+ text-align: right;
+ position: absolute;
+ bottom: -4px;
+ right: 0px;
+ a {
+  color: #333;
+ }
 }
 
 .btn-glass {
@@ -321,4 +350,19 @@ ul#editorContainer {
   font-size: 18px;
   line-height: 24px;
   padding: 8px 12px;
+}
+
+.hatched{
+  margin: 2px 0px;
+  // background-image: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, rgba(255, 255, 255, .2)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.75, rgba(255, 255, 255, .2)), color-stop(.75, transparent), to(transparent));
+  // background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
+  // background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
+  // background-image: -ms-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
+  // background-image: -o-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
+  // background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
+  // -webkit-background-size: 20px 20px;
+  // -moz-background-size: 20px 20px;
+  // -ms-background-size: 20px 20px;
+  // -o-background-size: 20px 20px;
+  // background-size: 20px 20px;
 }

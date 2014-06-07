@@ -1,5 +1,7 @@
 LLMD.registerPackage("multipleChoice", {
-  skeleton: {name: 'multipleChoice', questions: []}
+  skeleton: function(){
+    return {name: 'multipleChoice', questions: []};
+  }
 });
 
 
@@ -68,11 +70,18 @@ Template.llmd_multipleChoice_edit.created = function(){
     }
   };
   
+};
+
+Template.llmd_multipleChoice_edit.rendered = function(){
+  
   var self = this;
   this.data.buildAtom = function(){
-    return { questions: self.data.questions.get() };
+    return { 
+      questions: self.data.questions.get(),
+      score: self.find('[name=score]').value
+    };
   }
-};
+}
 
 Template.llmd_multipleChoice_edit.events = {
   "submit": function(e,t){

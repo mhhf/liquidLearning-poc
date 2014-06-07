@@ -2,26 +2,29 @@
 
 <div class="row clear">
   {{> llmd_seq_edit getRoot}}
-  
-  {{> addNewAtomBtn }}
-  
 </div>
 
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      
+    <button type="button"  data-dismiss="modal" class="btn btn-glass md-btn"><i class="fa fa-code"></i> Markdown</button>
+    <button type="button" data-dismiss="modal" class="btn btn-glass tts-btn"><i class="fa fa-comment-o"></i> TTS</button>
+    <button type="button"  data-dismiss="modal" class="btn btn-glass ms-btn"><i class="fa fa-list"></i> Multiple Choice</button>
+    <button type="button" data-dismiss="modal" class="btn btn-glass if-btn"><i class="fa fa-question"></i> if</button>
+    
+    
+    </div>
+  </div>
+</div>
   
 </template>
 
 <template name="addNewAtomBtn">
 <div class="addNewAtomWrapper">
-  {{#if isAdding}}
-  <div class="btn-group">
-    <button type="button" class="btn btn-glass md-btn"><i class="fa fa-code"></i> Markdown</button>
-    <button type="button" class="btn btn-glass tts-btn"><i class="fa fa-comment-o"></i> TTS</button>
-    <button type="button" class="btn btn-glass ms-btn"><i class="fa fa-list"></i> Multiple Choice</button>
-    <!-- <button type="button" class="btn btn&#45;glass comment&#45;btn"><i class="fa fa&#45;comment"></i> Comment</button> -->
-  </div>
-  {{else}}
-  <button class="btn btn-primary btn-lg btn-block add-btn"><i class="fa fa-plus"></i> ADD</button>
-  {{/if}}
+  
+  <a href='#' class="add-btn" data-toggle="modal" data-target=".bs-example-modal-lg"> <i class="fa fa-plus"></i></a>
+  
 </div>
 </template>
 
@@ -31,16 +34,10 @@
 </li>
 </template>
 
-<template name="llmd_seq_edit">
-  <ul id="editorContainer">
-    {{#each atoms}}
-    
-    {{#if isComment}}
-      {{> commentWrapper }}
-    {{else}}
-      {{> atomWrapper getData .. }}
-    {{/if}}
-    
-    {{/each}}
-  </ul>
+
+<template name="ifWrapper">
+<li class="ifWrapper">
+  {{>llmd_if_edit}}
+</li>
 </template>
+

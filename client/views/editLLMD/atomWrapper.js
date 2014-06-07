@@ -73,7 +73,7 @@ Template.atomWrapper.events = {
     var self = this;
     console.log('removing',this);
     $(t.find('.atomContainer')).fadeOut(400, function(){
-      editHandler.remove( [self.seqId, self.atom._id] );
+      editHandler.remove( self.parents.concat( [ self.atom._id ] ) );
       $(t.find('.atomContainer')).css('display','block');
     });
   },
@@ -83,7 +83,7 @@ Template.atomWrapper.events = {
     var atom = this.buildAtom();
     atom.name = this.atom.name;
     atom.active = this.atom.active;
-    editHandler.save( atom, [ this.seqId, this.atom._id ] );
+    editHandler.save( atom, this.parents.concat([ this.atom._id ]) );
     
   },
   "click .dismiss-btn": function(e,t){

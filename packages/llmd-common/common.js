@@ -1,4 +1,11 @@
 LLMD.registerPackage("if", {
+  skeleton: function(){
+    
+    var trueSeq = Atoms.insert( new LLMD.packageTypes['seq'].skeleton() );
+    var falseSeq = Atoms.insert( new LLMD.packageTypes['seq'].skeleton() );
+    
+    return { name: 'if', c:'true', t: trueSeq, f:falseSeq };
+  },
   nested:['t','f'],
   dataFilter: function( params, rawData ){
     this.c; // condition
@@ -60,5 +67,7 @@ var cleanBlocks = function( bs ){
 
 
 LLMD.registerPackage('seq', {
-  skeleton: {name: 'seq', data: []}
+  skeleton: function(){
+    return {name: 'seq', data: []};
+  }
 });

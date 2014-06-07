@@ -17,7 +17,7 @@ Meteor.methods({
     // course.commit( 'init file', '', o.name+'.llmd' );
     // 
     
-    var root = LLMD.packageTypes.seq.skeleton;
+    var root = new LLMD.packageTypes.seq.skeleton();
     var rootId = Atoms.insert( root );
     
     var commitId = Commits.insert({

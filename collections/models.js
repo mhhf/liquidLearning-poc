@@ -40,10 +40,19 @@ CommitModel = function( _id ){
     
     var oldAtom = Atoms.findOne({_id: parentId});
     
-    var index = oldAtom.data.indexOf( oldId );
-    if( index == -1 ) console.log( 'fuuuuuck' );
+    if( oldAtom.name == 'seq' ) {
+      
+      var index = oldAtom.data.indexOf( oldId );
+      if( index == -1 ) console.log( 'fuuuuuck' );
+      
+      oldAtom.data[index] = newId;
+      
+    } else {
+      LLMD.packageTypes[oldAtom.name].nested.forEach( function( e ){
+        if( oldAtom[e] == oldId ) oldAtom[e] = newId;
+      });
+    }
     
-    oldAtom.data[index] = newId;
     
     ids.push(parentId);
     
@@ -52,6 +61,7 @@ CommitModel = function( _id ){
   }
   
   this.add = function( atom, ids ){
+    console.log('adding', ids);
     var atomId = Atoms.insert(atom);
     
     var parentId = ids.pop();
@@ -82,6 +92,7 @@ CommitModel = function( _id ){
   }
   
   this.remove = function( ids ){
+    console.log(ids);
     var toRemoveId = ids.pop();
     var removeFromSeqId = ids.pop();
     ids.push(removeFromSeqId);

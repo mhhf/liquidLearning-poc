@@ -3,7 +3,9 @@ if( Meteor.isServer ){
 }
 
 LLMD.registerPackage("tts", {
-  skeleton: {name: 'tts', data: []},
+  skeleton: function(){
+    return {name: 'tts', data: []};
+  },
   dataFilter: function( params, rawData ){
     var data = [];
     
