@@ -95,7 +95,7 @@ Template.atomWrapper.events = {
     e.preventDefault();
     var atom = this.atom;
     atom.active = !atom.active;
-    editHandler.save( atom, [ this.seqId, this.atom._id ] );
+    editHandler.save( atom, this.parents.concat([ this.atom._id ]) );
   }
   
 }
