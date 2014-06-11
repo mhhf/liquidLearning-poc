@@ -91,16 +91,18 @@ Router.map( function(){
     },
     data: function(){
       
+      
+      mediaHandler = new SyncQue();
       return {
         data: Courses.findOne(),
         section: this.params.section,
-        lecture: this.params.lecture,
-        unit: this.params.lecture,
         lectureName: this.params.lecture,
         unit: Units.findOne({ name: this.params.lecture }),
-        index: 0
+        index: 0,
+        mediaHandler: mediaHandler
         // astModel: new ASTModel( unit._id )
       };
+      
     }
   });
   

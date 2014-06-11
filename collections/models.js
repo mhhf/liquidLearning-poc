@@ -63,6 +63,7 @@ CommitModel = function( _id ){
   this.add = function( atom, ids ){
     console.log('adding', ids);
     var atomId = Atoms.insert(atom);
+    Meteor.call( 'atom.compile', atomId );
     
     var parentId = ids.pop();
     ids.push( parentId );
@@ -80,6 +81,7 @@ CommitModel = function( _id ){
   this.change = function( atom, ids ){
     
     var atomId = Atoms.insert(atom);
+    Meteor.call( 'atom.compile', atomId );
     var newRootId = this.exchange( atomId, ids );
     
     var newCommit = Commits.insert({ rootId: newRootId, previous: this.ele._id });
@@ -92,7 +94,6 @@ CommitModel = function( _id ){
   }
   
   this.remove = function( ids ){
-    console.log(ids);
     var toRemoveId = ids.pop();
     var removeFromSeqId = ids.pop();
     ids.push(removeFromSeqId);

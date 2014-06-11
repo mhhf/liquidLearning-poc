@@ -15,6 +15,9 @@
 <div class="tts">
   {{#each getData}}
   <span class="sentance">
+    {{#if ready}}
+      <a href="#" class="btn-play"><i class="fa fa-volume-up"></i></a>
+    {{/if}}
     {{getText}}
   </span>
   {{/each}}

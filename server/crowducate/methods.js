@@ -51,22 +51,23 @@ Meteor.methods({
     var course = new CourseModel( _id );
     course.log('save','new course created');
   },
-  // openLectureFile: function(_id, name){
-  //   var course = new CourseModel( _id );
-  //   
-  //   course.check('read');
-  //   
-  //   return course.openFile( name + '.llmd' );
-  //   
-  // },
-  // saveLectureFile: function(_id, o){
-  //   
-  //   var course = new CourseModel( _id );
-  //   course.check('write');
-  //   // course.commit( o.commitMsg, o.md, o.filepath );
-  //   course.log('save', o.commitMsg );
-  //   
-  // }
-  
+  "atom.compile": function( _id ){
+    var atom = Atoms.findOne({ _id: _id});
+    
+    if( LLMD.packageTypes[atom.name] && LLMD.packageTypes[atom.name].preprocess ) {
+      var syncPreprocess = Meteor._wrapAsync( LLMD.packageTypes[atom.name].preprocess );
+      
+      var atom = syncPreprocess( atom );
+      
+    }
+    
+    var obj = _.omit( atom, '_id' );
+    // if( !obj.meta ) obj.meta = {};
+    obj.meta.state = 'ready';
+    
+    Atoms.update({ _id: atom._id },{ $set: obj });
+    
+    return atom;
+  }
   
 });

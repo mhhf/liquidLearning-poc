@@ -44,7 +44,11 @@ SyncQue = function( o ){
   
 	var loadSound = function( ttsO, cb ) {
 		var request = new XMLHttpRequest();
-		request.open('GET', ttsO.link, true);
+    
+    var protocoll = "";
+    if( !ttsO.link.match(/^http:\/\//) ) protocoll = "http://"
+    
+		request.open('GET', protocoll+ttsO.link, true);
 		request.responseType = 'arraybuffer';
 
 		// Decode asynchronously

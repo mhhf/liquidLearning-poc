@@ -99,6 +99,15 @@ a {
   &:hover {
     border: 1px solid #fdb756;
   }
+  
+  
+  .imgWrapper {
+    img {
+      background: #e5e5e5;
+      width: 200px;
+      height: 200px;
+    }
+  }
 }
 .sections {
   padding: 0px;
@@ -232,17 +241,16 @@ ul#editorContainer {
   //   min-height: 42px;
   // }
   
-  > li.ifWrapper {
-    background: #fff;
-    border-left: 6px solid #fff;
-    border-bottom: 4px solid #fff; 
-    margin: 4px 0;
-    > .head {
-      background: #fff;
-      width: 100%;
-      padding: 12px 4px 2px 2px;
-    }
-  }
+  // > li.ifWrapper {
+  //   background: #fff;
+  //   margin: 4px 0;
+  //   > .head {
+  //     background: #fff;
+  //     width: 100%;
+  //     padding: 12px 4px 2px 2px;
+  //   }
+  // }
+  
   
   > li.atomContainer {
     background: #fff;
@@ -316,7 +324,16 @@ ul#editorContainer {
         content: "\f046";
       }
     }
+    
+    &.ifWrapper {
+      .atomWrapper {
+        margin-right: 0px;
+        padding-right: 0px;
+        padding-left: 6px;
+      }
+    }
   } // li
+  
   
 } // ul
 
@@ -365,4 +382,13 @@ ul#editorContainer {
   // -ms-background-size: 20px 20px;
   // -o-background-size: 20px 20px;
   // background-size: 20px 20px;
+}
+
+
+.stateWrapper {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  height: 25px;
+  width: 25px;
 }

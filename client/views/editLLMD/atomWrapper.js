@@ -34,6 +34,7 @@ var editHandler = new function(){
 
 
 Template.atomWrapper.rendered = function(){
+
 }
 
 
@@ -45,10 +46,10 @@ Template.atomWrapper.helpers({
     return ( editHandler.get() === this )?'edit':'';
   },
   getActivateClass: function(){
-    return ( this.atom.active )?'':'inactive';
+    return ( this.atom.meta && this.atom.meta.active )?'':'inactive';
   },
   isActive: function(){
-    return ( this.atom.active );
+    return ( this.atom.meta && this.atom.meta.active );
   },
   dynamicTemplate: function(){
     
@@ -56,6 +57,32 @@ Template.atomWrapper.helpers({
     var mode = ( editMode )?'edit':'ast';
     var template = Template['llmd_'+this.atom.name+'_'+mode];
     return template;
+  },
+  getSmallSpinner: function(){
+    return {
+      lines: 11, // The number of lines to draw
+      length: 4, // The length of each line
+      width: 2, // The line thickness
+      radius: 4, // The radius of the inner circle
+      corners: 1, // Corner roundness (0..1)
+      rotate: 0, // The rotation offset
+      direction: 1, // 1: clockwise, -1: counterclockwise
+      color: '#000', // #rgb or #rrggbb or array of colors
+      speed: 1, // Rounds per second
+      trail: 42, // Afterglow percentage
+      shadow: false, // Whether to render a shadow
+      hwaccel: false, // Whether to use hardware acceleration
+      className: 'spinner', // The CSS class to assign to the spinner
+      zIndex: 2e9, // The z-index (defaults to 2000000000)
+      top: '0', // Top position relative to parent
+      left: '0' // Left position relative to parent 
+    };
+  },
+  previewable: function(){
+    return this.meta && this.meta.previewable && this.meta.state == "ready";
+  },
+  isPending: function(){
+    return this.atom.meta && this.atom.meta.state == "pending";
   }
 });
 
@@ -71,7 +98,6 @@ Template.atomWrapper.events = {
   },
   "click .remove-btn": function(e,t){
     var self = this;
-    console.log('removing',this);
     $(t.find('.atomContainer')).fadeOut(400, function(){
       editHandler.remove( self.parents.concat( [ self.atom._id ] ) );
       $(t.find('.atomContainer')).css('display','block');
@@ -82,7 +108,8 @@ Template.atomWrapper.events = {
     
     var atom = this.buildAtom();
     atom.name = this.atom.name;
-    atom.active = this.atom.active;
+    atom.meta = this.atom.meta || {};
+    atom.meta.state = 'pending';
     editHandler.save( atom, this.parents.concat([ this.atom._id ]) );
     
   },
@@ -94,7 +121,7 @@ Template.atomWrapper.events = {
   "click .activate-toggle-btn": function(e,t){
     e.preventDefault();
     var atom = this.atom;
-    atom.active = !atom.active;
+    atom.meta.active = !atom.meta.active;
     editHandler.save( atom, this.parents.concat([ this.atom._id ]) );
   }
   

@@ -31,6 +31,21 @@ Template.pkg_tts_view.getData = function(){
   return this.data;
 }
 
+Template.llmd_tts_ast.helpers({
+  ready: function(){
+    return !!this.link;
+  }
+});
+
+Template.llmd_tts_ast.events = {
+  "click .btn-play": function(e,t){
+    var self = this;
+    mediaHandler.loadSound( self, function(){
+      mediaHandler.playSound( self.hash );
+    });
+  }
+}
+
 Template.llmd_tts_ast.getData = function(){
   return this;
 }

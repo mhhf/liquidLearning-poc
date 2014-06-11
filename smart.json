@@ -1,7 +1,9 @@
 {
   "packages": {
     "belt-md5": {},
-    "spin": {},
+    "spin": {
+      "git": "git@github.com:SachaG/meteor-spin.git"  
+    },
     "tts": {
       "git": "git@bitbucket.org:liquidlearningdev/tts.git"
     },

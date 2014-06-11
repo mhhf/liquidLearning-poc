@@ -20,6 +20,20 @@ IFPlugin = BasicPlugin.extend({
 
 PluginHandler.registerPlugin( 'if', IFPlugin );
 
+Template.llmd_if_edit.rendered = function(){
+  
+  var self = this;
+  
+  this.data.buildAtom = function(){
+    return {
+      name: 'if',
+      c: self.find('input[name=condition]').value,
+      t: self.data.atom.t,
+      f: self.data.atom.f
+    }
+  }
+}
+
 Template.llmd_if_body.helpers({
   getTrue: function(){
     return {
@@ -37,16 +51,16 @@ Template.llmd_if_body.helpers({
 
 
 Template.llmd_seq_edit.rendered = function(){
-  new Sortable(this.find('#editorContainer'), {
-    handle: '.sort-handle',
-    onUpdate: function(e,a){
-      var oldPos = e.srcElement.dataset.index;
-      var newPos = e.srcElement.previousElementSibling && e.srcElement.previousElementSibling.dataset.index - 1 || 0;
-      var parent = e.srcElement.parentElement;
-      console.log(e);
-    },
-    group: 'seq'
-  });
+  // new Sortable(this.find('#editorContainer'), {
+  //   handle: '.sort-handle',
+  //   onUpdate: function(e,a){
+  //     var oldPos = e.srcElement.dataset.index;
+  //     var newPos = e.srcElement.previousElementSibling && e.srcElement.previousElementSibling.dataset.index - 1 || 0;
+  //     var parent = e.srcElement.parentElement;
+  //     console.log(e);
+  //   },
+  //   group: 'seq'
+  // });
 }
 
 Template.llmd_seq_edit.helpers({
@@ -66,7 +80,7 @@ Template.llmd_seq_edit.helpers({
       return Template['commentWrapper'];
     } else if( this.atom.name === 'seq' ) {
       return Template['atomWrapper'];
-    } else if( this.atom.name === 'if' ) {
+    } else if( this.atom.name === 'if' && false ) {
       return Template['ifWrapper'];
     } else {
       return Template['atomWrapper'];

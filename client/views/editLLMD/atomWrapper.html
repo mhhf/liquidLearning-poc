@@ -1,17 +1,17 @@
 <template name="atomWrapper">
 
-  <li class="atomContainer {{editModeClass}} {{getActivateClass}}" data-index="{{index}}">
+<li class="atomContainer {{editModeClass}} {{getActivateClass}} {{atom.name}}Wrapper" data-index="{{index}}">
     <label>{{atom.name}}</label>
     <div class="{{name}} atomWrapper">
       {{> dynamicTemplate}}
     </div>
     <div class="actions">
-      {{#unless editMode }}
-      <a href='#' class="edit-btn"><i class="fa fa-pencil"></i></a>
-      <a href='#' class="remove-btn"><i class="fa fa-trash-o"></i></a>
+      {{#if editMode}}
       <a href='#' class="activate-toggle-btn"><i class="fa fa-square-o"></i></a>
-      {{/unless}}
-      <i class="fa fa-align-justify sort-handle"></i> 
+      <a href='#' class="remove-btn"><i class="fa fa-trash-o"></i></a>
+      {{else}}
+      <a href='#' class="edit-btn"><i class="fa fa-pencil"></i></a>
+      {{/if}}
     </div>
     
     {{#if editMode}}
@@ -20,6 +20,28 @@
       <a class="dismiss-btn btn btn-default" href="#"><i class="fa fa-times"></i> Dismiss</a>
     </div>
     {{/if}}
+    
+    <div class="stateWrapper">
+      {{#if isPending}}
+        {{> spinner getSmallSpinner}}
+      {{/if}}
+      {{#if previewable}}
+        <a href="#"><i class="fa fa-play"></i></a>
+      {{/if}}
+    </div>
   </li>
   
 </template>
+
+<template name="commentWrapper">
+<li class="commentContainer">
+  {{>Comment postData }}
+</li>
+</template>
+
+<template name="ifWrapper">
+<li class="ifWrapper">
+  {{>llmd_if_edit}}
+</li>
+</template>
+
