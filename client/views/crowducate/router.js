@@ -106,6 +106,25 @@ Router.map( function(){
     }
   });
   
+  this.route('diffCommits', {
+    
+    path: 'diff/:_id1/:_id2',
+    waitOn: function(){
+      return [
+        Meteor.subscribe('commit',this.params._id1),
+        Meteor.subscribe('commit',this.params._id2)
+      ];
+    },
+    data: function(){
+      return {
+        commit1: Commits.findOne({ _id: this.params._id1 }),
+        commit2: Commits.findOne({ _id: this.params._id2 })
+      }
+    }
+    
+  });
+  
+  
   this.route( 'newCourse', {
     waitOn: function(){
       return [ Meteor.subscribe('tags'), Meteor.subscribe('images') ];

@@ -61,7 +61,6 @@ CommitModel = function( _id ){
   }
   
   this.add = function( atom, ids ){
-    console.log('adding', ids);
     var atomId = Atoms.insert(atom);
     Meteor.call( 'atom.compile', atomId );
     
@@ -71,6 +70,7 @@ CommitModel = function( _id ){
     var oldAtom = Atoms.findOne( {_id: parentId} );
     
     oldAtom.data.push( atomId );
+    // oldAtom.meta.parents.push( oldAtom. );
     
     
     
