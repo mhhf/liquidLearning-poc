@@ -79,11 +79,27 @@ Template.llmd_seq_edit.helpers({
     if( this.atom.name === 'comment') {
       return Template['commentWrapper'];
     } else if( this.atom.name === 'seq' ) {
-      return Template['atomWrapper'];
+      if( this.atom.meta && this.atom.meta.state == 'conflict' ) {
+        console.log('merge');
+        return Template['atomWrapper'];
+      } else {
+        console.log('merge', this.atom);
+        return Template['atomWrapper'];
+      }
     } else if( this.atom.name === 'if' && false ) {
       return Template['ifWrapper'];
     } else {
-      return Template['atomWrapper'];
+      if( this.atom.meta && this.atom.meta.state == 'conflict' && !LLMD.packageTypes[this.atom.name].nested ) {
+        if( this.atom.meta.diff.type == 'remove') {
+          return Template['removeWrapper'];
+        } else if( this.atom.meta.diff.type == 'add') {
+          return Template['addWrapper'];
+        } else {
+          return Template['diffWrapper'];
+        }
+      } else {
+        return Template['atomWrapper'];
+      }
     }
   },
   atoms: function(){

@@ -86,7 +86,8 @@ Meteor.methods({
           diff: {
             type: 'change',
             parents: seqHistory
-          }
+          },
+          state: 'conflict'
         }
       });
       console.log( newRootSeqId );
@@ -140,7 +141,8 @@ var Diff = function( seq ){
       atom.meta.diff = {
         type: 'remove',
         parents: []
-      }
+      };
+      atom.meta.state = 'conflict';
       this._seq[index] = atom;
     } else {
       this._seq[index].meta.diff.type = 'remove';
@@ -154,6 +156,7 @@ var Diff = function( seq ){
       type: 'add',
       parents: [a]
     };
+    diffAtom.meta.state = 'conflict';
     this._seq.splice(index, 0, diffAtom);
   }
   
@@ -164,7 +167,8 @@ var Diff = function( seq ){
       diffAtom.meta.diff = {
         type: 'change',
         parents: [this._seq[index]]
-      }
+      };
+      diffAtom.meta.state = 'conflict';
     } else {
       var diffAtom = Atoms.findOne({ _id: a });
       var oldDiffAtom = this._seq[index];
@@ -172,6 +176,7 @@ var Diff = function( seq ){
         type: oldDiffAtom.meta.diff.type,
         parents: oldDiffAtom.meta.diff.parents
       }
+      diffAtom.meta.state = 'conflict';
       diffAtom.meta.diff.parents.push( oldDiffAtom._id );
     }
     this._seq[index] = diffAtom;
@@ -288,7 +293,8 @@ seqDiff = function( ids ) {
                 diff: {
                   type: 'change',
                   parents: seqHistory
-                }
+                },
+                state: 'conflict'
               }
             });
             

@@ -33,6 +33,35 @@
   
 </template>
 
+<template name="diffWrapper">
+<div class="diffAtom">
+  <div class="diffLeft">{{> atomWrapper}}</div>
+  <div class="conflictActions"></div>
+  <div class="diffRight"></div>
+  {{getType}}
+</div>
+</template>
+
+<template name="removeWrapper">
+<div class="diffAtom">
+  <div class="diffLeft">{{> atomWrapper}}</div>
+  <div class="conflictActions"></div>
+  <div class="diffRight"></div>
+  {{getType}}
+</div>
+</template>
+
+<template name="addWrapper">
+<div class="diffAtom">
+  <div class="diffLeft"></div>
+  <div class="conflictActions"></div>
+  <div class="diffRight">{{> atomWrapper}}</div>
+  {{getType}}
+</div>
+</template>
+
+
+
 <template name="commentWrapper">
 <li class="commentContainer">
   {{>Comment postData }}

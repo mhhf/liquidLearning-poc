@@ -1,7 +1,6 @@
 
 Template.editLLMD.helpers({
   getRoot: function(){
-    console.log(this.root);
     return {atom:this.root, parents:[]};
   },
   
@@ -19,3 +18,8 @@ Template.commentWrapper.helpers({
 });
 
 
+Template.diffWrapper.helpers({
+  type: function(){
+    return this.atom.meta.diff.type;
+  }
+});
