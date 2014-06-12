@@ -56,7 +56,8 @@ Template.atomWrapper.helpers({
     var editMode = editHandler.get() === this;
     var mode = ( editMode )?'edit':'ast';
     var template = Template['llmd_'+this.atom.name+'_'+mode];
-    return template;
+    if(!template) throw new Error('no teplate for '+this.atom.name+" found!");
+    return template || null;
   },
   getSmallSpinner: function(){
     return {

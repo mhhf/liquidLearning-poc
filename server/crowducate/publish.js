@@ -22,3 +22,23 @@ Meteor.publish('publicCourses', function(){
 Meteor.publish('commit', function( _id ){
   return Commits.find({ _id: _id })
 });
+
+Meteor.publish('atom', function( _id ){
+  return Atoms.find({ _id: _id });
+});
+
+var buildHistory = function( _id ){
+  var history = [];
+  while( _id ) {
+    history.push( _id );
+    var commit = Commits.findOne({ _id: _id });  
+    _id = commit && commit.previous;
+  }
+  
+  return history;
+}
+
+Meteor.publish('commitHistory', function( _commitId ){
+  var commitsId = buildHistory( _commitId );
+  return Commits.find({ _id: { $in: commitsId } });
+});

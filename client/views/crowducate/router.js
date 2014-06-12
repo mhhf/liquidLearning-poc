@@ -78,7 +78,7 @@ Router.map( function(){
   
   this.route('editLecture', {
     path:'course/:_courseId/edit/:section/:lecture',
-    template: 'editLLMD',
+    template: 'editLecture',
     controller: EditCourseController,
     waitOn: function(){
       return [
@@ -93,33 +93,62 @@ Router.map( function(){
       
       
       mediaHandler = new SyncQue();
+      
+      var unit = Units.findOne({ name: this.params.lecture });
+      var commit = Commits.findOne({ _id: unit.commitId });
+      var root = Atoms.findOne({ _id: commit.rootId });
+      
       return {
         data: Courses.findOne(),
         section: this.params.section,
         lectureName: this.params.lecture,
-        unit: Units.findOne({ name: this.params.lecture }),
+        unit: unit,
         index: 0,
-        mediaHandler: mediaHandler
+        mediaHandler: mediaHandler,
+        root: root
         // astModel: new ASTModel( unit._id )
       };
       
     }
   });
   
-  this.route('diffCommits', {
-    
-    path: 'diff/:_id1/:_id2',
+  this.route('commitHistory', {
+    path: 'commit/:_commitId/history',
     waitOn: function(){
-      return [
-        Meteor.subscribe('commit',this.params._id1),
-        Meteor.subscribe('commit',this.params._id2)
-      ];
+      return Meteor.subscribe( 'commitHistory', this.params._commitId );
     },
     data: function(){
       return {
-        commit1: Commits.findOne({ _id: this.params._id1 }),
-        commit2: Commits.findOne({ _id: this.params._id2 })
+        head: Commits.findOne({ _id: this.params._commitId })
+      };
+    }
+  });
+  
+  this.route('diffCommits', {
+    
+    
+    path: 'diff/:_diffId',
+    waitOn: function(){
+      // [TODO] - subscribe on atoms which are used in the diff
+      
+      // return [
+      //   Meteor.subscribe('commit',this.params._id1),
+      //   Meteor.subscribe('commit',this.params._id2)
+      // ];
+      // return new SyncLectureLoader( this.params._diffId );
+      return Meteor.subscribe('atom',this.params._diffId);
+    },
+    data: function(){
+      console.log( this.params._diffId );
+      return {
+        // ast: Session.get('ast'),
+        root: Atoms.findOne({ _id: this.params._diffId }),
+        index: 0
       }
+      // return {
+      //   commit1: Commits.findOne({ _id: this.params._id1 }),
+      //   commit2: Commits.findOne({ _id: this.params._id2 })
+      // }
     }
     
   });
@@ -141,7 +170,7 @@ Router.map( function(){
 
 var id = null;
 var retObj = null;
-SyncLectureLoader = function( id, _id, filepath ){
+SyncLectureLoader = function( _id ){
 
   var readyFlag = false ;
   var readyFlagDep = new Deps.Dependency;
@@ -162,8 +191,8 @@ SyncLectureLoader = function( id, _id, filepath ){
   //   setReady(true);
   // },3000);
   
-  Meteor.call('openLectureFile', _id, filepath, function(err, data){
-    Session.set('fileData',data);
+  Meteor.call('atom.compile', _id, function(err, data){
+    Session.set('ast',data);
     setReady(true);
   });
   

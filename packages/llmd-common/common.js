@@ -71,3 +71,17 @@ LLMD.registerPackage('seq', {
     return {name: 'seq', data: []};
   }
 });
+
+LLMD.registerPackage('diff', {
+  skeleton: function(){
+    return {
+      name:'diff',
+      type: '',
+      new: '',
+      old: '',
+      parents: []
+    };
+  },
+  nested: ['new','old']
+  
+});
