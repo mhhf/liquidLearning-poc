@@ -17,12 +17,11 @@ accounts-password
 accounts-ui
 npm
 bootboxjs
-llmdParser
 iron-router
 moment
 discussions
 blaze-layout
-llmd-include
+llmd-core
 llmdBuilder
 llmd-tts
 syncque
