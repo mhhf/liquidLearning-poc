@@ -1,8 +1,0 @@
-//
-// plugin.dot
-//
-// Created on 16-04-2014 by mhhf
-//
-digraph plugin {
-  initial -> ready [label = "init()"];
-}

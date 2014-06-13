@@ -22,14 +22,11 @@ moment
 discussions
 blaze-layout
 llmd-core
-llmdBuilder
 llmd-tts
 syncque
 llmdInterpreter
-pluginSystem
 llmd-md
 llmd-multipleChoice
-llmd-common
 llmd-wait
 selectize
 tags
