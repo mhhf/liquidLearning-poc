@@ -92,7 +92,7 @@ Template.atomWrapper.events = {
     e.preventDefault();
     
     // perserve height
-    var ele = t.find('li');
+    var ele = t.find('.atomContainer');
     $(ele).css('min-height',ele.clientHeight + "px");
     
     editHandler.set(this);

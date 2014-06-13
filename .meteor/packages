@@ -44,3 +44,5 @@ sortable
 rlogParser
 fontawesome4
 less
+crypto-base
+crypto-sha1

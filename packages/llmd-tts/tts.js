@@ -3,13 +3,14 @@ if( Meteor.isServer ){
 }
 
 LLMD.registerPackage("tts", {
-  skeleton: function(){
-    return {name: 'tts', data: []};
+  init: function(){
+    this.data = [];
   },
   dataFilter: function( params, rawData ){
     var data = [];
     
-    var lang = ( params && ( params.length == 1 ) && params[0] ) || LlmdParser.yy.lang;
+    // [TODO] - default language is 'en' -> settings
+    var lang = ( params && ( params.length == 1 ) && params[0] ) || 'en'; 
     
     for( var block in rawData ) {
       // interpret als sentance

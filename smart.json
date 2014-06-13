@@ -2,7 +2,7 @@
   "packages": {
     "belt-md5": {},
     "spin": {
-      "git": "git@github.com:SachaG/meteor-spin.git"  
+      "git": "git@github.com:SachaG/meteor-spin.git"
     },
     "tts": {
       "git": "git@bitbucket.org:liquidlearningdev/tts.git"
@@ -28,6 +28,8 @@
     "tags": {
       "git": "git@github.com:mhhf/meteor-tags.git"
     },
-    "fontawesome4": {}
+    "fontawesome4": {},
+    "crypto-base": {},
+    "crypto-sha1": {}
   }
 }

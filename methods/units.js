@@ -20,29 +20,6 @@ var compileAST = function( _id ){
   
 }
 
-// 
-// var diffAtom = function( _id1, _id2 ) {
-//   var a1 = Atoms.findOne({ _id: _id1 });
-//   var a2 = Atoms.findOne({ _id: _id2 });
-//   
-//   if( a1._id == a2._id ) { // if the atom has not changed
-//     return _id1;
-//   } else if( a1.name == a2.name && a1.name == 'seq' ){ // if both are sequences
-//     
-//   } else if( a1.name == a2.name ) { // if atom has changed
-//     var diffAtom = Atoms.insert({
-//       name: 'diff',
-//       type: 'change',
-//       orig: _id1,
-//       remote: _id2
-//     });
-//     return diffAtom;
-//   } else { // diffAtom tries to compare 2 different atoms
-//     throw new Error('type '+a1.name+' and '+a2.name+' mismatch');
-//   }
-//   
-// }
-
 
 Meteor.methods({
   "unit.compile": function( _id ){

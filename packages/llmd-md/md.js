@@ -1,6 +1,6 @@
 LLMD.registerPackage("md", {
-  skeleton: function(){
-    return {name:'md', data: ''};
+  init: function(){
+    this.data = '';
   },
   dataFilter: function( params, rawData ){
     var data = "";
