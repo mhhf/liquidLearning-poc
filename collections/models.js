@@ -48,7 +48,7 @@ CommitModel = function( _id ){
       oldAtom.data[index] = newId;
       
     } else {
-      LLMD.packageTypes[oldAtom.name].nested.forEach( function( e ){
+      LLMD.Type( oldAtom.name ).nested.forEach( function( e ){
         if( oldAtom[e] == oldId ) oldAtom[e] = newId;
       });
     }

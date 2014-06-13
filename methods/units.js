@@ -4,8 +4,8 @@ var compileAST = function( _id ){
   
   if( atom.name == 'seq' ) {
     return _.map(atom.data, function(atom_id){ return compileAST( atom_id ) });
-  } else if( LLMD.packageTypes[atom.name] && LLMD.packageTypes[atom.name].nested ) {
-    var nested = LLMD.packageTypes[atom.name].nested;
+  } else if( LLMD.Type( atom.name ) && LLMD.Type( atom.name ).nested ) {
+    var nested = LLMD.Type( atom.name ).nested;
     
     nested.forEach( function(k){
       if( atom[k] ) {
@@ -254,7 +254,7 @@ seqDiff = function( ids ) {
     
     if( typeof diffAtom != 'string' && diffAtom.meta.diff.type == 'change' ) {
     
-      var type = LLMD.packageTypes[diffAtom.name];
+      var type = LLMD.Type( diffAtom.name );
       var nested = type && type.nested;
       
       if( nested ) {

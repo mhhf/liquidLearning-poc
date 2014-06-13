@@ -83,7 +83,7 @@ Template.llmd_tts_edit.rendered = function(){
     
     return {
       name: 'tts',
-      data: LLMD.packageTypes['tts'].dataFilter( null, data )
+      data: LLMD.Package( 'tts' ).dataFilter( null, data )
     }
   }
 }
