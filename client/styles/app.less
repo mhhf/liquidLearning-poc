@@ -392,3 +392,28 @@ ul#editorContainer {
   height: 25px;
   width: 25px;
 }
+
+ul.history {
+  border-left: 4px #333 solid;
+  padding-left: 0px;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  > li {
+    margin-left: -16px;
+    list-style: none;
+    .fa-circle{
+      &.front{
+        color: #333;
+        font-size: 0.6em;
+      }
+      &.back{
+        color: #f1f1f1;
+      }
+    }
+    .fa-stack {
+      height: 1.5em;
+      line-height: 1.5em;
+      font-size: 1em;
+    }
+  }
+}

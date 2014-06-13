@@ -1,8 +1,14 @@
 <template name="commitHistory">
 history
-<ul>
+<ul class="history">
 {{#each getHistory }}
-  <li>{{_id}}</li>
+  <li>
+  <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-1x back"></i>
+    <i class="fa fa-circle fa-stack-1x front"></i>
+  </span>
+  <a href="{{pathFor 'commitView' _commitId=_id}}">{{_id}} </a>
+  </li>
 {{/each}}
 </ul>
 </template>

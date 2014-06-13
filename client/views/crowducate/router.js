@@ -124,6 +124,21 @@ Router.map( function(){
     }
   });
   
+  this.route('commitView', {
+    template: 'editLLMD',
+    path: 'commit/:_commitId',
+    waitOn: function(){
+      return Meteor.subscribe( 'commit', this.params._commitId );
+    },
+    data: function(){
+      var commit = Commits.findOne({ _id: this.params._commitId });
+      return {
+        head: commit,
+        root: Atoms.findOne({ _id: commit.rootId })
+      }
+    }
+  });
+  
   this.route('diffCommits', {
     
     
