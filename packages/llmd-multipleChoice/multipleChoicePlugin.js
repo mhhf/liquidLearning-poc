@@ -1,6 +1,6 @@
 LLMD.registerPackage("multipleChoice", {
-  skeleton: function(){
-    return {name: 'multipleChoice', questions: []};
+  init: function (){
+    this.questions = [];
   }
 });
 

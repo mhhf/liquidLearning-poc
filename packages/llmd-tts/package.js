@@ -4,8 +4,7 @@ Package.describe({
 
 Package.on_use(function (api) {
   api.use(['tts','belt-md5'],'server');
-  api.use('llmdParser',['client','server']);
-  api.use('pluginSystem','client');
+  api.use('llmd-core',['client','server']);
   api.use('templating', 'client');
   api.use('minimongo', ['client','server']);
   api.use('less', 'client');

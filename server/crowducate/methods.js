@@ -17,7 +17,7 @@ Meteor.methods({
     // course.commit( 'init file', '', o.name+'.llmd' );
     // 
     
-    var root = new LLMD.packageTypes.seq.skeleton();
+    var root = new LLMD.Atom('seq');
     var rootId = Atoms.insert( root );
     
     var commitId = Commits.insert({
@@ -54,8 +54,8 @@ Meteor.methods({
   "atom.compile": function( _id ){
     var atom = Atoms.findOne({ _id: _id});
     
-    if( LLMD.packageTypes[atom.name] && LLMD.packageTypes[atom.name].preprocess ) {
-      var syncPreprocess = Meteor._wrapAsync( LLMD.packageTypes[atom.name].preprocess );
+    if( LLMD.Package( atom.name ) && LLMD.Package( atom.name ).preprocess ) {
+      var syncPreprocess = Meteor._wrapAsync( LLMD.Package( atom.name ).preprocess );
       
       var atom = syncPreprocess( atom );
       

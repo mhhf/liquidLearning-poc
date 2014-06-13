@@ -33,3 +33,20 @@ Template.llmd_md_edit.rendered = function(){
   }
   
 }
+
+Template.llmd_md_ast.helpers({
+  getData: function(){
+    var dot = this.atom.data.match(/\[dot\]((.|\n)*?)\[\/dot\]/);
+    
+    if(dot) {
+      var data = this.atom.data;
+      var link = "https://chart.googleapis.com/chart?chof=png&cht=gv&chl="+ encodeURIComponent( dot[1] );
+      var image = "![graphviz]("+link+")"
+      return data.replace(dot[0], image);
+    } else {
+      return this.atom.data;
+    }
+  
+  console.log(dot[1]);
+  }
+});

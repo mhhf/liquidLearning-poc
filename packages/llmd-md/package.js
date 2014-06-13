@@ -3,8 +3,8 @@ Package.describe({
 });
 
 Package.on_use(function (api) {
-  api.use('llmdParser',['client','server']);
-  api.use('pluginSystem','client');
+  api.use('llmd-core',['client','server']);
+  
   api.use('templating', 'client');
   api.use('minimongo', ['client','server']);
   api.use('less', 'client');

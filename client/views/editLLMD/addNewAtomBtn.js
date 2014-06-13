@@ -48,7 +48,7 @@ addAtom = function( name ){
   var unit = Units.findOne();
   var commit = new CommitModel( unit._id );
 
-  var atom =  new LLMD.packageTypes[ name ].skeleton();
+  var atom =  new LLMD.Atom( name );
   atom.meta = {
     active: true,
     state: 'pending'

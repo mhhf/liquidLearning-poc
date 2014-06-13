@@ -3,7 +3,7 @@ Package.describe({
 });
 
 Package.on_use(function (api) {
-  api.use('pluginSystem','client');
+  api.use('llmd-core','client');
   api.use('templating','client');
   
   api.add_files("waitPlugin.js", ["client"]);
