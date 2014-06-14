@@ -68,7 +68,8 @@ var getSyncsForNotesAsync = function( text , cb ){
   for(var i=0; i<text.length; i++) {
     // [TODO] - hash from text[i].toString() 
     //          current implementation could cause problems for same sentance and multiple languages/ voices
-    hash = MD5.hash( text[i].text ).toString();
+    hash = CryptoJS.SHA1( JSON.stringify( text[i] ) ).toString();          
+    // hash = MD5.hash( text[i].text ).toString();
     tts = Syncs.findOne({ hash: hash });
     if(!tts){
       queue++;

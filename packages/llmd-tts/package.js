@@ -5,6 +5,8 @@ Package.describe({
 Package.on_use(function (api) {
   api.use(['tts','belt-md5'],'server');
   api.use('llmd-core',['client','server']);
+  api.use('crypto-base',['server']);
+  api.use('crypto-sha1',['server']);
   api.use('templating', 'client');
   api.use('minimongo', ['client','server']);
   api.use('less', 'client');

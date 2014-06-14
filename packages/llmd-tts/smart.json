@@ -9,6 +9,8 @@
     "llmdParser": {
       "git": "git@bitbucket.org:liquidlearningdev/slideparser.git"
     },
-    "tts"
+    "tts":{},
+    "crypto-base":{},
+    "crypto-sha1":{}
   }
 }
