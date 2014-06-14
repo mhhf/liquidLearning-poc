@@ -46,3 +46,5 @@ fontawesome4
 less
 crypto-base
 crypto-sha1
+module-loader
+llmd

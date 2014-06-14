@@ -32,6 +32,10 @@ Template.llmd_md_edit.rendered = function(){
     }
   }
   
+  
+}
+
+Template.llmd_md_ast.rendered = function(){
 }
 
 Template.llmd_md_ast.helpers({

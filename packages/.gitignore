@@ -79,3 +79,5 @@ bootboxjs
 /emitter
 /fontawesome4
 /llmd-core
+/mathjax
+/module-loader
