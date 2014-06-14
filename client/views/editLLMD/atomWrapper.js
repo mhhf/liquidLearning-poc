@@ -9,11 +9,7 @@ var editHandler = new function(){
     this.dep.changed();
     this.val = val;
   },
-  this.save = function( atom, ids ){
-    var unit = Units.findOne();
-    var obj = {};
-    
-    var commit = new CommitModel( unit._id );
+  this.save = function( atom, ids, commit ){
     
     commit.change(_.omit(atom,'_id'), ids);
       
@@ -22,10 +18,8 @@ var editHandler = new function(){
   this.dismiss = function(){
     this.set(null);
   },
-  this.remove = function( ids ){
-    var _id = Units.findOne()._id;
+  this.remove = function( ids, commit ){
     
-    var commit = new CommitModel( _id );
     commit.remove( ids );
   }
 }
@@ -100,7 +94,7 @@ Template.atomWrapper.events = {
   "click .remove-btn": function(e,t){
     var self = this;
     $(t.find('.atomContainer')).fadeOut(400, function(){
-      editHandler.remove( self.parents.concat( [ self.atom._id ] ) );
+      editHandler.remove( self.parents.concat( [ self.atom._id ] ), self.commit );
       $(t.find('.atomContainer')).css('display','block');
     });
   },
@@ -110,7 +104,7 @@ Template.atomWrapper.events = {
     
     var atom = _.extend( this.atom, this.buildAtom() );
     atom.meta.state = 'pending';
-    editHandler.save( atom, this.parents.concat([ this.atom._id ]) );
+    editHandler.save( atom, this.parents.concat([ this.atom._id ]), this.commit );
     
   },
   "click .dismiss-btn": function(e,t){
@@ -122,7 +116,7 @@ Template.atomWrapper.events = {
     e.preventDefault();
     var atom = this.atom;
     atom.meta.active = !atom.meta.active;
-    editHandler.save( atom, this.parents.concat([ this.atom._id ]) );
+    editHandler.save( atom, this.parents.concat([ this.atom._id ]), this.commit );
   }
   
 }

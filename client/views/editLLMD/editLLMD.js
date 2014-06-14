@@ -1,7 +1,11 @@
 
 Template.editLLMD.helpers({
   getRoot: function(){
-    return {atom:this.root, parents:[]};
+    return {
+      atom:this.root,
+      parents:[],
+      commit: this.commitModel
+    };
   },
   
 });

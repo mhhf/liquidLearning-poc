@@ -24,10 +24,9 @@ ProjectModel = function( _id ){
   
 }
 
-CommitModel = function( _id ){
+CommitModel = function( _commitId ){
   
-  this.unit = Units.findOne({ _id: _id });
-  this.ele = Commits.findOne({ _id: this.unit.commitId });
+  this.ele = Commits.findOne({ _id: _commitId });
   
   // [TODO] - refactor for all nested
   // [TODO] - hashsum the id to link to same atoms in the db - garbage collection is then 'nichtig'
@@ -87,7 +86,7 @@ CommitModel = function( _id ){
     var newCommit = Commits.insert({ rootId: newRootId, previous: this.ele._id });
     this.ele = Commits.findOne({_id: newCommit});
     
-    this.updateUnit( newCommit );
+    // this.updateUnit( newCommit );
     
     return newCommit;
     
@@ -107,8 +106,8 @@ CommitModel = function( _id ){
     
   }
   
-  this.updateUnit = function( newCommitId ){
-    Units.update({_id: this.unit._id}, {$set: { commitId: newCommitId }})
-  }
+  // this.updateUnit = function( newCommitId ){
+  //   Units.update({_id: this.unit._id}, {$set: { commitId: newCommitId }})
+  // }
   
 }

@@ -1,5 +1,12 @@
 <template name="editLLMD">
 
+<div class="commitInfo">
+  <span class="right">
+    <a href="{{pathFor 'commitHistory' _commitId=unit.commitId}}"> <i class="fa fa-history"></i> History</a>
+    <a href="{{pathFor 'commitUnit' _commitId=unit.commitId}}"> <i class="fa fa-save"></i> Commit</a>
+  </span>
+</div>
+
 <div class="row clear">
   {{> llmd_seq_edit getRoot}}
 </div>

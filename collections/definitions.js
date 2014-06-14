@@ -18,6 +18,7 @@ Courses = new Meteor.Collection( 'courses', {
 
 Atoms = new Meteor.Collection( 'atoms' );
 Commits = new Meteor.Collection( 'commits' );
+LQTags = new Meteor.Collection('lq_tags');
 
 // Dev
 if (Meteor.isServer) {
@@ -27,11 +28,16 @@ if (Meteor.isServer) {
   Meteor.publish('commits', function(){
     return Commits.find();
   });
+  Meteor.publish('lq_tags', function(){
+    return LQTags.find();
+  });
+  
 }
 
 if (Meteor.isClient) {
   Meteor.subscribe('atoms');
   Meteor.subscribe('commits');
+  Meteor.subscribe('lq_tags');
 }
 
 

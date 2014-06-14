@@ -41,29 +41,10 @@ Meteor.methods({
     var commitNew = Commits.findOne({ _id: _idNew });
     
     
-    var rootOld = Atoms.findOne({ _id: commitOld.rootId });
-    var rootNew = Atoms.findOne({ _id: commitNew.rootId });
-    
-    
-    if( rootOld._atomId == rootNew._atomId ) {
-      
-      var as1 = _.map(rootOld.data, function( _id ){
-        return Atoms.findOne({ _id: _id });
-      });
-
-      var as2 = _.map(rootNew.data, function( _id ){
-        return Atoms.findOne({ _id: _id });
-      });
-      
-      var seq = diffSeq3( as1, as2, _idOld, _idNew );
+    if( commitOld.rootId != commitNew.rootId ) {
+      var seq = diffSeq3( commitOld.rootId, commitNew.rootId, _idOld, _idNew );
       console.log(seq);
-      
-    } else {
-      // wtf?
     }
-    
-    
-    
     
     
     
@@ -134,7 +115,20 @@ findFirstMatched = function( as1, as2 ) {
   return { i: as1.length, j: as2.length };
 }
 
-diffSeq3 = function( ast1, ast2, _cId1, _cId2 ){
+diffSeq3 = function( _seqId1, _seqId2, _cId1, _cId2 ){
+  
+  var seqAtom1 = Atoms.findOne({ _id: _seqId1 });
+  var seqAtom2 = Atoms.findOne({ _id: _seqId2 });
+  
+  
+  var ast1 = _.map(seqAtom1.data, function( _id ){
+    return Atoms.findOne({ _id: _id });
+  });
+
+  var ast2 = _.map(seqAtom2.data, function( _id ){
+    return Atoms.findOne({ _id: _id });
+  });
+  
   
   var ds = []; // final diffed sequence
   
@@ -155,19 +149,62 @@ diffSeq3 = function( ast1, ast2, _cId1, _cId2 ){
     
     if( a1 && a2 ) {
       if( a1._id == a2._id ) {
-        ds.push(a1._id);
+        ds = ds.concat( [a1._id] );
       } else {
         a2.meta.diff = {
           type: 'change',
           atom: a1._id 
         }
-        ds.push( a2 );
+        ds = ds.concat( [a2] );
       }
     }
     
   }
   
-  return ds;
+  
+  // diff nested
+  
+  ds = _.map(ds, function( diffAtom, i ){
+    
+    if( typeof diffAtom == 'string' ) {
+      return diffAtom;
+    } else if( diffAtom.meta.diff.type == 'change' ) {
+    
+      var type = LLMD.Type( diffAtom.name );
+      var nested = type && type.nested;
+      
+      if( nested ) {
+        
+        nested.forEach( function( key ){
+          
+          if( diffAtom.meta.diff.atom[key] != diffAtom[key] ) {
+            
+            diffAtom[key] = diffSeq3( diffAtom.meta.diff.atom[key], diffAtom[key], _cId1, _cId2 );
+            
+          }
+          
+        });
+        
+      }
+      
+    }
+    
+    return Atoms.insert( _.omit(diffAtom,'_id') );
+    
+  });
+  
+  var newSeqAtom = Atoms.insert({
+    name: 'seq',
+      data: ds,
+      meta: {
+        diff: {
+          type: 'change'
+        },
+      state: 'conflict'
+      }
+  });
+
+  return newSeqAtom;
 }
 
 restackElements = function( seq, i, _cId, add ){

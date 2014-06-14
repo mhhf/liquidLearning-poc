@@ -86,9 +86,6 @@ Router.map( function(){
         Meteor.subscribe('courseUnits', this.params._courseId, this.params.lecture)
       ];
     },
-    onBeforeAction: function(){
-      var model = 'model';
-    },
     data: function(){
       
       
@@ -138,6 +135,7 @@ Router.map( function(){
       }
     }
   });
+  
   
   this.route('diffCommits', {
     
