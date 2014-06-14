@@ -107,9 +107,8 @@ Template.atomWrapper.events = {
   "click .save-btn": function(e,t){
     e.preventDefault();
     
-    var atom = this.buildAtom();
-    atom.name = this.atom.name;
-    atom.meta = this.atom.meta || {};
+    
+    var atom = _.extend( this.atom, this.buildAtom() );
     atom.meta.state = 'pending';
     editHandler.save( atom, this.parents.concat([ this.atom._id ]) );
     

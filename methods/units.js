@@ -35,6 +35,39 @@ Meteor.methods({
     var ast = compileAST( _id );
     return ast;
   },
+  "commit.diff2": function( _idOld, _idNew ){
+    
+    var commitOld = Commits.findOne({ _id: _idOld });
+    var commitNew = Commits.findOne({ _id: _idNew });
+    
+    
+    var rootOld = Atoms.findOne({ _id: commitOld.rootId });
+    var rootNew = Atoms.findOne({ _id: commitNew.rootId });
+    
+    
+    if( rootOld._atomId == rootNew._atomId ) {
+      
+      var as1 = _.map(rootOld.data, function( _id ){
+        return Atoms.findOne({ _id: _id });
+      });
+
+      var as2 = _.map(rootNew.data, function( _id ){
+        return Atoms.findOne({ _id: _id });
+      });
+      
+      var seq = diffSeq3( as1, as2, _idOld, _idNew );
+      console.log(seq);
+      
+    } else {
+      // wtf?
+    }
+    
+    
+    
+    
+    
+    
+  },
   "commit.diff": function( _idOld, _idNew ){
     var commitOld = Commits.findOne({ _id: _idOld });
     var commitNew = Commits.findOne({ _id: _idNew });
@@ -84,6 +117,139 @@ Meteor.methods({
     
   }
 });
+
+
+// search for the smalest matched index
+findFirstMatched = function( as1, as2 ) {
+  
+  for(var m=0; m <= Math.max( as1.length, as2.length ); m++ ) {
+    for( var i=0; i<= Math.min( as2.length, as1.length, m ); i++ ) {
+      var j = m-i;
+      
+      if( i in as1 && j in as2 && as1[i]._atomId == as2[j]._atomId ) return { i:i, j:j };
+      
+    }
+  }
+
+  return { i: as1.length, j: as2.length };
+}
+
+diffSeq3 = function( ast1, ast2, _cId1, _cId2 ){
+  
+  var ds = []; // final diffed sequence
+  
+  while ( ast1.length + ast2.length > 0 ) {
+    
+    var indexes = findFirstMatched( ast1, ast2 );
+    
+    // take all elements < indexes.i from ast1 and push them to ds with changes
+    if( indexes.i > 0 )
+      ds = ds.concat( restackElements( ast1, indexes.i, _cId2, false ) );
+    
+    if( indexes.j > 0 )
+      ds = ds.concat( restackElements( ast2, indexes.j, _cId1, true ) );
+    
+    
+    var a1 = ast1.pop();
+    var a2 = ast2.pop();
+    
+    if( a1 && a2 ) {
+      if( a1._id == a2._id ) {
+        ds.push(a1._id);
+      } else {
+        a2.meta.diff = {
+          type: 'change',
+          atom: a1._id 
+        }
+        ds.push( a2 );
+      }
+    }
+    
+  }
+  
+  return ds;
+}
+
+restackElements = function( seq, i, _cId, add ){
+  
+  var atoms = seq.splice( 0, i );
+  var key;
+  
+  atoms.forEach( function( a ){
+    if ( key = getCommitKey( a, _cId ) ) {
+      a.meta.diff = {
+        type: 'move',
+        key: key
+      }
+    } else {
+      a.meta.diff = {
+        type: (add?'add':'remove')
+      }
+    }
+  });
+  
+  return atoms;
+  
+}
+
+getCommitKey = function( a, _cId ){
+  return null;
+}
+
+
+diffSeq2 = function( as1, as2, _commitId1, _commitId2 ){
+  
+  var index = 0;
+
+  var ds = []; // final diff sequence
+  var a,b; // atom
+   
+  // atom can be removed, added, changed, moved
+  while( a = as1.pop() ) {
+
+   if( b = as2.pop() ) {
+     
+     // if a in as2 => a didn't change OR a change OR a moved
+     //   if a is next
+     //     if a changed
+     //       push a diff changed
+     //     else
+     //       push a
+     //   else a is at index > 1
+     //     if b is added
+     //       push b added
+     //       push a to as1
+     //     else b is moved
+     //       push b moved from key
+     //       
+     //     => a is moved or
+     //        b is moved in or
+     //     => a is moved to index
+     //     push a moved index
+     // else a is in commit
+     //   => a is moved to key
+     //   push a moved key
+     // else
+     //   => a is removed
+     //   push a removed 
+
+   } else {
+    // => as2 is empty
+    // => a is moved or added
+    // if a in commit 2 => a is moved 
+    //   push a moved to key
+    // else => a is added
+    //   push a added
+   }
+      
+     
+   
+ }
+
+ // seq2 could also be empty -> terminate
+ // seq2 is not empty -> added or moved elements
+  
+}
 
 
 
