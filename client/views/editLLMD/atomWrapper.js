@@ -1,28 +1,3 @@
-var editHandler = new function(){
-  this.dep =	new Deps.Dependency,
-  this.val = null,
-  this.get = function(){
-    this.dep.depend();
-    return this.val;
-  },
-  this.set = function( val ){
-    this.dep.changed();
-    this.val = val;
-  },
-  this.save = function( atom, ids, commit ){
-    
-    commit.change(_.omit(atom,'_id'), ids);
-      
-    this.set(null);
-  },
-  this.dismiss = function(){
-    this.set(null);
-  },
-  this.remove = function( ids, commit ){
-    
-    commit.remove( ids );
-  }
-}
 
 
 Template.atomWrapper.created = function(){
@@ -40,13 +15,14 @@ Template.atomWrapper.rendered = function(){
 
 Template.atomWrapper.helpers({
   editable: function(){
-    return this.editor.edit;
+    return this.editorModel.editable;
   },
   editMode: function(){
-    return editHandler.get() === this;
+    return this.editorModel.editHandler.get() === this;
   },
   editModeClass: function(){
-    return ( editHandler.get() === this )?'edit':'';
+    console.log(this);
+    return ( this.editorModel.editHandler.get() === this )?'edit':'';
   },
   getActivateClass: function(){
     return ( this.atom.meta && this.atom.meta.active )?'':'inactive';
@@ -56,7 +32,7 @@ Template.atomWrapper.helpers({
   },
   dynamicTemplate: function(){
     
-    var editMode = editHandler.get() === this;
+    var editMode = this.editorModel.editHandler.get() === this;
     var mode = ( editMode )?'edit':'ast';
     var template = Template['llmd_'+this.atom.name+'_'+mode];
     if(!template) throw new Error('no teplate for '+this.atom.name+" found!");
@@ -108,12 +84,12 @@ Template.atomWrapper.events = {
     var ele = t.find('.atomContainer');
     $(ele).css('min-height',ele.clientHeight + "px");
     
-    editHandler.set(this);
+    this.editorModel.editHandler.set(this);
   },
   "click .remove-btn": function(e,t){
     var self = this;
     $(t.find('.atomContainer')).fadeOut(400, function(){
-      editHandler.remove( self.parents.concat( [ self.atom._id ] ), self.commit );
+      this.editorModel.editHandler.remove( self.parents.concat( [ self.atom._id ] ), self.commit );
       $(t.find('.atomContainer')).css('display','block');
     });
   },
@@ -123,19 +99,19 @@ Template.atomWrapper.events = {
     
     var atom = _.extend( this.atom, this.buildAtom() );
     atom.meta.state = 'pending';
-    editHandler.save( atom, this.parents.concat([ this.atom._id ]), this.commit );
+    this.editorModel.editHandler.save( atom, this.parents.concat([ this.atom._id ]), this.commit );
     
   },
   "click .dismiss-btn": function(e,t){
     e.preventDefault();
     
-    editHandler.dismiss();
+    this.editorModel.editHandler.dismiss();
   },
   "click .activate-toggle-btn": function(e,t){
     e.preventDefault();
     var atom = this.atom;
     atom.meta.active = !atom.meta.active;
-    editHandler.save( atom, this.parents.concat([ this.atom._id ]), this.commit );
+    this.editorModel.editHandler.save( atom, this.parents.concat([ this.atom._id ]), this.commit );
   }
   
 }

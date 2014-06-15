@@ -63,10 +63,20 @@ Schemas.Units = [
   {
     _id: {
       type: String,
-      defaultValue: CryptoJS.SHA1(Math.random()+''+Math.random()).toString()
+      autoValue: function(){
+        if( this.isInsert ) {
+          return Meteor.user().username+this.field('name').value.replace(/ /g,'_')
+        }
+      }
     },
     name: {
       type: String
+    },
+    nameId: {
+      type: String,
+      autoValue: function(){
+        return this.field('name').value.replace(/ /g,'_');
+      }
     },
     memberOf: {
       type:[String]

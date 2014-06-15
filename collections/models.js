@@ -64,7 +64,7 @@ CommitModel = function( _branchId ){
   
   this.add = function( atom, ids ){
     var atomId = Atoms.insert(atom);
-    Meteor.call( 'atom.compile', atomId );
+    // Meteor.call( 'atom.compile', atomId );
     
     var parentId = ids.pop();
     ids.push( parentId );
@@ -112,3 +112,5 @@ CommitModel = function( _branchId ){
   }
   
 }
+
+

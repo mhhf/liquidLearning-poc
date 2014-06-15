@@ -11,9 +11,11 @@ Meteor.publish('courseUnits', function( _courseId, name ){
   return Units.find({ memberOf: {$in: [_courseId]}, name: name });
 })
 
-Meteor.publish('units', function( _id ){
+Meteor.publish('unit', function( _id ){
+  
   return Units.find({ _id: _id });
 });
+
 
 Meteor.publish('publicCourses', function(){
   return Courses.find();

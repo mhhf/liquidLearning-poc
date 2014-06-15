@@ -9,7 +9,7 @@ Template.addNewAtomBtn.events({
 
 Template.addNewAtomBtn.helpers({
   editable: function(){
-    return this.editor.edit;
+    return this.editorModel.editable;
   }
 });
 
@@ -52,6 +52,7 @@ Template.editLLMD.events({
 
 addAtom = function( name ){
 
-  this.commitModel.add( new LLMD.Atom( name ), parents );
+  this.editorModel.commitModel.add( new LLMD.Atom( name ), parents );
+  // this.editorModel.editHandler.set();
 
 }
