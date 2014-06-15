@@ -1,4 +1,8 @@
 
+Template.editLLMD.rendered = function(){
+  $('.branchSelect').selectize();
+}
+
 Template.editLLMD.helpers({
   getRoot: function(){
     return {

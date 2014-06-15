@@ -106,7 +106,8 @@ Router.map( function(){
         root: root,
         editor: {
           edit: true
-        }
+        },
+        branch: branch
         // astModel: new ASTModel( unit._id )
       };
       
