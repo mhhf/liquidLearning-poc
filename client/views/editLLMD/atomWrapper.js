@@ -15,7 +15,6 @@ Template.atomWrapper.helpers({
     return this.editorModel.get() === this;
   },
   editModeClass: function(){
-    console.log(this);
     return ( this.editorModel.get() === this )?'edit':'';
   },
   getActivateClass: function(){

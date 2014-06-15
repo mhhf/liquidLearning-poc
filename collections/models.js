@@ -86,7 +86,7 @@ CommitModel = function( o ){
     Meteor.call( 'atom.compile', atomId );
     var newRootId = this.exchange( atomId, ids );
     
-    var newCommit = Commits.insert({ rootId: newRootId, previous: this.ele._id });
+    var newCommit = Commits.insert({ rootId: newRootId, parent: this.ele._id });
     this.ele = Commits.findOne({_id: newCommit});
     
     this.updateBranch( newCommit );

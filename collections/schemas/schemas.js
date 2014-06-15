@@ -57,6 +57,17 @@ Schemas.Courses = [
   Schemas.Common.LLMD
 ];
 
+Schemas.Commit = [
+  {
+    _rootId: {
+      type: String
+    },
+    parent: {
+      type: String
+    }
+  }
+];
+
 Schemas.Units = [
   Schemas.Common.Owner,
   ACLInterface.schema,
@@ -93,7 +104,7 @@ Schemas.Units = [
 
           var _commitId = Commits.insert({
             rootId: rootId,
-            previous: null
+            parent: null
           });
           
           var branch = LQTags.insert({

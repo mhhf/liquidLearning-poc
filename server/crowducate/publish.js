@@ -34,7 +34,7 @@ var buildHistory = function( _id ){
   while( _id ) {
     history.push( _id );
     var commit = Commits.findOne({ _id: _id });  
-    _id = commit && commit.previous;
+    _id = commit && commit.parent;
   }
   
   return history;

@@ -56,12 +56,12 @@ Meteor.methods({
     
     var commitsQue = [];
     
-    while( commitNew && commitNew.previous != commitOld._id ){
+    while( commitNew && commitNew.parent != commitOld._id ){
       commitsQue.push( commitNew );
-      commitNew = Commits.findOne({ _id: commitNew.previous });
+      commitNew = Commits.findOne({ _id: commitNew.parent });
     }
     
-    if ( commitNew && commitNew.previous == commitOld._id ) {
+    if ( commitNew && commitNew.parent == commitOld._id ) {
       commitsQue.push( commitNew );
       commitsQue.push( commitOld );
       

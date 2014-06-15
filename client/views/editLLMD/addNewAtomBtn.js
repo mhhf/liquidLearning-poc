@@ -39,14 +39,11 @@ Template.editLLMD.events({
   "click .comment-btn": function(e,t){
     e.preventDefault();
     
-    // addAtom.apply( this, ['multipleChoice'] );
-    // addAtom( 'comment', t.data.unit.rootId );
   },
   "click .if-btn": function(e,t){
     e.preventDefault();
     
     addAtom.apply( this, ['if'] );
-    // addAtom( 'comment', t.data.unit.rootId );
   }
 });
 
