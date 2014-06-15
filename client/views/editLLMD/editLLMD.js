@@ -1,6 +1,7 @@
 
 Template.editLLMD.rendered = function(){
-  $('.branchSelect').selectize();
+  $('.branchSelect').selectize({
+  });
 }
 
 Template.editLLMD.helpers({
@@ -8,13 +9,6 @@ Template.editLLMD.helpers({
     var atom = this.editorModel.wrapAtom( this.root );
     atom.parents = [];
     return atom;
-    // return {
-    //   atom:this.root,
-    //   parents:[],
-    //   commit: this.commitModel,
-    //   editor: this.editor,
-    //   editorModel: this.editorModel
-    // };
   },
   
 });

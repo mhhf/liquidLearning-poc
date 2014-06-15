@@ -2,7 +2,7 @@ Router.map( function(){
   
   
   this.route('branch.edit', {
-    path: '/:user/:unit',
+    path: '/lq/:user/:unit',
     template: 'editLLMD',
     waitOn: function(){
       return Meteor.subscribe( 'unit', this.params.user + this.params.unit );
@@ -18,7 +18,9 @@ Router.map( function(){
       
       var editorModel = new EditorModel({
         editable: true,
-        commitModel: new CommitModel( branch._id )
+        commitModel: new CommitModel({ 
+          _branchId: branch._id 
+        })
       });
       
       return {
@@ -40,6 +42,13 @@ Router.map( function(){
     },
     data: function(){
       
+      var editorModel = new EditorModel({
+        editable: false,
+        commitModel: new CommitModel( {
+          _commitId: this.params._commitId
+        } )
+      });
+      
       mediaHandler = new SyncQue();
       
       var commit = Commits.findOne({ _id: this.params._commitId });
@@ -47,20 +56,17 @@ Router.map( function(){
       
       return {
         head: commit,
-        commitModel: new CommitModel( this.params._commitId ),
-        mediaHandler: mediaHandler,
+        editorModel: editorModel,
         root: rootAtom,
-        editor: {
-          edit: false
-        },
-        branch: LQTags.findOne({ _commitId: this.params._commitId })
+        mediaHandler: mediaHandler
       };
     }
     
   });
   
   
-  this.route('commitHistory', {
+  this.route('commit.history', {
+    template: 'commitHistory',
     path: 'commit/:_commitId/history',
     waitOn: function(){
       return Meteor.subscribe( 'commitHistory', this.params._commitId );

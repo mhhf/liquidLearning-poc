@@ -7,8 +7,9 @@
     </select>
   </div>
   <span class="right actions">
-    <a href="{{pathFor 'commitHistory' _commitId=unit.commitId}}"> <i class="fa fa-history"></i> History</a>
-    <a href="{{pathFor 'commitUnit' _commitId=unit.commitId}}"> <i class="fa fa-save"></i> Commit</a>
+    <a href="{{pathFor 'commit.history' _commitId=head._id}}"> <i class="fa fa-history"></i> History</a>
+    <a href=""> <i class="fa fa-save"></i> Commit</a>
+    <a href="#" class="fork-btn"> <i class="fa fa-code-fork"></i> Fork</a>
   </span>
 </div>
 

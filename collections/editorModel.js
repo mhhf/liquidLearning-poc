@@ -36,7 +36,7 @@ EditorModel = function( o ){
     };
     
     if( atom.meta.state == 'init' ) {
-      this.editHandler.set( wrappedAtom );
+      this.set( wrappedAtom );
     }
       
     return wrappedAtom;
