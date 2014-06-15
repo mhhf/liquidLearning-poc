@@ -53,6 +53,5 @@ Template.editLLMD.events({
 addAtom = function( name ){
 
   this.editorModel.commitModel.add( new LLMD.Atom( name ), parents );
-  // this.editorModel.editHandler.set();
 
 }
