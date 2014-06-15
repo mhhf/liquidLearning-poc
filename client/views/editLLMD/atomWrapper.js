@@ -25,10 +25,15 @@ var editHandler = new function(){
 }
 
 
-
+Template.atomWrapper.created = function(){
+  // if( this.data.atom.meta.state = 'init' ) {
+  //   console.log('da atom');
+  //   editHandler.set( this.data );
+  // }
+}
 
 Template.atomWrapper.rendered = function(){
-
+  
 }
 
 

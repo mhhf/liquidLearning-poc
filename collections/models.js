@@ -24,9 +24,12 @@ ProjectModel = function( _id ){
   
 }
 
-CommitModel = function( _commitId ){
+CommitModel = function( _branchId ){
   
-  this.ele = Commits.findOne({ _id: _commitId });
+  this.branch = LQTags.findOne({ _id: _branchId });
+  
+  console.log('cm', this.branch);
+  this.ele = Commits.findOne({ _id: this.branch._commitId });
   
   // [TODO] - refactor for all nested
   // [TODO] - hashsum the id to link to same atoms in the db - garbage collection is then 'nichtig'
@@ -71,8 +74,6 @@ CommitModel = function( _commitId ){
     oldAtom.data.push( atomId );
     // oldAtom.meta.parents.push( oldAtom. );
     
-    
-    
     return this.change(_.omit(oldAtom,'_id'), ids);
     
   }
@@ -86,7 +87,7 @@ CommitModel = function( _commitId ){
     var newCommit = Commits.insert({ rootId: newRootId, previous: this.ele._id });
     this.ele = Commits.findOne({_id: newCommit});
     
-    // this.updateUnit( newCommit );
+    this.updateBranch( newCommit );
     
     return newCommit;
     
@@ -106,8 +107,8 @@ CommitModel = function( _commitId ){
     
   }
   
-  // this.updateUnit = function( newCommitId ){
-  //   Units.update({_id: this.unit._id}, {$set: { commitId: newCommitId }})
-  // }
+  this.updateBranch = function( newCommitId ){
+    LQTags.update({ _id: this.branch._id }, {$set: { _commitId: newCommitId }})
+  }
   
 }

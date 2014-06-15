@@ -100,6 +100,7 @@ Router.map( function(){
         data: Courses.findOne(),
         section: this.params.section,
         lectureName: this.params.lecture,
+        commitModel: new CommitModel( branch._id ),
         unit: unit,
         index: 0,
         mediaHandler: mediaHandler,

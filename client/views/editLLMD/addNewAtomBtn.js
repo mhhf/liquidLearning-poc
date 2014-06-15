@@ -51,16 +51,7 @@ Template.editLLMD.events({
 });
 
 addAtom = function( name ){
-  var unit = Units.findOne();
-  var commit = new CommitModel( unit._id );
 
-  var atom =  new LLMD.Atom( name );
-  atom.meta = {
-    active: true,
-    state: 'pending'
-  }
-  atom.name = name;
-  commit.add( atom, parents );
+  this.commitModel.add( new LLMD.Atom( name ), parents );
 
-  Units.update({_id: unit._id},{$set: {commitId: commit.ele._id}});
 }
