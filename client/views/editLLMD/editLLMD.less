@@ -4,18 +4,26 @@
 
 .diffAtom {
   width: 100%;
-}
-
-.diffAtom {
+  display: table;
+  padding: 10px 0;
+  /* background: #f1e4e4; */
+  /* border-top: 2px solid #f17979; */
+  /* border-bottom: 2px solid #f17979; */
+  
+  
   > div {
-    display: inline-block;
+    display: table-cell;
+    vertical-align: middle;
+  }
+  > .conflictActions {
+    text-align: center;
   }
 }
 
 .diffLeft, .diffRight {
-  width: 46%;
   min-height: 34px;
   height: 100%;
+  width: 45%;
 }
 .diffLeft {
   background: #9bf797;
@@ -24,6 +32,9 @@
   background: #ff9c9e;
 }
 .conflictActions{
-  width: 7%;
+  width: 10%;
 }
-
+.commitInfo {
+  height: 34px;
+  background: #fff;
+}

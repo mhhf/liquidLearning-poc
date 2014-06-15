@@ -5,13 +5,15 @@
   <div class="{{name}} atomWrapper">
     {{> dynamicTemplate}}
   </div>
+  
+{{#if editable}}
   <div class="actions">
-    {{#if editMode}}
-    <a href='#' class="activate-toggle-btn"><i class="fa fa-square-o"></i></a>
-    <a href='#' class="remove-btn"><i class="fa fa-trash-o"></i></a>
-    {{else}}
-    <a href='#' class="edit-btn"><i class="fa fa-pencil"></i></a>
-    {{/if}}
+      {{#if editMode}}
+      <a href='#' class="activate-toggle-btn"><i class="fa fa-square-o"></i></a>
+      <a href='#' class="remove-btn"><i class="fa fa-trash-o"></i></a>
+      {{else}}
+      <a href='#' class="edit-btn"><i class="fa fa-pencil"></i></a>
+      {{/if}}
   </div>
 
   {{#if editMode}}
@@ -29,6 +31,7 @@
     <a href="#"><i class="fa fa-play"></i></a>
     {{/if}}
   </div>
+{{/if}}  
 </div>
   
 </template>
@@ -36,8 +39,14 @@
 <template name="diffWrapper">
 <div class="diffAtom">
   <div class="diffLeft">{{> atomWrapper}}</div>
-  <div class="conflictActions"></div>
-  <div class="diffRight"></div>
+  <div class="conflictActions">
+    <div class="btn-group">
+      <a class="btn btn-default"> <i class="fa fa-angle-left"></i> </a>
+      <a class="btn btn-default">diff</a>
+      <a class="btn btn-default"> <i class="fa fa-angle-right"></i> </a>
+    </div>
+  </div>
+  <div class="diffRight">{{> atomWrapper getDiffedAtom}}  </div>
   {{getType}}
 </div>
 </template>

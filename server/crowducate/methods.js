@@ -12,23 +12,11 @@ Meteor.methods({
       return false;
     } 
     
-    
     course.check('write');
-    // course.commit( 'init file', '', o.name+'.llmd' );
-    // 
-    
-    var root = new LLMD.Atom('seq');
-    var rootId = Atoms.insert( root );
-    
-    var commitId = Commits.insert({
-      rootId: rootId,
-      previous: null
-    });
     
     var _unitId = Units.insert({ 
       name: o.name, 
-      memberOf: [ course.ele._id ],
-      commitId: commitId
+      memberOf: [ course.ele._id ]
     });
     
     var sections = _.map(course.ele.sections, function(section){

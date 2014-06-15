@@ -32,7 +32,11 @@ Template.atomWrapper.rendered = function(){
 }
 
 
+
 Template.atomWrapper.helpers({
+  editable: function(){
+    return this.editor.edit;
+  },
   editMode: function(){
     return editHandler.get() === this;
   },
@@ -78,6 +82,16 @@ Template.atomWrapper.helpers({
   },
   isPending: function(){
     return this.atom.meta && this.atom.meta.state == "pending";
+  }
+});
+
+Template.diffWrapper.helpers({
+  getDiffedAtom: function(){
+    return {
+      atom: Atoms.findOne({ _id: this.atom.meta.diff.atom }),
+      commit: this.commit,
+      editor: this.editor
+    };
   }
 });
 

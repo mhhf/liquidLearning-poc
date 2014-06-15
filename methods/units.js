@@ -3,6 +3,7 @@ var compileAST = function( _id ){
   var atom = Atoms.findOne({ _id: _id });
   
   if( atom.name == 'seq' ) {
+    console.log(atom);
     return _.map(atom.data, function(atom_id){ return compileAST( atom_id ) });
   } else if( LLMD.Type( atom.name ) && LLMD.Type( atom.name ).nested ) {
     var nested = LLMD.Type( atom.name ).nested;
@@ -155,6 +156,7 @@ diffSeq3 = function( _seqId1, _seqId2, _cId1, _cId2 ){
           type: 'change',
           atom: a1._id 
         }
+        a2.meta.state = 'conflict';
         ds = ds.concat( [a2] );
       }
     }
@@ -193,6 +195,8 @@ diffSeq3 = function( _seqId1, _seqId2, _cId1, _cId2 ){
     
   });
   
+  ds.reverse();
+  
   var newSeqAtom = Atoms.insert({
     name: 'seq',
       data: ds,
@@ -223,6 +227,7 @@ restackElements = function( seq, i, _cId, add ){
         type: (add?'add':'remove')
       }
     }
+    a.meta.state = 'conflict';
   });
   
   return atoms;

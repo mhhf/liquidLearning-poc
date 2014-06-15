@@ -233,10 +233,6 @@ ul#editorContainer {
   padding-bottom: 34px;
   width: 100%;
   
-  > li{
-    -webkit-box-shadow: -4px 4px 5px -5px #aaa; 
-    box-shadow: -4px 4px 5px -5px #aaa; 
-  }
   // > li {
   //   min-height: 42px;
   // }
@@ -251,12 +247,16 @@ ul#editorContainer {
   //   }
   // }
   
+  > li {
+    margin: @border2 0;
+  }
+  
   > li .atomContainer {
     background: #fff;
     position: relative;
-    margin: @border2 0;
     min-height: 20px;
-    
+    -webkit-box-shadow: -4px 4px 5px -5px #aaa; 
+    box-shadow: -4px 4px 5px -5px #aaa; 
     
     
     > label {

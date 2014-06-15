@@ -61,13 +61,49 @@ Schemas.Units = [
   Schemas.Common.Owner,
   ACLInterface.schema,
   {
+    _id: {
+      type: String,
+      defaultValue: CryptoJS.SHA1(Math.random()+''+Math.random()).toString()
+    },
     name: {
       type: String
     },
     memberOf: {
       type:[String]
     },
-    commitId: {
+    branch: {
+      type: Object,
+      autoValue: function(){
+        if( this.isInsert ){
+          
+          console.log('_id',this.field('_id').value);
+          
+          var root = new LLMD.Atom('seq');
+          var rootId = Atoms.insert( root );
+
+          var _commitId = Commits.insert({
+            rootId: rootId,
+            previous: null
+          });
+          
+          var branch = LQTags.insert({
+            name: 'master',
+            type: 'branch',
+            _commitId: _commitId,
+            _unitId: this.field('_id').value
+          });
+          
+          return {
+            name: 'master',
+            _id: branch 
+          }
+        }
+      }
+    },
+    'branch.name': {
+      type: String
+    },
+    'branch._id': {
       type: String
     }
   }

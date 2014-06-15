@@ -1,6 +1,7 @@
 <template name="editLLMD">
 
-<div class="commitInfo">
+<div class="commitInfo row">
+  {{branch.name}}
   <span class="right">
     <a href="{{pathFor 'commitHistory' _commitId=unit.commitId}}"> <i class="fa fa-history"></i> History</a>
     <a href="{{pathFor 'commitUnit' _commitId=unit.commitId}}"> <i class="fa fa-save"></i> Commit</a>
@@ -30,7 +31,9 @@
 <template name="addNewAtomBtn">
 <div class="addNewAtomWrapper">
   
+  {{#if editable}}
   <a href='#' class="add-btn" data-toggle="modal" data-target=".bs-example-modal-lg"> <i class="fa fa-plus"></i></a>
+  {{/if}}
   
 </div>
 </template>

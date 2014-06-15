@@ -18,7 +18,15 @@ Courses = new Meteor.Collection( 'courses', {
 
 Atoms = new Meteor.Collection( 'atoms' );
 Commits = new Meteor.Collection( 'commits' );
+
+//
+// name: <String>
+// _commitId: <CommitId>
+// type: ( tag | branch )
+// _unitId: <UnitId>
+//
 LQTags = new Meteor.Collection('lq_tags');
+
 
 // Dev
 if (Meteor.isServer) {

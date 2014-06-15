@@ -42,3 +42,9 @@ Meteor.publish('commitHistory', function( _commitId ){
   var commitsId = buildHistory( _commitId );
   return Commits.find({ _id: { $in: commitsId } });
 });
+
+Meteor.publish('branch', function( _unitId, name ){
+  // [TODO] - unitId
+  return LQTags.find({ name:name });
+
+});

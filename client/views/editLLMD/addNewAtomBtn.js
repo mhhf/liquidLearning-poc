@@ -7,6 +7,12 @@ Template.addNewAtomBtn.events({
   }
 });
 
+Template.addNewAtomBtn.helpers({
+  editable: function(){
+    return this.editor.edit;
+  }
+});
+
 
 Template.editLLMD.events({
   "click .add-btn": function(e,t){

@@ -4,7 +4,8 @@ Template.editLLMD.helpers({
     return {
       atom:this.root,
       parents:[],
-      commit: this.commitModel
+      commit: this.commitModel,
+      editor: this.editor
     };
   },
   

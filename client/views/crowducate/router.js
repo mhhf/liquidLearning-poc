@@ -92,7 +92,8 @@ Router.map( function(){
       mediaHandler = new SyncQue();
       
       var unit = Units.findOne({ name: this.params.lecture });
-      var commit = Commits.findOne({ _id: unit.commitId });
+      var branch = LQTags.findOne({ _id: unit.branch._id });
+      var commit = Commits.findOne({ _id: branch._commitId });
       var root = Atoms.findOne({ _id: commit.rootId });
       
       return {
@@ -102,69 +103,18 @@ Router.map( function(){
         unit: unit,
         index: 0,
         mediaHandler: mediaHandler,
-        root: root
+        root: root,
+        editor: {
+          edit: true
+        }
         // astModel: new ASTModel( unit._id )
       };
       
     }
   });
   
-  this.route('commitHistory', {
-    path: 'commit/:_commitId/history',
-    waitOn: function(){
-      return Meteor.subscribe( 'commitHistory', this.params._commitId );
-    },
-    data: function(){
-      return {
-        head: Commits.findOne({ _id: this.params._commitId })
-      };
-    }
-  });
-  
-  this.route('commitView', {
-    template: 'editLLMD',
-    path: 'commit/:_commitId',
-    waitOn: function(){
-      return Meteor.subscribe( 'commit', this.params._commitId );
-    },
-    data: function(){
-      var commit = Commits.findOne({ _id: this.params._commitId });
-      return {
-        head: commit,
-        root: Atoms.findOne({ _id: commit.rootId })
-      }
-    }
-  });
   
   
-  this.route('diffCommits', {
-    
-    
-    path: 'diff/:_diffId',
-    waitOn: function(){
-      // [TODO] - subscribe on atoms which are used in the diff
-      
-      // return [
-      //   Meteor.subscribe('commit',this.params._id1),
-      //   Meteor.subscribe('commit',this.params._id2)
-      // ];
-      // return new SyncLectureLoader( this.params._diffId );
-      return Meteor.subscribe('atom',this.params._diffId);
-    },
-    data: function(){
-      console.log( this.params._diffId );
-      return {
-        // ast: Session.get('ast'),
-        root: Atoms.findOne({ _id: this.params._diffId }),
-        index: 0
-      }
-      // return {
-      //   commit1: Commits.findOne({ _id: this.params._id1 }),
-      //   commit2: Commits.findOne({ _id: this.params._id2 })
-      // }
-    }
-    
-  });
   
   
   this.route( 'newCourse', {
