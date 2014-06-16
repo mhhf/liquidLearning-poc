@@ -64,6 +64,16 @@ Schemas.Commit = [
     },
     parent: {
       type: String
+    },
+    date: {
+      type: Date,
+      autoValue: function(){
+        return new Date();
+      }
+    },
+    msg: {
+      type: String,
+      defaultValue: ''
     }
   }
 ];

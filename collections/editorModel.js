@@ -16,7 +16,7 @@ EditorModel = function( o ){
   },
   this.save = function( atom, ids, commit ){
     
-    commit.change(_.omit(atom,'_id'), ids);
+    commit.change(atom, ids);
       
     this.set(null);
   },

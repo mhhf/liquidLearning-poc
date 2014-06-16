@@ -14,6 +14,53 @@ Template.editLLMD.helpers({
 });
 
 
+Template.editLLMD.events({
+  "click .add-btn": function(e,t){
+    e.preventDefault();
+    
+  },
+  "click .md-btn": function(e,t){
+    e.preventDefault();
+    addAtom.apply( this, ['md'] );
+    
+  },
+  "click .tts-btn": function(e,t){
+    e.preventDefault();
+    
+    addAtom.apply( this, ['tts'] );
+    
+  },
+  "click .ms-btn": function(e,t){
+    e.preventDefault();
+    
+    addAtom.apply( this, ['multipleChoice'] );
+    
+  },
+  "click .comment-btn": function(e,t){
+    e.preventDefault();
+    
+  },
+  "click .if-btn": function(e,t){
+    e.preventDefault();
+    
+    addAtom.apply( this, ['if'] );
+  },
+  "click .commit-btn": function(e,t){
+    e.preventDefault();
+    
+    var self = this;
+    bootbox.prompt("What did you changed?", function(result) {                
+      self.editorModel.commitModel.commit({
+        msg: result
+      });
+    }); 
+  },
+  "click .fork-btn": function(){
+    console.log('fork');
+  }
+});
+
+
 Template.commentWrapper.helpers({
   postData: function(){
     if( this._id ) {

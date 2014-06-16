@@ -1,14 +1,14 @@
 <template name="editLLMD">
-
 <div class="commitInfo row">
   <div class="branchSelectWrapper">
     <select name="branch" class="branchSelect">
       <option value="1">{{branch.name}}</option>
     </select>
   </div>
+    {{head._id}}
   <span class="right actions">
     <a href="{{pathFor 'commit.history' _commitId=head._id}}"> <i class="fa fa-history"></i> History</a>
-    <a href=""> <i class="fa fa-save"></i> Commit</a>
+    <a href="#" class="commit-btn"> <i class="fa fa-save"></i> Commit</a>
     <a href="#" class="fork-btn"> <i class="fa fa-code-fork"></i> Fork</a>
   </span>
 </div>

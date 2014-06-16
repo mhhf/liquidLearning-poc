@@ -14,38 +14,6 @@ Template.addNewAtomBtn.helpers({
 });
 
 
-Template.editLLMD.events({
-  "click .add-btn": function(e,t){
-    e.preventDefault();
-    
-  },
-  "click .md-btn": function(e,t){
-    e.preventDefault();
-    addAtom.apply( this, ['md'] );
-    
-  },
-  "click .tts-btn": function(e,t){
-    e.preventDefault();
-    
-    addAtom.apply( this, ['tts'] );
-    
-  },
-  "click .ms-btn": function(e,t){
-    e.preventDefault();
-    
-    addAtom.apply( this, ['multipleChoice'] );
-    
-  },
-  "click .comment-btn": function(e,t){
-    e.preventDefault();
-    
-  },
-  "click .if-btn": function(e,t){
-    e.preventDefault();
-    
-    addAtom.apply( this, ['if'] );
-  }
-});
 
 addAtom = function( name ){
 
