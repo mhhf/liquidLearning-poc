@@ -73,9 +73,10 @@ Schemas.Commit = [
     },
     msg: {
       type: String,
-      defaultValue: ''
+      defaultValue: '',
+      optional: true
     },
-    _seedId: {
+    _unitId: {
       type: String
     }
   }

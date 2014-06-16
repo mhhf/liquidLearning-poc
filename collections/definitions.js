@@ -17,7 +17,9 @@ Courses = new Meteor.Collection( 'courses', {
 // Packages = new Meteor.Collection('packages');
 
 Atoms = new Meteor.Collection( 'atoms' );
-Commits = new Meteor.Collection( 'commits' );
+Commits = new Meteor.Collection( 'commits', {
+  schema: new SimpleSchema( Schemas.Commit )
+});
 
 // owner:
 // name: <String>
