@@ -74,6 +74,9 @@ Schemas.Commit = [
     msg: {
       type: String,
       defaultValue: ''
+    },
+    _seedId: {
+      type: String
     }
   }
 ];
@@ -107,14 +110,13 @@ Schemas.Units = [
       autoValue: function(){
         if( this.isInsert ){
           
-          console.log('_id',this.field('_id').value);
-          
           var root = new LLMD.Atom('seq');
-          var rootId = Atoms.insert( root );
+          var _rootId = Atoms.insert( root );
 
           var _commitId = Commits.insert({
-            rootId: rootId,
-            parent: null
+            _rootId: _rootId,
+            parent: null,
+            _unitId: this.field('_id').value
           });
           
           var branch = LQTags.insert({

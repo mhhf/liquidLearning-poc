@@ -26,6 +26,7 @@ ProjectModel = function( _id ){
 
 CommitModel = function( o ){
   
+  // [TODO] - refactor ele to commit
   if( o._branchId ) {
     this.branch = LQTags.findOne({ _id: o._branchId });
     this.ele = Commits.findOne({ _id: this.branch._commitId });
@@ -115,7 +116,11 @@ CommitModel = function( o ){
       console.log('nr',root);
       // Commits.update( this.ele._id, {$set: {_rootId: _newRootId} } );
       
-      var _commitId = Commits.insert({ _rootId: _newRootId, parent: this.ele._id });
+      var _commitId = Commits.insert({ 
+        _rootId: _newRootId, 
+        parent: this.ele._id,
+        _unitId: this.ele._unitId
+      });
       this.ele = Commits.findOne({_id: _commitId });
       this.updateBranch( _commitId );
     }
@@ -187,4 +192,5 @@ CommitModel = function( o ){
 }
 
 
+// co HEAD^
 // LQTags.update({_id: Units.findOne({name:'rasputin4'}).branch._id }, {$set: {_commitId: Commits.findOne({_id: LQTags.findOne({ _id: Units.findOne({name:'rasputin4'}).branch._id })._commitId }).parent }});

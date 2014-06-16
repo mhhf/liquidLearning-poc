@@ -1,7 +1,6 @@
 Router.map( function(){
   
-  
-  this.route('branch.edit', {
+  this.route('unit.edit', {
     path: '/lq/:user/:unit',
     template: 'editLLMD',
     waitOn: function(){
@@ -25,10 +24,48 @@ Router.map( function(){
       
       return {
         head: commit,
+        user: this.params.user,
         mediaHandler: mediaHandler,
         root: rootAtom,
         editorModel: editorModel,
-        branch: branch
+        branch: branch,
+        branches: LQTags.find({ _unitId: unit._id })
+      };
+    }
+    
+  });
+  
+  this.route('branch.edit', {
+    path: '/lq/:user/:unit/:branch',
+    template: 'editLLMD',
+    waitOn: function(){
+      return Meteor.subscribe( 'unit', this.params.user + this.params.unit );
+    },
+    data: function(){
+      
+      mediaHandler = new SyncQue();
+      
+      var unit = Units.findOne({ _id: this.params.user+this.params.unit });
+      var branch = LQTags.findOne({ name: this.params.branch, _unitId: unit._id });
+      var commit = Commits.findOne({ _id: branch._commitId });
+      var rootAtom = Atoms.findOne({ _id: commit._rootId });
+      
+      var editorModel = new EditorModel({
+        editable: true,
+        commitModel: new CommitModel({ 
+          _branchId: branch._id 
+        })
+      });
+      
+      return {
+        head: commit,
+        user: this.params.user,
+        unit: this.params.unit,
+        mediaHandler: mediaHandler,
+        root: rootAtom,
+        editorModel: editorModel,
+        branch: branch,
+        branches: LQTags.find({ _unitId: unit._id })
       };
     }
     

@@ -19,7 +19,7 @@ Courses = new Meteor.Collection( 'courses', {
 Atoms = new Meteor.Collection( 'atoms' );
 Commits = new Meteor.Collection( 'commits' );
 
-//
+// owner:
 // name: <String>
 // _commitId: <CommitId>
 // type: ( tag | branch )

@@ -1,11 +1,6 @@
 <template name="editLLMD">
 <div class="commitInfo row">
-  <div class="branchSelectWrapper">
-    <select name="branch" class="branchSelect">
-      <option value="1">{{branch.name}}</option>
-    </select>
-  </div>
-    {{head._id}}
+  {{> branchSelector}}
   <span class="right actions">
     <a href="{{pathFor 'commit.history' _commitId=head._id}}"> <i class="fa fa-history"></i> History</a>
     <a href="#" class="commit-btn"> <i class="fa fa-save"></i> Commit</a>
@@ -43,3 +38,33 @@
 </div>
 </template>
 
+
+<template name="branchSelector">
+  {{#if isAdding}}
+  <form id="#newBranch" action="#">
+    <div class="input-group newBranch">
+      <input name="name" type="text" class="form-control" autofocus>
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit"> <i class="fa fa-plus"></i> Add</button>
+        <button class="btn btn-default btn-dismiss" type="button"> <i class="fa fa-times"></i> Dismiss</button>
+      </span>
+    </div>
+  </form>
+  {{else}}
+    {{#if onBranch}}
+    <div class="branchSelectWrapper">
+      {{> selectBranch}}
+      {{updated}}
+    </div>
+    {{/if}}
+      <a class="btn btn-primary create-branch-btn" href="#"> <i class="fa fa-plus"></i> New Branch </a>
+  {{/if}}
+</template>
+
+<template name="selectBranch">
+<select name="branch" class="branchSelect">
+  {{#each branches}}
+  <option value="{{name}}" {{isSelected ..}}>{{name}}</option>
+  {{/each}}
+</select>
+</template>

@@ -82,8 +82,8 @@ Template.atomWrapper.events = {
   "click .remove-btn": function(e,t){
     var self = this;
     $(t.find('.atomContainer')).fadeOut(400, function(){
-      this.editorModel.remove( self.parents.concat( [ self.atom._id ] ), self.commit );
-      $(t.find('.atomContainer')).css('display','block');
+      self.editorModel.remove( self.parents.concat( [ self.atom._id ] ), self.commit );
+      // $(t.find('.atomContainer.')).css('display','block');
     });
   },
   "click .save-btn": function(e,t){

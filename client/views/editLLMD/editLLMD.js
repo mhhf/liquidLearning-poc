@@ -1,7 +1,5 @@
 
 Template.editLLMD.rendered = function(){
-  $('.branchSelect').selectize({
-  });
 }
 
 Template.editLLMD.helpers({
@@ -57,7 +55,7 @@ Template.editLLMD.events({
   },
   "click .fork-btn": function(){
     console.log('fork');
-  }
+  },
 });
 
 
@@ -77,3 +75,86 @@ Template.diffWrapper.helpers({
     return this.atom.meta.diff.type;
   }
 });
+
+var addNewBranch = {
+  dep:	new Deps.Dependency,
+  val: null,
+  get: function(){
+    this.dep.depend();
+    return this.val;
+  },
+  set: function( val ){
+    this.dep.changed();
+    this.val = val;
+  }
+}
+
+Template.branchSelector.events = {
+  "click .create-branch-btn": function(){
+    
+    if( !this.root.meta.commit ) {
+      
+      bootbox.alert("Pleas Commit first!", function() {
+        
+      });
+      return null;
+    }
+    
+    addNewBranch.set( true );
+  },
+  "submit": function( e, t ){
+    e.preventDefault();
+    
+    
+    
+    var name = t.find('[name=name]').value;
+    
+    var _branchId = LQTags.insert({ 
+      name: name,
+      _commitId: this.head._id,
+      type: 'branch',
+      _unitId: this.head._unitId
+    });
+    
+    Router.go('branch.edit',{
+      user: this.user,
+      unit: this.unit.name,
+      branch: name
+    });
+    
+    addNewBranch.set( false );
+  },
+  "click .btn-dismiss": function(){
+    addNewBranch.set( false );
+  }
+}
+
+Template.branchSelector.helpers({
+  isAdding: function(){
+    return addNewBranch.get();
+  },
+  onBranch: function(){
+    return this.branch;
+  },
+});
+
+Template.selectBranch.helpers({
+  isSelected: function( data ){
+    return data.branch._id == this._id? 'selected':'';
+  }
+});
+    
+Template.selectBranch.rendered = function(){
+  var self = this.data;
+  $('.branchSelect').selectize({
+    onChange: function( name ){
+      
+      Router.go('branch.edit', {
+        user: self.user,
+        unit: self.unit,
+        branch: name
+      });
+      
+    }
+  });
+}
