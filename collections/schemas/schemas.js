@@ -63,7 +63,8 @@ Schemas.Commit = [
       type: String
     },
     parent: {
-      type: String
+      type: String,
+      optional: true
     },
     date: {
       type: Date,

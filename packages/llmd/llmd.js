@@ -30,7 +30,8 @@ if (Package.ui) {
 }
 
 Template.llmd.rendered = function(){
-  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+  console.log(MathJax);
+ if( MathJax ) MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 }
 
 Template.llmd.helpers({

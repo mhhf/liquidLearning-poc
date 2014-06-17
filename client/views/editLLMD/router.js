@@ -25,6 +25,7 @@ Router.map( function(){
       return {
         head: commit,
         user: this.params.user,
+        unit: unit,
         mediaHandler: mediaHandler,
         root: rootAtom,
         editorModel: editorModel,
@@ -60,7 +61,7 @@ Router.map( function(){
       return {
         head: commit,
         user: this.params.user,
-        unit: this.params.unit,
+        unit: unit,
         mediaHandler: mediaHandler,
         root: rootAtom,
         editorModel: editorModel,

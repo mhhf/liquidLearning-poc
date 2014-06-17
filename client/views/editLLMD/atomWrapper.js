@@ -15,7 +15,13 @@ Template.atomWrapper.helpers({
     return this.editorModel.get() === this;
   },
   editModeClass: function(){
-    return ( this.editorModel.get() === this )?'edit':'';
+    if( this.editorModel.get() === this) {
+      return 'edit';
+    } else if( !this.atom.meta.commit ){
+      return 'changed';
+    } else {
+      return '';
+    }
   },
   getActivateClass: function(){
     return ( this.atom.meta && this.atom.meta.active )?'':'inactive';

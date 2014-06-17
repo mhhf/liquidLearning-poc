@@ -8,7 +8,9 @@ Template.editLLMD.helpers({
     atom.parents = [];
     return atom;
   },
-  
+  isChanged: function(){
+    return ( !this.root.meta.commit )?'changed':'';
+  }
 });
 
 
@@ -151,7 +153,7 @@ Template.selectBranch.rendered = function(){
       
       Router.go('branch.edit', {
         user: self.user,
-        unit: self.unit,
+        unit: self.unit.name,
         branch: name
       });
       

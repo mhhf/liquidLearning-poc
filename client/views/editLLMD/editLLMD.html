@@ -3,7 +3,7 @@
   {{> branchSelector}}
   <span class="right actions">
     <a href="{{pathFor 'commit.history' _commitId=head._id}}"> <i class="fa fa-history"></i> History</a>
-    <a href="#" class="commit-btn"> <i class="fa fa-save"></i> Commit</a>
+    <a href="#" class="commit-btn {{isChanged}}"> <i class="fa fa-save"></i> Commit</a>
     <a href="#" class="fork-btn"> <i class="fa fa-code-fork"></i> Fork</a>
   </span>
 </div>

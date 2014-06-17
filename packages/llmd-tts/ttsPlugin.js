@@ -76,6 +76,7 @@ Template.llmd_tts_edit.rendered = function(){
   });
   
   var self = this;
+  console.log('buildAtom');
   this.data.buildAtom = function(){
     
     var data = editor.getValue().split('\n');
