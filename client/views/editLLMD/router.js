@@ -122,29 +122,54 @@ Router.map( function(){
     
     path: 'atom/:_atomId',
     waitOn: function(){
-      // [TODO] - subscribe on atoms which are used in the diff
-      
-      // return [
-      //   Meteor.subscribe('commit',this.params._id1),
-      //   Meteor.subscribe('commit',this.params._id2)
-      // ];
-      // return new SyncLectureLoader( this.params._diffId );
       return Meteor.subscribe('atom',this.params._atomId);
     },
     data: function(){
+      
+      
+      var rootAtom = Atoms.findOne({ _id: this.params._atomId });
+      var editorModel = new EditorModel({
+        editable: false,
+      });
+      
+      mediaHandler = new SyncQue();
+      console.log(editorModel);
+      
       return {
-        // ast: Session.get('ast'),
-        root: Atoms.findOne({ _id: this.params._atomId }),
-        index: 0,
-        editor: {
-          edit: false,
-          diff: true
-        },
-      }
-      // return {
-      //   commit1: Commits.findOne({ _id: this.params._id1 }),
-      //   commit2: Commits.findOne({ _id: this.params._id2 })
-      // }
+        user: this.params.user,
+        mediaHandler: mediaHandler,
+        root: rootAtom,
+        editorModel: editorModel,
+      };
+    }
+    
+  });
+  
+  
+  this.route('diff.view', {
+    template: 'editLLMD',
+    
+    path: 'diff/:_commitId1/:_commitId2',
+    waitOn: function(){
+      return Meteor.subscribe('diffedAtom', this.params._commitId1, this.params._commitId2);
+    },
+    data: function(){
+      
+      var rootAtom = Atoms.findOne({ _id: 'diff_'+this.params._commitId1+'_'+this.params._commitId2 });
+      var editorModel = new EditorModel({
+        editable: false,
+      });
+      
+      console.log(rootAtom);
+      
+      mediaHandler = new SyncQue();
+      
+      return {
+        user: this.params.user,
+        mediaHandler: mediaHandler,
+        root: rootAtom,
+        editorModel: editorModel,
+      };
     }
     
   });

@@ -6,9 +6,7 @@ EditCourseController = RouteController.extend({
     'editAside': { to: 'aside' },
     'editToolbar': { to: 'toolbar' },
     'navbar': { to: 'navbar' }
-  },
-                     
-                     
+  }
 });
 
 

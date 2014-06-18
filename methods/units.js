@@ -42,10 +42,11 @@ Meteor.methods({
     var commitNew = Commits.findOne({ _id: _idNew });
     
     
-    if( commitOld.rootId != commitNew.rootId ) {
-      var seq = diffSeq3( commitOld.rootId, commitNew.rootId, _idOld, _idNew );
+    if( commitOld._rootId != commitNew._rootId ) {
+      var seq = diffSeq3( commitOld._rootId, commitNew._rootId, _idOld, _idNew );
       console.log(seq);
     }
+    return seq;
     
     
     
@@ -118,6 +119,7 @@ findFirstMatched = function( as1, as2 ) {
 
 diffSeq3 = function( _seqId1, _seqId2, _cId1, _cId2 ){
   
+  console.log('begin');
   var seqAtom1 = Atoms.findOne({ _id: _seqId1 });
   var seqAtom2 = Atoms.findOne({ _id: _seqId2 });
   
@@ -136,6 +138,7 @@ diffSeq3 = function( _seqId1, _seqId2, _cId1, _cId2 ){
   while ( ast1.length + ast2.length > 0 ) {
     
     var indexes = findFirstMatched( ast1, ast2 );
+    console.log( 'intexes:', indexes.i, indexes.j, ast1.length, ast2.length );
     
     // take all elements < indexes.i from ast1 and push them to ds with changes
     if( indexes.i > 0 )
@@ -145,11 +148,13 @@ diffSeq3 = function( _seqId1, _seqId2, _cId1, _cId2 ){
       ds = ds.concat( restackElements( ast2, indexes.j, _cId1, true ) );
     
     
-    var a1 = ast1.pop();
-    var a2 = ast2.pop();
+    var a1 = ast1.splice(0, 1)[0];
+    var a2 = ast2.splice(0, 1)[0];
     
+    console.log('a',a1,a2);
     if( a1 && a2 ) {
       if( a1._id == a2._id ) {
+        console.log(a1);
         ds = ds.concat( [a1._id] );
       } else {
         a2.meta.diff = {
@@ -195,9 +200,10 @@ diffSeq3 = function( _seqId1, _seqId2, _cId1, _cId2 ){
     
   });
   
-  ds.reverse();
+  // ds.reverse();
   
   var newSeqAtom = Atoms.insert({
+    _id: 'diff_'+_cId1 +'_'+ _cId2 ,
     name: 'seq',
       data: ds,
       meta: {

@@ -375,17 +375,6 @@ ul#editorContainer {
 
 .hatched{
   margin: 2px 0px;
-  // background-image: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, rgba(255, 255, 255, .2)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.75, rgba(255, 255, 255, .2)), color-stop(.75, transparent), to(transparent));
-  // background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
-  // background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
-  // background-image: -ms-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
-  // background-image: -o-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
-  // background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
-  // -webkit-background-size: 20px 20px;
-  // -moz-background-size: 20px 20px;
-  // -ms-background-size: 20px 20px;
-  // -o-background-size: 20px 20px;
-  // background-size: 20px 20px;
 }
 
 
@@ -419,5 +408,23 @@ ul.history {
       line-height: 1.5em;
       font-size: 1em;
     }
+  }
+}
+
+@transparency: 1;
+.focusArea {
+  background-image: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, rgba(241, 241, 241, @transparency)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(241, 241, 241, @transparency)), color-stop(.75, rgba(241, 241, 241, @transparency)), color-stop(.75, transparent), to(transparent));
+  background-image: -webkit-linear-gradient(-45deg, rgba(241, 241, 241, @transparency) 25%, transparent 25%, transparent 50%, rgba(241, 241, 241, @transparency) 50%, rgba(241, 241, 241, @transparency) 75%, transparent 75%, transparent);
+  background-image: -moz-linear-gradient(-45deg, rgba(241, 241, 241, @transparency) 25%, transparent 25%, transparent 50%, rgba(241, 241, 241, @transparency) 50%, rgba(241, 241, 241, @transparency) 75%, transparent 75%, transparent);
+  background-image: -ms-linear-gradient(-45deg, rgba(241, 241, 241, @transparency) 25%, transparent 25%, transparent 50%, rgba(241, 241, 241, @transparency) 50%, rgba(241, 241, 241, @transparency) 75%, transparent 75%, transparent);
+  background-image: -o-linear-gradient(-45deg, rgba(241, 241, 241, @transparency) 25%, transparent 25%, transparent 50%, rgba(241, 241, 241, @transparency) 50%, rgba(241, 241, 241, @transparency) 75%, transparent 75%, transparent);
+  background-image: linear-gradient(-45deg, rgba(241, 241, 241, @transparency) 25%, transparent 25%, transparent 50%, rgba(241, 241, 241, @transparency) 50%, rgba(241, 241, 241, @transparency) 75%, transparent 75%, transparent);
+  -webkit-background-size: 10px 10px;
+  -moz-background-size: 10px 10px;
+  -ms-background-size: 10px 10px;
+  -o-background-size: 10px 10px;
+  background-size: 10px 10px;
+  &.focus-danger {
+    background-color: #f2e8da;
   }
 }

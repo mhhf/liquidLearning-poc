@@ -50,3 +50,20 @@ Meteor.publish('branch', function( _unitId, name ){
   return LQTags.find({ name:name });
 
 });
+
+Meteor.publish('diffedAtom', function( _c1, _c2 ){
+  
+  var commitOld = Commits.findOne({ _id: _c1 });
+  var commitNew = Commits.findOne({ _id: _c2 });
+  
+  if( commitOld._rootId != commitNew._rootId ) {
+    
+    var retObject;
+    if( retObject = Atoms.findOne( { _id: 'diff_'+_c1 +'_'+ _c2 } ) ) {
+      Atoms.remove({ _id: 'diff_'+_c1 +'_'+ _c2 })
+    }
+    var seq = diffSeq3( commitOld._rootId, commitNew._rootId, _c1, _c2 );
+    return Atoms.find({_id:seq});
+  }
+  
+});

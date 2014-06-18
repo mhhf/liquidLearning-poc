@@ -1,6 +1,6 @@
 EditorModel = function( o ){
   
-  this.editable = o.editable || true;
+  this.editable = !!o.editable;
   
   this.commitModel = o.commitModel;
   

@@ -9,6 +9,7 @@ Template.atomWrapper.rendered = function(){
 
 Template.atomWrapper.helpers({
   editable: function(){
+    // console.log(this);
     return this.editorModel.editable;
   },
   editMode: function(){
@@ -67,11 +68,9 @@ Template.atomWrapper.helpers({
 
 Template.diffWrapper.helpers({
   getDiffedAtom: function(){
-    return {
-      atom: Atoms.findOne({ _id: this.atom.meta.diff.atom }),
-      commit: this.commit,
-      editor: this.editor
-    };
+    var otherAtom = Atoms.findOne({ _id: this.atom.meta.diff.atom });
+    otherAtom.parents = this.parents;
+    return this.editorModel.wrapAtom( otherAtom );
   }
 });
 
@@ -117,3 +116,20 @@ Template.atomWrapper.events = {
 
 
 
+Template.conflictActions.helpers({
+  diff: function(){
+    return this.atom.meta.diff.type == 'change';
+  }
+});
+
+Template.conflictActions.events = {
+  "click .left-btn": function(){
+    console.log('left');
+  },
+  "click .diff-btn": function(){
+    console.log('diff');
+  },
+  "click .right-btn": function(){
+    console.log('right');
+  }
+}
