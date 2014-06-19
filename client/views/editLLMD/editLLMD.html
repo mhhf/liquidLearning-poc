@@ -55,7 +55,8 @@
 </template>
 
 <template name="selectBranch">
-<select name="branch" class="branchSelect">
+<select name="branch" class="branchSelect" placeholder="Branch...">
+  <option value=""></option>
   {{#each branches}}
   <option value="{{name}}" {{isSelected ..}}>{{name}}</option>
   {{/each}}
@@ -79,9 +80,10 @@
       
       {{#if state 'merge'}}
         <div class="branchSelectWrapper">
-          {{> selectBranch getMergeBranches }}
+          {{> selectBranch}}
         </div>
         <a class="btn btn-primary apply-merge-btn" href="#"> <i class="octicon octicon-git-merge"></i> merge </a>
+        <a class="btn btn-default init-btn" href="#"> <i class="fa fa-cross"></i> Cancel </a>
       {{/if}}
       
       <span class="right actions">

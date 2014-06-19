@@ -1,5 +1,6 @@
 Router.map( function(){
   
+  // [TODO] - redirect to :user/:unit/master
   this.route('unit.edit', {
     path: '/lq/:user/:unit',
     template: 'editLLMD',
@@ -50,6 +51,11 @@ Router.map( function(){
       var branch = LQTags.findOne({ name: this.params.branch, _unitId: unit._id });
       var commit = Commits.findOne({ _id: branch._commitId });
       var rootAtom = Atoms.findOne({ _id: commit._rootId });
+      console.log(branch._id);
+      var branches = LQTags.find({ _unitId: unit._id, _id: { $not: branch._id } }).fetch();
+      
+      console.log(branches, branch);
+      
       
       var editorModel = new EditorModel({
         editable: true,
@@ -66,7 +72,7 @@ Router.map( function(){
         root: rootAtom,
         editorModel: editorModel,
         branch: branch,
-        branches: LQTags.find({ _unitId: unit._id })
+        branches: branches
       };
     }
     

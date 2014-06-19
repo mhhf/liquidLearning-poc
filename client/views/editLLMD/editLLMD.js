@@ -151,7 +151,7 @@ Template.branchSelector.helpers({
 
 Template.selectBranch.helpers({
   isSelected: function( data ){
-    return data.branch._id == this._id? 'selected':'';
+    return (data && data.branch && data.branch._id == this._id)? 'selected':'';
   }
 });
 
@@ -212,7 +212,14 @@ Template.editNavBar.helpers({
   },
   getMergeBranches: function(){
     var branches = this.branches.fetch();
-    return branches;
+    var self = this;
+    branches = _.filter(branches, function(b){
+      return b.name != self.branch.name;
+    });
+    // return branches;
+    return {
+      branches: branches
+    }
   }
 });
 
@@ -222,7 +229,12 @@ Template.editNavBar.events = {
   },
   "click .apply-merge-btn": function(){
     
-    console.log('merge', state.data);
+    console.log('merge', state.data, 'into', this.branch);
+    
+    state.set('init');
+  },
+  "click .init-btn": function(e,t){
+    e.preventDefault();
     
     state.set('init');
   }
