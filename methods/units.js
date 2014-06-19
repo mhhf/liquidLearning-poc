@@ -36,14 +36,18 @@ Meteor.methods({
     var ast = compileAST( _id );
     return ast;
   },
-  "commit.diff2": function( _idOld, _idNew ){
+  "commit.diff2": function( _cId1, _cId2 ){
     
-    var commitOld = Commits.findOne({ _id: _idOld });
-    var commitNew = Commits.findOne({ _id: _idNew });
+    var diffAtom = Atoms.remove({ _id: 'diff_'+_cId1+'_'+_cId2 });
+    if(diffAtom) return diffAtom._id;
+    
+    var commitOld = Commits.findOne({ _id: _cId1 });
+    var commitNew = Commits.findOne({ _id: _cId2 });
+    console.log(commitOld, commitNew);
     
     
     if( commitOld._rootId != commitNew._rootId ) {
-      var seq = diffSeq3( commitOld._rootId, commitNew._rootId, _idOld, _idNew );
+      var seq = diffSeq3( commitOld._rootId, commitNew._rootId, _cId1, _cId2 );
       console.log(seq);
     }
     return seq;
@@ -142,10 +146,10 @@ diffSeq3 = function( _seqId1, _seqId2, _cId1, _cId2 ){
     
     // take all elements < indexes.i from ast1 and push them to ds with changes
     if( indexes.i > 0 )
-      ds = ds.concat( restackElements( ast1, indexes.i, _cId2, false ) );
+      ds = ds.concat( restackElements( ast1, indexes.i, _cId2, true ) );
     
     if( indexes.j > 0 )
-      ds = ds.concat( restackElements( ast2, indexes.j, _cId1, true ) );
+      ds = ds.concat( restackElements( ast2, indexes.j, _cId1, false ) );
     
     
     var a1 = ast1.splice(0, 1)[0];

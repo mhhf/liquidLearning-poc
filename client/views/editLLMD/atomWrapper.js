@@ -10,7 +10,7 @@ Template.atomWrapper.rendered = function(){
 Template.atomWrapper.helpers({
   editable: function(){
     // console.log(this);
-    return this.editorModel.editable;
+    return this.editorModel.editable && this.atom.meta.state != 'conflict';
   },
   editMode: function(){
     return this.editorModel.get() === this;
@@ -70,6 +70,7 @@ Template.diffWrapper.helpers({
   getDiffedAtom: function(){
     var otherAtom = Atoms.findOne({ _id: this.atom.meta.diff.atom });
     otherAtom.parents = this.parents;
+    otherAtom.meta.state = 'conflict';
     return this.editorModel.wrapAtom( otherAtom );
   }
 });
@@ -87,7 +88,7 @@ Template.atomWrapper.events = {
   "click .remove-btn": function(e,t){
     var self = this;
     $(t.find('.atomContainer')).fadeOut(400, function(){
-      self.editorModel.remove( self.parents.concat( [ self.atom._id ] ), self.commit );
+      self.editorModel.remove( self.parents.concat( [ self.atom._id ] ));
       // $(t.find('.atomContainer.')).css('display','block');
     });
   },
@@ -97,7 +98,7 @@ Template.atomWrapper.events = {
     
     var atom = _.extend( this.atom, this.buildAtom() );
     atom.meta.state = 'pending';
-    this.editorModel.save( atom, this.parents.concat([ this.atom._id ]), this.commit );
+    this.editorModel.save( atom, this.parents.concat([ this.atom._id ]) );
     
   },
   "click .dismiss-btn": function(e,t){
@@ -118,18 +119,19 @@ Template.atomWrapper.events = {
 
 Template.conflictActions.helpers({
   diff: function(){
-    return this.atom.meta.diff.type == 'change';
+    // [TODO] - turn on after atom_<name>_diff is implemented
+    return this.atom.meta.diff.type == 'change' && false;
   }
 });
 
 Template.conflictActions.events = {
   "click .left-btn": function(){
-    console.log('left');
+    this.editorModel.diffLeft( this );
   },
   "click .diff-btn": function(){
     console.log('diff');
   },
   "click .right-btn": function(){
-    console.log('right');
+    this.editorModel.diffRight( this );
   }
 }

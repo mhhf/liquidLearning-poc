@@ -94,9 +94,12 @@ CommitModel = function( o ){
     
   }
   
+  
   this.change = function( atom, ids ){
     var atomId;
-    if( typeof atom.meta.commit == 'string' ) {
+    
+    if( typeof atom.meta.commit == 'string' ) { // has a commit
+      // create a new working space
       console.log('inserting');
       atom.meta = _.omit(atom.meta,'commit');
       atomId = Atoms.insert(_.omit(atom,'_id'));
@@ -109,11 +112,23 @@ CommitModel = function( o ){
     }
     var _newRootId = this.exchange( atomId, ids );
     
-    var root = Atoms.findOne( { _id: _newRootId } );
+    // var root = Atoms.findOne( { _id: _newRootId } );
+    // console.log('nr',root);
+    
+    this.changeRoot( _newRootId );
+    
+    
+    
+    
+    return this.ele._id
+    // return newCommit;
+    
+  }
+  
+  this.changeRoot = function( _newRootId ){
     
     if( this.ele._rootId != _newRootId ) {
       
-      console.log('nr',root);
       // Commits.update( this.ele._id, {$set: {_rootId: _newRootId} } );
       
       var _commitId = Commits.insert({ 
@@ -124,13 +139,6 @@ CommitModel = function( o ){
       this.ele = Commits.findOne({_id: _commitId });
       this.updateBranch( _commitId );
     }
-    
-    
-    
-    
-    
-    return this.ele._id
-    // return newCommit;
     
   }
   

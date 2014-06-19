@@ -229,6 +229,28 @@ Template.editNavBar.events = {
   },
   "click .apply-merge-btn": function(){
     
+    var self = this;
+    // [TODO] - state.data._id instead of name
+    var c1 = LQTags.findOne({ name: state.data });
+    var _cId1 = c1 && c1._commitId;
+    
+    
+    if( _cId1 && this.branch._id ) { // if both ids are valide
+      
+      console.log( _cId1, this.branch._commitId );
+      
+      Meteor.call('commit.diff2', _cId1, this.branch._commitId, function( e, _sId ){
+        
+        self.editorModel.commitModel.changeRoot( _sId );
+        
+      });
+      
+    }
+    
+    // self.editorModel.commitModel.commit({
+    //   msg: result
+    // });
+    
     console.log('merge', state.data, 'into', this.branch);
     
     state.set('init');

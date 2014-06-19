@@ -49,12 +49,12 @@ Router.map( function(){
       
       var unit = Units.findOne({ _id: this.params.user+this.params.unit });
       var branch = LQTags.findOne({ name: this.params.branch, _unitId: unit._id });
+      console.log(branch);
       var commit = Commits.findOne({ _id: branch._commitId });
+      console.log(commit);
       var rootAtom = Atoms.findOne({ _id: commit._rootId });
-      console.log(branch._id);
       var branches = LQTags.find({ _unitId: unit._id, _id: { $not: branch._id } }).fetch();
       
-      console.log(branches, branch);
       
       
       var editorModel = new EditorModel({
