@@ -1,13 +1,5 @@
 <template name="editLLMD">
-<div class="commitInfo row">
-  {{> branchSelector}}
-  {{head._id}}
-  <span class="right actions">
-    <a href="{{pathFor 'commit.history' _commitId=head._id}}"> <i class="fa fa-history"></i> History</a>
-    <a href="#" class="commit-btn {{isChanged}}"> <i class="fa fa-save"></i> Commit</a>
-    <a href="#" class="fork-btn"> <i class="fa fa-code-fork"></i> Fork</a>
-  </span>
-</div>
+{{> editNavBar }}
 
 <div class="row clear">
   {{> llmd_seq_edit getRoot}}
@@ -68,4 +60,43 @@
   <option value="{{name}}" {{isSelected ..}}>{{name}}</option>
   {{/each}}
 </select>
+</template>
+
+<template name="editNavBar">
+  <div class="commitInfo row {{getLevel}}">
+    <div class="contextName"> 
+      {{getContext}}
+    </div>
+    <div class="contextWrapper">
+      
+      {{#if state 'branch'}}
+        {{> branchSelector}}
+      {{/if}}
+      
+      {{#if state 'init'}}
+        <a href="#" class="branch-change">{{ branch.name }}</a>
+      {{/if}}
+      
+      {{#if state 'merge'}}
+        <div class="branchSelectWrapper">
+          {{> selectBranch getMergeBranches }}
+        </div>
+        <a class="btn btn-primary apply-merge-btn" href="#"> <i class="octicon octicon-git-merge"></i> merge </a>
+      {{/if}}
+      
+      <span class="right actions">
+        <a href="{{pathFor 'commit.history' _commitId=head._id}}"> <i class="fa fa-history"></i> History</a>
+        <a href="#" class="commit-btn {{isChanged}}"> <i class="fa fa-save"></i> Commit</a>
+        <a href="#" class="branch-change"> <i class="octicon octicon-git-branch"></i> Change Branch</a>
+        <a href="#" class="merge-btn"> <i class="octicon octicon-git-merge"></i> Merge</a>
+      </span>
+    </div>
+  </div>
+</template>
+
+
+<template name="branchMerge">
+  <div class="branchSelectWrapper">
+    {{updated}}
+  </div>
 </template>

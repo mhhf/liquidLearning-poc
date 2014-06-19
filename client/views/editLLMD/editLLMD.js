@@ -1,4 +1,5 @@
 
+
 Template.editLLMD.rendered = function(){
 }
 
@@ -58,6 +59,10 @@ Template.editLLMD.events({
   "click .fork-btn": function(){
     console.log('fork');
   },
+  "click .merge-btn": function(){
+    state.set('merge.branch');
+    // console.log('merge');
+  }
 });
 
 
@@ -78,18 +83,18 @@ Template.diffWrapper.helpers({
   }
 });
 
-var addNewBranch = {
-  dep:	new Deps.Dependency,
-  val: null,
-  get: function(){
-    this.dep.depend();
-    return this.val;
-  },
-  set: function( val ){
-    this.dep.changed();
-    this.val = val;
-  }
-}
+// var addNewBranch = {
+//   dep:	new Deps.Dependency,
+//   val: null,
+//   get: function(){
+//     this.dep.depend();
+//     return this.val;
+//   },
+//   set: function( val ){
+//     this.dep.changed();
+//     this.val = val;
+//   }
+// }
 
 Template.branchSelector.events = {
   "click .create-branch-btn": function(){
@@ -102,7 +107,8 @@ Template.branchSelector.events = {
       return null;
     }
     
-    addNewBranch.set( true );
+    state.set( 'branch.new' )
+    // addNewBranch.set( true );
   },
   "submit": function( e, t ){
     e.preventDefault();
@@ -124,16 +130,19 @@ Template.branchSelector.events = {
       branch: name
     });
     
-    addNewBranch.set( false );
+    // addNewBranch.set( false );
+    state.set( 'init' );
   },
   "click .btn-dismiss": function(){
-    addNewBranch.set( false );
-  }
+    // addNewBranch.set( false );
+    state.set( 'init' );
+  },
 }
 
 Template.branchSelector.helpers({
   isAdding: function(){
-    return addNewBranch.get();
+    return state.get() === 'branch.new';
+    // return addNewBranch.get();
   },
   onBranch: function(){
     return this.branch;
@@ -145,18 +154,76 @@ Template.selectBranch.helpers({
     return data.branch._id == this._id? 'selected':'';
   }
 });
+
+
+
+var state = {
+  dep:	new Deps.Dependency,
+  val: 'init',
+  data: null,
+  get: function(){
+    this.dep.depend();
+    return this.val;
+  },
+  set: function( val ){
+    this.dep.changed();
+    this.val = val;
+  },
+}
     
 Template.selectBranch.rendered = function(){
   var self = this.data;
   $('.branchSelect').selectize({
     onChange: function( name ){
       
-      Router.go('branch.edit', {
-        user: self.user,
-        unit: self.unit.name,
-        branch: name
-      });
+      if( state.get().match('^branch') ) {
+        Router.go('branch.edit', {
+          user: self.user,
+          unit: self.unit.name,
+          branch: name
+        });
+        state.set( 'init' );
+      } else if( state.get().match('^merge') ) {
+        state.data = name;
+      }
+      
       
     }
   });
+}
+
+Template.editNavBar.helpers({
+  getLevel: function(){
+    return  ( state.get() != 'init' ) ? 'lvl2':'';
+  },
+  getContext: function(){
+    switch( state.get() ) {
+      case 'branch.select' :
+        return 'Change Branch';
+      case 'branch.new':
+        return 'Create Branch';
+      case 'merge.branch':
+        return 'Merge Branch';
+    }
+    return '';
+  },
+  state: function( name ){
+    return state.get().match('^'+name);
+  },
+  getMergeBranches: function(){
+    var branches = this.branches.fetch();
+    return branches;
+  }
+});
+
+Template.editNavBar.events = {
+  "click .branch-change": function(){
+    state.set( 'branch.select' );
+  },
+  "click .apply-merge-btn": function(){
+    
+    console.log('merge', state.data);
+    
+    state.set('init');
+  }
 }

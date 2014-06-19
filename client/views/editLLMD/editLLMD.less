@@ -29,17 +29,44 @@
   width: 10%;
 }
 .commitInfo {
-  height: 42px;
-  padding: 4px;
-  background: #fff;
   margin-bottom: 5px;
-  -webkit-box-shadow: -4px 4px 5px -5px #aaaaaa;
-  box-shadow: -4px 4px 5px -5px #aaaaaa;
+  line-height: 34px;
+  > div {
+    -webkit-box-shadow: -4px 4px 5px -5px #aaaaaa;
+    box-shadow: -4px 4px 5px -5px #aaaaaa;
+    padding: 4px;
+    height: 42px;
+  }
+  &.lvl2 {
+    .contextName {
+      display: block;
+    }
+    .contextWrapper {
+      margin-left: 147px;
+      background: #fcfcfc;
+    }
+  }
+  
+  .contextName {
+    text-align: center;
+    display: none;
+    background: #fff;
+    width: 144px;
+    margin-right: 4px;
+    padding-left: 4px;
+    float: left;
+  }
+  
+  .contextWrapper {
+    background: #fff;
+    padding-left: 8px;
+  }
+  
   .actions {
     margin-right: 4px;
     a {
       line-height: 34px;
-      margin-right: 5px;
+      margin-right: 15px;
       &.changed {
         color: orange;
       }
