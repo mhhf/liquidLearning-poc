@@ -1,12 +1,15 @@
 Router.map( function(){
   this.route('dev', {
-    waitOn: function(){
-      return Meteor.subscribe('Redisc.Posts',['dev']);
-    },
-    data: {
-      posts: Redisc.Posts.find({root:null},{sort:{ score:-1, updatedOn: -1, createdOn: -1 }}),
-      postPath: 'feedbackPost'
+    // waitOn: function(){
+    //   return Meteor.subscribe('Redisc.Posts',['dev']);
+    // },
+    data: function(){
+      return {
+        posts: Atoms.find({ name: 'redisc' })
+      };
     }
+  
+    
   });
   
   this.route('devNew', {
@@ -26,10 +29,10 @@ Router.map( function(){
   this.route('devPost', {
     path: '/dev/:_id',
     waitOn: function(){
-      return Meteor.subscribe('Redisc.Post', this.params._id);
+      return Meteor.subscribe('atom',this.params._id);
     },
     data: function(){
-      return { post: Redisc.Posts.findOne({ _id:this.params._id, root: null }) };
+      return { atom: Atoms.findOne({ _id:this.params._id}) };
     }
   });
   

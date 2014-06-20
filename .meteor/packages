@@ -48,3 +48,4 @@ crypto-base
 crypto-sha1
 module-loader
 llmd
+llmd-redisc

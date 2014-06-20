@@ -82,6 +82,7 @@ Router.map( function(){
     path: 'commit/:_commitId',
     template: 'editLLMD',
     waitOn: function(){
+      // [TODO] - subscribe to unit
       return Meteor.subscribe( 'commit', this.params._commitId );
     },
     data: function(){
@@ -97,9 +98,11 @@ Router.map( function(){
       
       var commit = Commits.findOne({ _id: this.params._commitId });
       var rootAtom = Atoms.findOne({ _id: commit._rootId });
+      var unit = Units.findOne({ _id: commit._unitId });
       
       return {
         head: commit,
+        unit: unit,
         editorModel: editorModel,
         root: rootAtom,
         mediaHandler: mediaHandler

@@ -1,20 +1,41 @@
 <template name="dev">
 <a class="btn btn-primary newFeedbackBtn" href="{{pathFor 'devNew' params=this}}">new Post</a>
 
-<div class="row-fluid">
-  <div class="span12">
+    {{> rediscPosts}}
+</template>
 
-    {{> Posts }}
-    
+<template name="rediscPosts">
+<ul class="postList">
+  {{#each posts}}
+  <li>
+
+  {{> Score}}
+
+  <div class="contentContainer">
+    <a href="{{pathFor 'devPost'}}">
+      <span class="title"> {{title}} </span>
+    </a>
+    <div>
+      {{> Stats}}
+    </div>
+
   </div>
-</div>
+
+
+  </li>
+  {{/each}}
+</ul>
 </template>
 
 
 <template name="devPost">
 
 <a href="{{pathFor 'dev' params=this}}">... back To Dev</a>
-{{> Post}}
+
+  <h2> {{title}} </h2>
+
+  {{> PostContent atom}}
+  
 
 </template>
 
@@ -22,6 +43,11 @@
 <template name="devNew">
 
 <a href="{{pathFor 'dev' params=this}}">... back To Dev</a>
-{{> PostNew }}
+
+<div class="newRediscWrapper">
+  {{> llmd_redisc_edit }}
+  <button type="submit" class="btn btn-primary save-btn"> Save </button>
+  
+</div>
 
 </template>

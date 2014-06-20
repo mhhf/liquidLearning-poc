@@ -9,9 +9,6 @@ Template.editLLMD.helpers({
     atom.parents = [];
     return atom;
   },
-  isChanged: function(){
-    return ( !this.root.meta.commit )?'changed':'';
-  }
 });
 
 
@@ -40,6 +37,8 @@ Template.editLLMD.events({
   "click .comment-btn": function(e,t){
     e.preventDefault();
     
+    addAtom.apply( this, ['redisc'] );
+    
   },
   "click .if-btn": function(e,t){
     e.preventDefault();
@@ -66,35 +65,11 @@ Template.editLLMD.events({
 });
 
 
-Template.commentWrapper.helpers({
-  postData: function(){
-    if( this._id ) {
-      Meteor.subscribe('Redisc.Post', this._id);
-      return {post: Redisc.Posts.findOne({_id: this._id})};
-    }
-    return null;
-  }
-});
-
-
 Template.diffWrapper.helpers({
   type: function(){
     return this.atom.meta.diff.type;
   }
 });
-
-// var addNewBranch = {
-//   dep:	new Deps.Dependency,
-//   val: null,
-//   get: function(){
-//     this.dep.depend();
-//     return this.val;
-//   },
-//   set: function( val ){
-//     this.dep.changed();
-//     this.val = val;
-//   }
-// }
 
 Template.branchSelector.events = {
   "click .create-branch-btn": function(){
@@ -220,6 +195,9 @@ Template.editNavBar.helpers({
     return {
       branches: branches
     }
+  },
+  isChanged: function(){
+    return ( !this.root.meta.commit )?'changed':'';
   }
 });
 
@@ -246,10 +224,6 @@ Template.editNavBar.events = {
       });
       
     }
-    
-    // self.editorModel.commitModel.commit({
-    //   msg: result
-    // });
     
     console.log('merge', state.data, 'into', this.branch);
     
