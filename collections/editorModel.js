@@ -23,10 +23,10 @@ EditorModel = function( o ){
   
   this.diffLeft = function( wrappedAtom ){
     
+    var atom = wrappedAtom.atom;
     var ids = wrappedAtom.parents;
     ids.push(atom._id);
     
-    var atom = wrappedAtom.atom;
     if( atom.meta.diff.type == 'add' ) {
       this.remove( ids );
       return null;
@@ -43,8 +43,11 @@ EditorModel = function( o ){
     if( wrappedAtom.atom.meta.diff.type == 'remove' ) {
       this.remove( ids );
       return null;
+    } else if( wrappedAtom.atom.meta.diff.type == 'change' ) {
+      var atom = Atoms.findOne({ _id: wrappedAtom.atom.meta.diff.atom });
+    } else {
+      var atom = wrappedAtom.atom;
     }
-    var atom = wrappedAtom.atom.meta.diff.atom;
     atom.meta = _.omit(atom.meta,'diff');
     atom.meta.state = 'ready';
     this.save( atom, ids );
