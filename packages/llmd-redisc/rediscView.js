@@ -14,12 +14,13 @@ PluginHandler.registerPlugin( "md", RediscPlugin );
 
 
 
-var tags;
+var tags = [];
 Template.llmd_redisc_edit.rendered = function(){
   
   var self = this;
   
   var data = ( this.data.atom && this.data.atom.data ) || ''; 
+  var code = ( this.data.atom && this.data.atom.code ) || ''; 
   
   var dataEditor = CodeMirror(this.find('.dataEditor'),{
     value: data,
@@ -29,7 +30,7 @@ Template.llmd_redisc_edit.rendered = function(){
   });
   
   var codeEditor = CodeMirror(this.find('.codeEditor'),{
-    value: data,
+    value: code,
     mode:  "javascript",
     theme: "monokai",
     lineNumbers: true,
@@ -44,15 +45,23 @@ Template.llmd_redisc_edit.rendered = function(){
   });
   
   this.data.buildAtom = function(){
+    var title = self.find('input[name=title]') && self.find('input[name=title]').value;
+    
     return {
       data: dataEditor.getValue(),
       code: codeEditor.getValue(),
       tags: tags,
-      title: self.find('input[name=title]').value
+      title: title
     }
   }
   
 }
+
+Template.llmd_redisc_edit.helpers({
+  isRoot: function(){
+    return !this.atom || this.atom.root == '';
+  }
+});
 
 Template.llmd_redisc_ast.rendered = function(){
 }

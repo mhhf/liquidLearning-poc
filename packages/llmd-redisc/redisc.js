@@ -8,12 +8,14 @@ LLMD.registerPackage("redisc", {
     this.downvotes = [];
     this.score = 0;
     
-    
-    this.nested = '';
+    var seq = new LLMD.Atom('seq');
+    var _seqId = Atoms.insert( seq );
+    this.nested = _seqId;
     this.comments = 0;
     
     this.tags = [];
     this.root = '';
+    this.parent = '';
     
     this.createdOn = new Date();
     this.updatedOn = new Date();

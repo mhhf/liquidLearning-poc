@@ -1,10 +1,12 @@
 <template name="llmd_redisc_edit">
 <form>
+  {{#if isRoot}}
   <div class="form-group">
     <label class="control-label" for="title">Title</label>
-    <input type="text" name="title" class="form-control">
+    <input type="text" name="title" class="form-control" value="{{atom.title}}" placeholder="Title...">
     <span class="help-block"></span>
   </div>
+  {{/if}}
   
   <div class="form-group">
     <label class="control-label" for="data">Content</label>
@@ -21,17 +23,13 @@
   <div class="form-group">
     <label class="control-label" for="data">Tags</label>
     <select id="tags" name="tags" multiple>
-      {{#each tags}}
-      <option value="{{name}}">{{name}}</option>
+      {{#each atom.tags}}
+      <option value="{{this}}" selected>{{this}}</option>
       {{/each}}
     </select>
     <span class="help-block"></span>
   </div>
 </form>
-
-
-
-
 
 </template>
 

@@ -34,8 +34,11 @@
 
   <h2> {{title}} </h2>
 
-  {{> PostContent atom}}
-  
+  {{#if isEdit}}
+    {{> EditorWrapper}}
+  {{else}}
+    {{> PostWrapper}}
+  {{/if}}
 
 </template>
 
@@ -50,4 +53,35 @@
   
 </div>
 
+</template>
+
+<template name="PostWrapper">
+<div class="contentWrapper">
+
+  <div class="dataWrapper">
+    {{> llmd_redisc_ast }}
+  </div>
+  <!-- <div class="codeWrapper"> </div> -->
+  <div class="interactions">
+    <a href="#" class="btn-comment" data-target="{{_id}}"> <i class="fa fa-reply"></i></a>
+    <a href="#" class="btn-edit" data-target="{{_id}}"> <i class="fa fa-pencil"></i></a>
+  </div>
+
+</div>
+
+{{> Stats atom}}
+
+{{#if isComment}}
+{{> EditorWrapper newCommentAtom }}
+{{/if}}
+
+</template>
+
+<template name="EditorWrapper">
+  <div class="contentWrapper">
+    {{> llmd_redisc_edit }}
+  </div>
+
+  <button type="submit" class="btn btn-primary save-btn"> Save </button>
+  <button class="btn btn-default cancel-btn"> Cancel </button>
 </template>
