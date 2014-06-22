@@ -42,7 +42,7 @@ Template.llmd.helpers({
 
     if( dot ) {
 
-      var link = "https://chart.googleapis.com/chart?chof=png&cht=gv&chl="+ encodeURIComponent( dot[1] );
+      var link = "https://chart.googleapis.com/chart?chof=png&cht=gv&chl="+ escape( dot[1] );
 
       var image = "![graphviz]("+link+")"
 
