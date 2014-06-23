@@ -5,7 +5,7 @@ Template.editLLMD.rendered = function(){
 
 Template.editLLMD.helpers({
   getRoot: function(){
-    var atom = this.editorModel.wrapAtom( this.root );
+    var atom = this.editorModel.wrapAtom( this.tree.ast );
     atom.parents = [];
     return atom;
   },
@@ -85,7 +85,7 @@ Template.branchSelector.events = {
     state.set( 'branch.new' )
     // addNewBranch.set( true );
   },
-  "submit": function( e, t ){
+  "submit": function( e, t ){ // NEW BRANCH
     e.preventDefault();
     
     

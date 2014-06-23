@@ -82,15 +82,14 @@ CommitModel = function( o ){
     var atomId = Atoms.insert(atom);
     // Meteor.call( 'atom.compile', atomId );
     
-    var parentId = ids.pop();
-    ids.push( parentId );
+    var _parentId = ids[ ids.length - 1 ];
     
-    var oldAtom = Atoms.findOne( {_id: parentId} );
+    var parent = Atoms.findOne( { _id: _parentId } );
     
-    oldAtom.data.push( atomId );
-    // oldAtom.meta.parents.push( oldAtom. );
+    parent.data.push( atomId );
+    // parent.meta.parents.push( parent. );
     
-    return this.change(oldAtom, ids);
+    return this.change(parent, ids);
     
   }
   

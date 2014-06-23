@@ -113,7 +113,7 @@ findFirstMatched = function( as1, as2 ) {
     for( var i=0; i<= Math.min( as2.length, as1.length, m ); i++ ) {
       var j = m-i;
       
-      if( i in as1 && j in as2 && as1[i]._atomId == as2[j]._atomId ) return { i:i, j:j };
+      if( i in as1 && j in as2 && as1[i]._seedId == as2[j]._seedId ) return { i:i, j:j };
       
     }
   }

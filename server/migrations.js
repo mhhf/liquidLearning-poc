@@ -18,3 +18,18 @@ Migrations.add({
     }
   }
 });
+
+
+Migrations.add({
+  version: 4,
+  up: function() {
+    
+    var a;
+    while( a = Atoms.findOne( {_atomId: {$exists: true}} )) {
+      Atoms.update({ _id: a._id },{ 
+        $set:{_seedId: a._atomId},
+        $unset: {_atomId:''}
+      })
+    }
+  }
+});

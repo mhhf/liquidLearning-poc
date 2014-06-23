@@ -13,10 +13,10 @@ Template.atomWrapper.helpers({
     return this.editorModel.editable && this.atom.meta.state != 'conflict';
   },
   editMode: function(){
-    return this.editorModel.get() === this;
+    return this.editorModel.get('edit') === this ||this.editorModel.get('add') === this ;
   },
   editModeClass: function(){
-    if( this.editorModel.get() === this) {
+    if( this.editorModel.get('edit') === this) {
       return 'edit';
     } else if( !this.atom.meta.commit ){
       return 'changed';
@@ -32,7 +32,7 @@ Template.atomWrapper.helpers({
   },
   dynamicTemplate: function(){
     
-    var editMode = this.editorModel.get() === this;
+    var editMode = this.editorModel.get("edit") === this || this.editorModel.get('add') === this;
     var mode = ( editMode )?'edit':'ast';
     var template = Template['llmd_'+this.atom.name+'_'+mode];
     if(!template) throw new Error('no teplate for '+this.atom.name+" found!");
@@ -83,7 +83,7 @@ Template.atomWrapper.events = {
     var ele = t.find('.atomContainer');
     $(ele).css('min-height',ele.clientHeight + "px");
     
-    this.editorModel.set(this);
+    this.editorModel.set( 'edit', this );
   },
   "click .remove-btn": function(e,t){
     var self = this;
@@ -110,7 +110,7 @@ Template.atomWrapper.events = {
     e.preventDefault();
     var atom = this.atom;
     atom.meta.active = !atom.meta.active;
-    this.editorModel.save( atom, this.parents.concat([ this.atom._id ]), this.commit );
+    this.editorModel.save( atom, this.parents.concat([ this.atom._id ]) );
   }
   
 }

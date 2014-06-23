@@ -57,8 +57,8 @@ Template.PostWrapper.helpers({
   newCommentAtom: function(){
     var atom = new LLMD.Atom('redisc');
     // [TODO] - refactor _atomId to _seedId
-    atom.root = this.atom.root != ''? this.atom.root : this.atom._atomId;
-    atom.parent = this.atom._atomId;
+    atom.root = this.atom.root != ''? this.atom.root : this.atom._seedId;
+    atom.parent = this.atom._seedId;
     return {
       atom: atom,
       parents: [this.atom._id]

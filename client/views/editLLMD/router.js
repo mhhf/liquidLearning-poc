@@ -15,6 +15,7 @@ Router.map( function(){
       var branch = LQTags.findOne({ _id: unit.branch._id });
       var commit = Commits.findOne({ _id: branch._commitId });
       var rootAtom = Atoms.findOne({ _id: commit._rootId });
+      var tree = new TreeModel( commit._rootId );
       
       var editorModel = new EditorModel({
         editable: true,
@@ -25,6 +26,7 @@ Router.map( function(){
       
       return {
         head: commit,
+        tree: tree,
         user: this.params.user,
         unit: unit,
         mediaHandler: mediaHandler,

@@ -22,13 +22,37 @@
 </template>
 
 <template name="addNewAtomBtn">
+
 <div class="addNewAtomWrapper">
   
-  {{#if editable}}
-  <a href='#' class="add-btn" data-toggle="modal" data-target=".bs-example-modal-lg"> <i class="fa fa-plus"></i></a>
+  {{#if isChoosing}}
+    
+    <div class="selectWrapper">
+      {{> selectLLMDTypes}}
+    </div>
+    
+  {{else}}
+  
+    {{#if isAdding}}
+      {{> atomWrapper tmpAtom}}
+    {{else}}
+      {{#if editable}}
+      <a href='#' class="add-btn"> <i class="fa fa-plus"></i></a>
+      {{/if}}
+    {{/if}}
+  
   {{/if}}
   
 </div>
+</template>
+
+<template name="selectLLMDTypes">
+<select id="newAtom" name="name">
+  <option value=""></option>
+  {{#each atomTypes}}
+  <option value="{{this}}">{{this}}</option>
+  {{/each}}
+</select>
 </template>
 
 

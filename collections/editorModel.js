@@ -6,14 +6,22 @@ EditorModel = function( o ){
   
   this.dep =	new Deps.Dependency,
   this.val = null,
-  this.get = function(){
+  this.data = null,
+  this.get = function( state ){
     this.dep.depend();
-    return this.val;
+    if( !state || state == this.val ) {
+      return this.data;
+    } else {
+      return null;
+    }
   };
-  this.set = function( val ){
+   
+  this.set = function( state, data ){
     this.dep.changed();
-    this.val = val;
+    this.val = state;
+    this.data = data;
   };
+  
   this.save = function( atom, ids ){
     
     this.commitModel.change(atom, ids);
@@ -35,6 +43,7 @@ EditorModel = function( o ){
     atom.meta.state = 'ready';
     this.save( atom, ids );
   };
+  
   this.diffRight = function( wrappedAtom ){
     
     var ids = wrappedAtom.parents;
@@ -60,16 +69,28 @@ EditorModel = function( o ){
     this.commitModel.remove( ids );
   };
   
+  this.add = function( name ){
+    
+    var atom = new LLMD.Atom( name );
+    
+    var wrappedAtom = this.wrapAtom( atom );
+    
+    wrappedAtom.parents = this.data.parents;
+    wrappedAtom.parents.push( this.data.atom._id );
+    
+    this.set('add', wrappedAtom );
+    
+  };
+  
   this.wrapAtom = function( atom ){
     var wrappedAtom = {
       atom: atom,
-      commit: this.commitModel,
       editorModel: this
     };
     
-    if( atom.meta.state == 'init' ) {
-      this.set( wrappedAtom );
-    }
+    // if( atom.meta.state == 'init' ) {
+    //   this.set( wrappedAtom );
+    // }
       
     return wrappedAtom;
   };
