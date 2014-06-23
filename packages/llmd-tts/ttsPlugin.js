@@ -72,7 +72,8 @@ Template.llmd_tts_edit.rendered = function(){
     mode:  "markdown",
     lineNumbers: true,
     extraKeys: {"Ctrl-J": "autocomplete"},
-    lines: 10
+    lines: 10,
+    autofocus: true
   });
   
   var self = this;

@@ -23,7 +23,8 @@ Template.llmd_md_edit.rendered = function(){
     mode:  "markdown",
     lineNumbers: true,
     extraKeys: {"Ctrl-J": "autocomplete"},
-    lines: 10
+    lines: 10,
+    autofocus: true
   });
   
   this.data.buildAtom = function(){
