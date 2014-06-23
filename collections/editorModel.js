@@ -24,8 +24,12 @@ EditorModel = function( o ){
   
   this.save = function( atom, ids ){
     
-    this.commitModel.change(atom, ids);
-      
+    if( !atom._id ) { // tmp atom
+      this.commitModel.add(atom, ids);
+    } else {
+      this.commitModel.change(atom, ids.concat(atom._id));
+    }
+    
     this.set(null);
   };
   

@@ -98,7 +98,7 @@ Template.atomWrapper.events = {
     
     var atom = _.extend( this.atom, this.buildAtom() );
     atom.meta.state = 'pending';
-    this.editorModel.save( atom, this.parents.concat([ this.atom._id ]) );
+    this.editorModel.save( atom, this.parents );
     
   },
   "click .dismiss-btn": function(e,t){

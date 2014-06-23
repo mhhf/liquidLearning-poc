@@ -80,7 +80,7 @@ CommitModel = function( o ){
   
   this.add = function( atom, ids ){
     var atomId = Atoms.insert(atom);
-    // Meteor.call( 'atom.compile', atomId );
+    Meteor.call( 'atom.compile', atomId );
     
     var _parentId = ids[ ids.length - 1 ];
     
