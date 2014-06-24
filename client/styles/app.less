@@ -318,7 +318,14 @@ ul#editorContainer {
   }
 
   &.changed {
-    border: 1px solid @orange;
+    &:after {
+      content: '';
+      border-right: 2px solid #fdb756;
+      position: absolute;
+      height: 100%;
+      top: 0px;
+      right: -2px;
+    }
   }
 
   &.inactive {
