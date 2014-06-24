@@ -4,6 +4,8 @@ EditorModel = function( o ){
   
   this.commitModel = o.commitModel;
   
+  _.extend( this, o.tree );
+  
   this.dep =	new Deps.Dependency,
   this.val = null,
   this.data = null,
@@ -22,11 +24,12 @@ EditorModel = function( o ){
     this.data = data;
   };
   
-  this.save = function( atom, ids ){
+  this.save = function( atom, ids, key ){
     
     if( !atom._id ) { // tmp atom
-      this.commitModel.add(atom, ids);
+      this.commitModel.add(atom, ids, key);
     } else {
+      // todo: key?
       this.commitModel.change(atom, ids.concat(atom._id));
     }
     
@@ -73,23 +76,24 @@ EditorModel = function( o ){
     this.commitModel.remove( ids );
   };
   
-  this.add = function( name ){
+  this.add = function( name, key ){
     
     var atom = new LLMD.Atom( name );
     
-    var wrappedAtom = this.wrapAtom( atom );
+    var parents = this.data.parents.concat( this.data.atom._id );
     
-    wrappedAtom.parents = this.data.parents;
-    wrappedAtom.parents.push( this.data.atom._id );
+    var wrappedAtom = this.wrapAtom( atom, parents );
+    wrappedAtom.key = key;
     
     this.set('add', wrappedAtom );
     
   };
   
-  this.wrapAtom = function( atom ){
+  this.wrapAtom = function( atom, parents ){
     var wrappedAtom = {
       atom: atom,
-      editorModel: this
+      editorModel: this,
+      parents: parents
     };
     
     // if( atom.meta.state == 'init' ) {

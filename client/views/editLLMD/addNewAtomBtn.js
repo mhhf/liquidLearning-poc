@@ -24,13 +24,12 @@ Template.addNewAtomBtn.helpers({
   },
   isAdding: function(){
     var atom = this.editorModel.get('add');
-    return atom && ( _.last( atom.parents ) == this.atom._id );
+    return atom && ( _.last( atom.parents ) == this.atom._id ) && this.key === atom.key;
   },
   isChoosing: function(){
     return this.editorModel.get('choose') == this;
   },
   tmpAtom: function(){
-    console.log(this);
     return this.editorModel.get('add');
   } 
 });
@@ -47,7 +46,7 @@ Template.selectLLMDTypes.rendered = function(){
   
   $('select').selectize({
     onChange: function( name ){
-      self.data.editorModel.add( name );
+      self.data.editorModel.add( name, self.data.key );
     }
   })[0].selectize.focus();
 }

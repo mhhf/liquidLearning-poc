@@ -44,11 +44,9 @@ CommitModel = function( o ){
     if( oldId == newId ) {
       return ids[0];
     }
-    var parentId = ids.pop();
+    var parentId = _.last( ids );
     
     var oldAtom = Atoms.findOne({_id: parentId});
-    
-    console.log('o', oldAtom.name);
     
     if( oldAtom.name == 'seq' ) {
       
@@ -64,8 +62,6 @@ CommitModel = function( o ){
     }
     
     
-    ids.push(parentId);
-    
     if( typeof oldAtom.meta.commit == "string" ) {
       oldAtom.meta = _.omit(oldAtom.meta,'commit');
       return this.exchange( Atoms.insert(_.omit(oldAtom,'_id')), ids );
@@ -78,16 +74,19 @@ CommitModel = function( o ){
     
   }
   
-  this.add = function( atom, ids ){
+  this.add = function( atom, ids, key ){
     var atomId = Atoms.insert(atom);
     Meteor.call( 'atom.compile', atomId );
     
-    var _parentId = ids[ ids.length - 1 ];
+    var _parentId = _.last(ids);
     
     var parent = Atoms.findOne( { _id: _parentId } );
     
-    parent.data.push( atomId );
-    // parent.meta.parents.push( parent. );
+    if( key ) {
+      parent[key].push(atomId);
+    } else {
+      parent.data.push(atomId);
+    }
     
     return this.change(parent, ids);
     

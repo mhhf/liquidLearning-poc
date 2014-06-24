@@ -5,7 +5,7 @@ Router.map( function(){
     // },
     data: function(){
       return {
-        posts: Atoms.find({ name: 'redisc' })
+        posts: Atoms.find({ name: 'redisc', title: {$not: ''} })
       };
     }
   

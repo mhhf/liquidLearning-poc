@@ -3,34 +3,32 @@ TreeModel = function( _id  ){
   var self = this;
   
   
-  buildTree( _id, function( err, ast ){
-    self.ast = ast;
-  });
+  this.ast = buildTree( _id );
   
 }
 
+// [TODO] - do the wrapping in this function
 var buildTree = function( _id, cb ){
   
   var a = Atoms.findOne({ _id: _id });
   
   if( LLMD.hasNested( a ) ) {
     
-    LLMD.applyNested( a, buildTree, function( err, ast ){ 
-      // cosole.log( err, ast ); 
-      cb( null, ast );
+    LLMD.eachNested( a, function( seq ){
+      
+      for( var i in seq ) {
+        seq[i] = buildTree( seq[i] );
+      }
+      
     });
     
   } else if( a.name == 'seq' ){
-    _.each(a.data, function( _seqId, i ){
-      buildTree( _seqId, function(err, ast) {
-        a.data[i] = ast;
-      });
+    a.data = _.map(a.data, function( _seqId, i ){
+      return buildTree( _seqId );
     });
-    cb( null, a)
-  } else {
-    cb( null, a);
+
   }
   
-  // wrapAtom
+  return a;
   
 }

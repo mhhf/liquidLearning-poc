@@ -21,12 +21,12 @@ Router.map( function(){
         editable: true,
         commitModel: new CommitModel({ 
           _branchId: branch._id 
-        })
+        }),
+        tree: tree
       });
       
       return {
         head: commit,
-        tree: tree,
         user: this.params.user,
         unit: unit,
         mediaHandler: mediaHandler,

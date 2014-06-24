@@ -63,15 +63,17 @@ Template.atomWrapper.helpers({
   },
   isPending: function(){
     return this.atom.meta && this.atom.meta.state == "pending";
+  },
+  getParent: function(){
+    return _.last(this.parents);
   }
 });
 
 Template.diffWrapper.helpers({
   getDiffedAtom: function(){
     var otherAtom = Atoms.findOne({ _id: this.atom.meta.diff.atom });
-    otherAtom.parents = this.parents;
     otherAtom.meta.state = 'conflict';
-    return this.editorModel.wrapAtom( otherAtom );
+    return this.editorModel.wrapAtom( otherAtom, this.parents );
   }
 });
 
@@ -93,12 +95,15 @@ Template.atomWrapper.events = {
     });
   },
   "click .save-btn": function(e,t){
+    console.log( _.last(this.parents) , e.currentTarget.dataset.target, e);
     e.preventDefault();
     
-    
-    var atom = _.extend( this.atom, this.buildAtom() );
-    atom.meta.state = 'pending';
-    this.editorModel.save( atom, this.parents );
+    if( _.last(this.parents) == e.currentTarget.dataset.target) {
+      var atom = _.extend( this.atom, this.buildAtom() );
+      atom.meta.state = 'pending';
+      console.log('onSave');
+      this.editorModel.save( atom, this.parents, this.key );
+    }
     
   },
   "click .dismiss-btn": function(e,t){
@@ -121,7 +126,7 @@ Template.conflictActions.helpers({
   diff: function(){
     // [TODO] - turn on after atom_<name>_diff is implemented
     return this.atom.meta.diff.type == 'change' && false;
-  }
+  },
 });
 
 Template.conflictActions.events = {

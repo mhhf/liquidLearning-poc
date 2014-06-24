@@ -5,8 +5,7 @@ Template.editLLMD.rendered = function(){
 
 Template.editLLMD.helpers({
   getRoot: function(){
-    var atom = this.editorModel.wrapAtom( this.tree.ast );
-    atom.parents = [];
+    var atom = this.editorModel.wrapAtom( this.editorModel.ast, [] );
     return atom;
   },
 });
