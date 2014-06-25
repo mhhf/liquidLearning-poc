@@ -37,6 +37,7 @@ CommitModel = function( o ){
   // [TODO] - refactor for all nested
   // [TODO] - hashsum the id to link to same atoms in the db - garbage collection is then 'nichtig'
   this.exchange = function( newId, ids ){
+    console.log(ids);
     
     if( ids.length <= 1 ) return newId;
     
@@ -44,9 +45,9 @@ CommitModel = function( o ){
     if( oldId == newId ) {
       return ids[0];
     }
-    var parentId = _.last( ids );
+    var _parentId = _.last( ids );
     
-    var oldAtom = Atoms.findOne({_id: parentId});
+    var oldAtom = Atoms.findOne({_id: _parentId});
     
     if( oldAtom.name == 'seq' ) {
       
@@ -55,8 +56,8 @@ CommitModel = function( o ){
       
       oldAtom.data[index] = newId;
       
-    } else {
-      LLMD.Type( oldAtom.name ).nested.forEach( function( e ){
+    } else { // nested
+      LLMD.eachNested( function(e){
         if( oldAtom[e] == oldId ) oldAtom[e] = newId;
       });
     }

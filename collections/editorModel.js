@@ -30,7 +30,8 @@ EditorModel = function( o ){
       this.commitModel.add(atom, ids, key);
     } else {
       // todo: key?
-      this.commitModel.change(atom, ids.concat(atom._id));
+      // why concat?
+      this.commitModel.change( atom, ids.concat(atom._id) );
     }
     
     this.set(null);
@@ -40,7 +41,7 @@ EditorModel = function( o ){
     
     var atom = wrappedAtom.atom;
     var ids = wrappedAtom.parents;
-    ids.push(atom._id);
+    // ids.push(atom._id);
     
     if( atom.meta.diff.type == 'add' ) {
       this.remove( ids );
@@ -48,12 +49,15 @@ EditorModel = function( o ){
     }
     atom.meta = _.omit(atom.meta,'diff');
     atom.meta.state = 'ready';
-    this.save( atom, ids );
+    this.commitModel.change( atom, ids );
+    
+    this.set(null);
   };
   
   this.diffRight = function( wrappedAtom ){
     
     var ids = wrappedAtom.parents;
+    console.log(wrappedAtom.parents);
     ids.push( wrappedAtom.atom._id );
     
     if( wrappedAtom.atom.meta.diff.type == 'remove' ) {
@@ -66,7 +70,9 @@ EditorModel = function( o ){
     }
     atom.meta = _.omit(atom.meta,'diff');
     atom.meta.state = 'ready';
-    this.save( atom, ids );
+    this.commitModel.change( atom, ids );
+    
+    this.set(null);
   };
   this.dismiss = function(){
     this.set(null);

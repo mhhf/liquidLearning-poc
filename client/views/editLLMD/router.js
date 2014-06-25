@@ -56,6 +56,7 @@ Router.map( function(){
       console.log(commit);
       var rootAtom = Atoms.findOne({ _id: commit._rootId });
       var branches = LQTags.find({ _unitId: unit._id, _id: { $not: branch._id } }).fetch();
+      var tree = new TreeModel( commit._rootId );
       
       
       
@@ -63,7 +64,8 @@ Router.map( function(){
         editable: true,
         commitModel: new CommitModel({ 
           _branchId: branch._id 
-        })
+        }),
+        tree: tree
       });
       
       return {
