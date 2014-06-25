@@ -30,6 +30,7 @@
     },
     "fontawesome4": {},
     "crypto-base": {},
-    "crypto-sha1": {}
+    "crypto-sha1": {},
+    "mocha-web": {}
   }
 }

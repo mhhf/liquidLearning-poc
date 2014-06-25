@@ -33,6 +33,14 @@ Router.map(function() {
   this.route('login', {
     path: '/login'
   });
+  
+  this.route('testClient', {
+    path: '/test/client'
+  });
+  
+  this.route('testServer', {
+    path: '/test/server'
+  });
 
   this.route('signup', {
     path: '/signup'

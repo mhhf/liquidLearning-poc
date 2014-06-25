@@ -2,8 +2,9 @@ TreeModel = function( _id  ){
   
   var self = this;
   
-  
-  this.ast = buildTree( _id );
+  if( _id ) {
+    this.ast = buildTree( _id );
+  }
   
 }
 

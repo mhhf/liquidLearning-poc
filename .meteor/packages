@@ -49,3 +49,5 @@ crypto-sha1
 module-loader
 llmd
 llmd-redisc
+mocha-web
+emitter
