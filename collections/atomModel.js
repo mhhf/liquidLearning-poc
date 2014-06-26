@@ -6,7 +6,7 @@ AtomModel = function( _id ){
   
   
   /**
-   * change( <Atom> )
+   * change( <object> )
    * 
    * 
    */
@@ -18,6 +18,7 @@ AtomModel = function( _id ){
       this.emit('change.soft', null);
       // trigger soft change
     } else {
+      this.atom.meta.lock = false;
       var _atomId = Atoms.insert( _.omit( _.extend(this.atom, atom), '_id' ) );
       this.atom = Atoms.findOne({ _id: _atomId });
       this.emit('change.hard', null);
@@ -59,8 +60,54 @@ AtomModel = function( _id ){
   }
   
   
-  this.removePos = function(){
+  this.removePos = function( key, pos ){
     
+    // remove
+    
+  }
+  
+  // [TODO] - refactor hasChildren
+  this.isNested = function(){
+    return LLMD.hasNested( this.atom );
+  }
+  
+  this.isLocked = function(){
+    return this.atom.meta.lock;
+  }
+  
+  // [TODO] - refactor: eachChildren
+  this.eachNested = function( f ){
+    if( this.isNested() ) {
+      LLMD.eachNested(this.atom, f);
+    }
+  }
+  
+  this.getChild = function( key, pos ){
+    if( this.isNested() ) {
+      return this.atom[key][pos];
+    }
+  }
+  
+  // [TODO] - refactor: replaceChild
+  this.exchangeChild = function( key, pos, _atomId ){
+    var obj = {};
+    obj[key] = this.atom[key];
+    obj[key][pos] = _atomId;
+    
+    this.update( obj );
+  }
+  
+  this.remove = function( key, pos ){
+    var obj = {};
+    obj[key] = this.atom[key];
+    obj[key].splice(pos, 1);
+    
+    this.update( obj );
+    
+  }
+  
+  this.lock = function(){
+    this.update({meta:{lock: true}});
   }
   
   
