@@ -56,6 +56,7 @@ describe('Atoms', function(){
       
     });
     
+    
     it('#getId() should return the id', function(){
       
       var _atomId1 = Atoms.insert( new LLMD.Atom('seq') );
@@ -241,8 +242,6 @@ describe('Atoms', function(){
       
       it('#exchangeChildren should exchange a child _id for another child _id', function(){
         
-        console.log('\n\n--\n\n--start problem');
-        
         var _atomId1 = Atoms.insert( new LLMD.Atom('seq') );
         var a1 = new AtomModel( _atomId1 );
         
@@ -375,6 +374,38 @@ describe('Atoms', function(){
     
   });
   
+  
+  it('should insert an atom if no id is given', function(){
+    
+    var a = new AtomModel( new LLMD.Atom('md') );
+    a.getId().should.be.a('string');
+    
+  });
+  
+  it('should export an ast', function(){
+    var _atomId1 = Atoms.insert( new LLMD.Atom('seq') );
+    var a1 = new AtomModel( _atomId1 );
+    
+    var ifAtom = a1.addAfter('data', new LLMD.Atom('if') );
+    ifAtom.addAfter('t', new LLMD.Atom('md') );
+    
+    var ast = a1.export();
+    
+    ast.should.have.deep.property('data[0].t[0].name','md');
+    
+  });
+  
+  it('should import an ast if given', function(){
+    
+    var ast = {"data":[{"c":"true","f":[],"name":"if","t":[{"name":"md","data":""}]}],"name":"seq"};
+    
+    var a = new AtomModel( ast );
+    var ast2 = a.export();
+    
+    JSON.stringify( ast2 ).should.equal( JSON.stringify(ast) );
+    
+  });
+  
 });
 
 
@@ -384,4 +415,3 @@ checkDefaultAtomValues = function( a, name ){
   a.should.have.property('name').and.to.equal( name );
 }
 
-// [TODO] - atom.add

@@ -2,6 +2,34 @@ var atomModelMap = {};
 
 AtomModel = function( _id, o ){
   
+  // inserting
+  if( typeof _id == 'object' ) {
+    var insertAtoms = function( ast ){
+      
+      var n = {};
+      if( LLMD.hasNested(ast) ) {
+        LLMD.eachNested(ast, function( seq, key ){
+          n[key] = [];
+          for( var i in seq ){
+            n[key][i] = insertAtoms( ast[key][i] );
+          }
+        });
+      }
+      
+      if( ast._id ) {
+        return ast._id;
+      } else {
+        var _atomId = Atoms.insert( _.extend({},ast,n) );
+        return _atomId;
+      }
+      
+      
+    }
+    
+    _id = insertAtoms( _id );
+    
+  }
+  
   // singleton
   if( atomModelMap[ _id ] ) return atomModelMap[ _id ];
   atomModelMap[_id] = this;
@@ -9,29 +37,29 @@ AtomModel = function( _id, o ){
   if( o && o.parent ) this.parent = o.parent; 
   
   
-  
   var atom = Atoms.findOne({ _id: _id });
   var nested;
+  var self = this;
   
-  if( LLMD.Package(atom.name).nested ) {
-    nested = {};
-    var self = this;
-    
-    LLMD.eachNested( atom, function(seq, key){
-      nested[key] = [];
+  var computeNested = function() {
+    if( LLMD.Package(atom.name).nested ) {
+      nested = {};
       
-      for( var i in seq ){
-        var child = new AtomModel(seq[i], {
-          parent: self
-        });
-        nested[key][i] = child;
-      }
-      
-    });
-    
-    // [TODO] - fill nested with atomModels
-    
+      LLMD.eachNested( atom, function(seq, key){
+        nested[key] = [];
+        
+        for( var i in seq ){
+          var child = new AtomModel(seq[i], {
+            parent: self
+          });
+          nested[key][i] = child;
+        }
+        
+      });
+    }
   }
+  computeNested();
+  
   
   // this.atom = Atoms.findOne({ _id: _id });
   // 
@@ -65,7 +93,6 @@ AtomModel = function( _id, o ){
       this.emit('change.soft', null);
       // trigger soft change
     } else {
-      console.log('updating hard', !!this.parent);
       atom.meta.lock = false;
       var _oldId = atom._id;
       var _atomId = Atoms.insert( _.omit( _.extend(atom, atomO), '_id' ) );
@@ -81,6 +108,7 @@ AtomModel = function( _id, o ){
     }
     
     this.emit('change', null);
+    computeNested();
     
   }
   
@@ -90,11 +118,9 @@ AtomModel = function( _id, o ){
     var p;
     var k;
     
-    console.log('start looking in', atom);
     LLMD.eachNested( atom, function(seq, key){
       
       for(var i in seq) {
-        console.log(seq[i], _atomId, key);
         
         
         if( seq[i] == _atomId ) {
@@ -226,6 +252,19 @@ AtomModel = function( _id, o ){
   
   this.lock = function(){
     this.update({meta:{lock: true}});
+  }
+  
+  this.export = function(){
+    
+    var n = _.clone(nested);
+    _.forEach(n,function( s, k ){
+      for( var i in s ) {
+        n[k][i] = n[k][i].export();
+      }
+    });
+    
+    var e = _.extend( {}, _.omit(atom,['_id','meta','_seedId']), n );
+    return e;
   }
   
   
