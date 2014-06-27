@@ -1,17 +1,54 @@
 var atomModelMap = {};
 
-AtomModel = function( _id ){
+AtomModel = function( _id, o ){
   
   // singleton
   if( atomModelMap[ _id ] ) return atomModelMap[ _id ];
   atomModelMap[_id] = this;
   
+  if( o && o.parent ) this.parent = o.parent; 
   
-  this.atom = Atoms.findOne({ _id: _id });
-  if( _id && !this.atom ) throw new Error('no Atom '+_id+' found, maybe its not subscribed to it or is removed.');
+  
+  
+  var atom = Atoms.findOne({ _id: _id });
+  var nested;
+  
+  if( LLMD.Package(atom.name).nested ) {
+    nested = {};
+    var self = this;
+    
+    LLMD.eachNested( atom, function(seq, key){
+      nested[key] = [];
+      
+      for( var i in seq ){
+        var child = new AtomModel(seq[i], {
+          parent: self
+        });
+        nested[key][i] = child;
+      }
+      
+    });
+    
+    // [TODO] - fill nested with atomModels
+    
+  }
+  
+  // this.atom = Atoms.findOne({ _id: _id });
+  // 
+  
+  if( _id && !atom ) throw new Error('no Atom '+_id+' found, maybe its not subscribed to it or is removed.');
+  
+  
+  this.get = function(){
+    return atom;
+  }
+  
+  this.getNested = function( k ){
+    return nested && nested[k];
+  }
   
   this.getId = function(){
-    return this.atom._id;
+    return atom._id;
   }
   
   /**
@@ -19,30 +56,64 @@ AtomModel = function( _id ){
    * 
    * 
    */
-  this.update = function( atom ){
+  this.update = function( atomO ){
     
     
-    if( !this.atom.meta.lock ) {
-      Atoms.update({ _id: this.atom._id }, { $set: _.omit( atom, '_id' ) });
-      this.atom = Atoms.findOne({ _id: this.atom._id });
+    if( !atom.meta.lock ) {
+      Atoms.update({ _id: atom._id }, { $set: _.omit( atomO, '_id' ) });
+      atom = Atoms.findOne({ _id: atom._id });
       this.emit('change.soft', null);
       // trigger soft change
     } else {
-      this.atom.meta.lock = false;
-      var _oldId = this.atom._id;
-      var _atomId = Atoms.insert( _.omit( _.extend(this.atom, atom), '_id' ) );
-      this.atom = Atoms.findOne({ _id: _atomId });
+      console.log('updating hard', !!this.parent);
+      atom.meta.lock = false;
+      var _oldId = atom._id;
+      var _atomId = Atoms.insert( _.omit( _.extend(atom, atomO), '_id' ) );
+      atom = Atoms.findOne({ _id: _atomId });
       atomModelMap[ _atomId ] = this;
       this.emit('change.hard',{
         _oldId: _oldId,
         _newId: _atomId
       });
+      
+      this.parent && this.parent.exchangeChildren( _oldId, _atomId );
       // trigger hard change
     }
     
     this.emit('change', null);
     
   }
+  
+  
+  this.getNestedPos = function( _atomId ){
+    
+    var p;
+    var k;
+    
+    console.log('start looking in', atom);
+    LLMD.eachNested( atom, function(seq, key){
+      
+      for(var i in seq) {
+        console.log(seq[i], _atomId, key);
+        
+        
+        if( seq[i] == _atomId ) {
+          k = key;
+          p = i;
+        }
+        
+      }
+    
+    });
+    
+    
+    if( p ) {
+      return { key: k, pos: p };
+    } else {
+      return null;
+    }
+  }
+  
   
   /**
    * @param key: nested sequence property
@@ -53,24 +124,26 @@ AtomModel = function( _id ){
    * 
    * @return: AtomModel
    */
-  this.addAfter = function( key, atom, pos ){
+  this.addAfter = function( key, atomO, pos ){
     
-    if( !( LLMD.hasNested( this.atom ) && LLMD.Package( this.atom.name ).nested.indexOf(key) > -1 ) ) {
-      throw new Error( 'atom '+this.atom.name+ ' is not nested or nested key isn\'t '+key);
+    if( !( this.isNested() ) ) {
+      throw new Error( 'atom '+atom.name+ ' is not nested or nested key isn\'t '+key);
     }
     
-    var _atomId = Atoms.insert( atom );
+    var _atomId = Atoms.insert( atomO );
     
-    if( !( pos && pos >= 0 && pos in this.atom[key] ) ) {
-      pos = this.atom[key].length;
+    if( !( pos && pos >= 0 && pos in atom[key] ) ) {
+      pos = atom[key].length;
     }
-    this.atom[key].splice( pos, 0, _atomId );
+    atom[key].splice( pos, 0, _atomId );
     var o = {};
-    o[key] = this.atom[key];
+    o[key] = atom[key];
     
     this.update(o);
     
-    var atomModel = new AtomModel( _atomId );
+    var atomModel = new AtomModel( _atomId, {
+      parent: this
+    } );
     
     this.emit('add', { target: atomModel });
     
@@ -80,18 +153,18 @@ AtomModel = function( _id ){
   
   
   // [TODO] - refactor hasChildren
-  this.isNested = function(){
-    return LLMD.hasNested( this.atom );
+  this.isNested = function(k){
+    return !!nested;
   }
   
   this.isLocked = function(){
-    return this.atom.meta.lock;
+    return atom.meta.lock;
   }
   
   // [TODO] - refactor: eachChildren
   this.eachNested = function( f ){
     if( this.isNested() ) {
-      LLMD.eachNested(this.atom, f);
+      LLMD.eachNested(atom, f);
     }
   }
   
@@ -101,35 +174,54 @@ AtomModel = function( _id ){
     this.eachNested( function( seq, key ){
       
       for(var i in seq) {
-        f( seq[i], key, i );
+        f( atomModelMap[seq[i]], key, i );
       }
       
     });
     
   }
   
+  // @return: AtomModel
   this.getChild = function( key, pos ){
     if( this.isNested() ) {
-      return this.atom[key][pos];
+      return atom[key][pos];
     }
   }
   
   // [TODO] - refactor: replaceChild
-  this.exchangeChild = function( key, pos, _atomId ){
+  this.exchangeChildAt = function( key, pos, _atomId ){
     var obj = {};
-    obj[key] = this.atom[key];
+    obj[key] = atom[key];
     obj[key][pos] = _atomId;
     
     this.update( obj );
   }
   
-  this.remove = function( key, pos ){
+  this.exchangeChildren = function( _oldId, _newId ){
+    
+    var pos = this.getNestedPos( _oldId );
+    if( pos ) this.exchangeChildAt( pos.key, pos.pos, _newId )
+    
+  }
+  
+  this.removeAt = function( key, pos ){
     var obj = {};
-    obj[key] = this.atom[key];
-    obj[key].splice(pos, 1);
+    obj[key] = atom[key];
+    var _atomId = obj[key].splice(pos, 1);
     
     this.update( obj );
     
+    atomModelMap[ _atomId ].emit('remove');
+    
+  }
+  
+  this.removeChild = function( _id ){
+    var pos = this.getNestedPos( _id );
+    if( pos ) this.removeAt( pos.key, pos.pos );
+  }
+  
+  this.remove = function(){
+    this.parent.removeChild( atom._id );
   }
   
   this.lock = function(){

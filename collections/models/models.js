@@ -36,93 +36,93 @@ CommitModel = function( o ){
   
   // [TODO] - refactor for all nested
   // [TODO] - hashsum the id to link to same atoms in the db - garbage collection is then 'nichtig'
-  this.exchange = function( newId, ids ){
-    console.log(ids);
-    
-    if( ids.length <= 1 ) return newId;
-    
-    var oldId  = ids.pop();
-    if( oldId == newId ) {
-      return ids[0];
-    }
-    var _parentId = _.last( ids );
-    
-    var oldAtom = Atoms.findOne({_id: _parentId});
-    
-    if( oldAtom.name == 'seq' ) {
-      
-      var index = oldAtom.data.indexOf( oldId );
-      if( index == -1 ) console.log( 'fuuuuuck' );
-      
-      oldAtom.data[index] = newId;
-      
-    } else { // nested
-      LLMD.eachNested( function(e){
-        if( oldAtom[e] == oldId ) oldAtom[e] = newId;
-      });
-    }
-    
-    
-    if( typeof oldAtom.meta.commit == "string" ) {
-      oldAtom.meta = _.omit(oldAtom.meta,'commit');
-      return this.exchange( Atoms.insert(_.omit(oldAtom,'_id')), ids );
-    } else {
-      var _id = oldAtom._id;
-      Atoms.update({_id: oldAtom._id}, {$set: _.omit(oldAtom,'_id') });
-      return _id;
-    }
-    
-    
-  }
+  // this.exchange = function( newId, ids ){
+  //   console.log(ids);
+  //   
+  //   if( ids.length <= 1 ) return newId;
+  //   
+  //   var oldId  = ids.pop();
+  //   if( oldId == newId ) {
+  //     return ids[0];
+  //   }
+  //   var _parentId = _.last( ids );
+  //   
+  //   var oldAtom = Atoms.findOne({_id: _parentId});
+  //   
+  //   if( oldAtom.name == 'seq' ) {
+  //     
+  //     var index = oldAtom.data.indexOf( oldId );
+  //     if( index == -1 ) console.log( 'fuuuuuck' );
+  //     
+  //     oldAtom.data[index] = newId;
+  //     
+  //   } else { // nested
+  //     LLMD.eachNested( function(e){
+  //       if( oldAtom[e] == oldId ) oldAtom[e] = newId;
+  //     });
+  //   }
+  //   
+  //   
+  //   if( typeof oldAtom.meta.commit == "string" ) {
+  //     oldAtom.meta = _.omit(oldAtom.meta,'commit');
+  //     return this.exchange( Atoms.insert(_.omit(oldAtom,'_id')), ids );
+  //   } else {
+  //     var _id = oldAtom._id;
+  //     Atoms.update({_id: oldAtom._id}, {$set: _.omit(oldAtom,'_id') });
+  //     return _id;
+  //   }
+  //   
+  //   
+  // }
   
-  this.add = function( atom, ids, key ){
-    var atomId = Atoms.insert(atom);
-    Meteor.call( 'atom.compile', atomId );
-    
-    var _parentId = _.last(ids);
-    
-    var parent = Atoms.findOne( { _id: _parentId } );
-    
-    if( key ) {
-      parent[key].push(atomId);
-    } else {
-      parent.data.push(atomId);
-    }
-    
-    return this.change(parent, ids);
-    
-  }
+  // this.add = function( atom, ids, key ){
+  //   var atomId = Atoms.insert(atom);
+  //   Meteor.call( 'atom.compile', atomId );
+  //   
+  //   var _parentId = _.last(ids);
+  //   
+  //   var parent = Atoms.findOne( { _id: _parentId } );
+  //   
+  //   if( key ) {
+  //     parent[key].push(atomId);
+  //   } else {
+  //     parent.data.push(atomId);
+  //   }
+  //   
+  //   return this.change(parent, ids);
+  //   
+  // }
   
   
-  this.change = function( atom, ids ){
-    var atomId;
-    
-    if( typeof atom.meta.commit == 'string' ) { // has a commit
-      // create a new working space
-      console.log('inserting');
-      atom.meta = _.omit(atom.meta,'commit');
-      atomId = Atoms.insert(_.omit(atom,'_id'));
-      Meteor.call( 'atom.compile', atomId );
-    } else {
-      console.log('updating');
-      Atoms.update({ _id: atom._id }, { $set: _.omit( atom, '_id' ) });
-      Meteor.call( 'atom.compile', atom._id );
-      atomId = atom._id;
-    }
-    var _newRootId = this.exchange( atomId, ids );
-    
-    // var root = Atoms.findOne( { _id: _newRootId } );
-    // console.log('nr',root);
-    
-    this.changeRoot( _newRootId );
-    
-    
-    
-    
-    return this.ele._id
-    // return newCommit;
-    
-  }
+  // this.change = function( atom, ids ){
+  //   var atomId;
+  //   
+  //   if( typeof atom.meta.commit == 'string' ) { // has a commit
+  //     // create a new working space
+  //     console.log('inserting');
+  //     atom.meta = _.omit(atom.meta,'commit');
+  //     atomId = Atoms.insert(_.omit(atom,'_id'));
+  //     Meteor.call( 'atom.compile', atomId );
+  //   } else {
+  //     console.log('updating');
+  //     Atoms.update({ _id: atom._id }, { $set: _.omit( atom, '_id' ) });
+  //     Meteor.call( 'atom.compile', atom._id );
+  //     atomId = atom._id;
+  //   }
+  //   var _newRootId = this.exchange( atomId, ids );
+  //   
+  //   // var root = Atoms.findOne( { _id: _newRootId } );
+  //   // console.log('nr',root);
+  //   
+  //   this.changeRoot( _newRootId );
+  //   
+  //   
+  //   
+  //   
+  //   return this.ele._id
+  //   // return newCommit;
+  //   
+  // }
   
   this.changeRoot = function( _newRootId ){
     
@@ -141,19 +141,19 @@ CommitModel = function( o ){
     
   }
   
-  this.remove = function( ids ){
-    var toRemoveId = ids.pop();
-    var removeFromSeqId = ids.pop();
-    ids.push(removeFromSeqId);
-    
-    var parentAtom = Atoms.findOne({ _id: removeFromSeqId });
-    var index = parentAtom.data.indexOf( toRemoveId );
-    
-    parentAtom.data.splice(index,1);
-    
-    return this.change( parentAtom, ids );
-    
-  }
+  // this.remove = function( ids ){
+  //   var toRemoveId = ids.pop();
+  //   var removeFromSeqId = ids.pop();
+  //   ids.push(removeFromSeqId);
+  //   
+  //   var parentAtom = Atoms.findOne({ _id: removeFromSeqId });
+  //   var index = parentAtom.data.indexOf( toRemoveId );
+  //   
+  //   parentAtom.data.splice(index,1);
+  //   
+  //   return this.change( parentAtom, ids );
+  //   
+  // }
   
   this.updateBranch = function( newCommitId ){
     if( this.branch ) {

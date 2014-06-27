@@ -36,8 +36,10 @@ describe('Atoms', function(){
       var _atomId1 = Atoms.insert( new LLMD.Atom('seq') );
       var a1 = new AtomModel( _atomId1 );
       
-      a1.should.have.property('atom')
-      .and.deep.property('name','seq');
+      a1.get().should.have.property('name','seq');
+      
+      // a1.should.have.property('atom')
+      // .and.deep.property('name','seq');
       
     });
     
@@ -46,8 +48,8 @@ describe('Atoms', function(){
       var _atomId1 = Atoms.insert( new LLMD.Atom('seq') );
       var a1 = new AtomModel( _atomId1 );
       
-      var model1 = new AtomModel( a1.atom._id );
-      var model2 = new AtomModel( a1.atom._id );
+      var model1 = new AtomModel( a1.getId() );
+      var model2 = new AtomModel( a1.getId() );
       
       a1.should.equal( model1 );
       model1.should.equal( model2 );
@@ -59,7 +61,7 @@ describe('Atoms', function(){
       var _atomId1 = Atoms.insert( new LLMD.Atom('seq') );
       var a1 = new AtomModel( _atomId1 );
       
-      a1.getId().should.equal( a1.atom._id );
+      a1.getId().should.equal( a1.getId() );
       
     });
     
@@ -70,23 +72,52 @@ describe('Atoms', function(){
         var _atomId2 = Atoms.insert( new LLMD.Atom('md') );
         var a2 = new AtomModel( _atomId2 );
         
-        var _id = a2.atom._id;
+        var _id = a2.getId();
         a2.update({ data: '1' });
-        a2.atom.data.should.equal('1');
-        a2.atom._id.should.equal( _id );
+        a2.get().data.should.equal('1');
+        a2.getId().should.equal( _id );
       });
       
       it('should hard update locked atoms', function(){
         
         var _atomId2 = Atoms.insert( new LLMD.Atom('md') );
         var a2 = new AtomModel( _atomId2 );
+        var _id = a2.getId();
         
-        a2.atom.meta.lock = true;
-        var _id = a2.atom._id;
+        a2.lock();
         a2.update({ data: '2' });
-        a2.atom.data.should.equal('2');
-        a2.atom.meta.lock.should.be.false;
-        a2.atom._id.should.not.equal( _id );
+        a2.get().data.should.equal('2');
+        a2.isLocked().should.be.false;
+        a2.getId().should.not.equal( _id );
+        
+      });
+      
+      it('should hard update nested locked atoms', function(){
+        
+        var _atomId1 = Atoms.insert( new LLMD.Atom('seq') );
+        var a1 = new AtomModel( _atomId1 );
+        var a2 = a1.addAfter('data', new LLMD.Atom('if'));
+        var a3 = a2.addAfter('t', new LLMD.Atom('md'));
+        var _id1 = a1.getId();
+        var _id2 = a2.getId();
+        var _id3 = a3.getId();
+        
+        a2.lock();
+        a3.lock();
+        
+        a2.isLocked().should.be.true;
+        a3.isLocked().should.be.true;
+        
+        a3.update({ data: '2' });
+        
+        a3.get().data.should.equal('2');
+        
+        a2.isLocked().should.be.false;
+        a3.isLocked().should.be.false;
+        
+        a2.getId().should.not.equal( _id2 );
+        a3.getId().should.not.equal( _id3 );
+        
       });
       
       it('should maintan singleton structure on hard change', function(){
@@ -94,12 +125,12 @@ describe('Atoms', function(){
         var _atomId2 = Atoms.insert( new LLMD.Atom('md') );
         var a2 = new AtomModel( _atomId2 );
         
-        var _id = a2.atom._id;
+        var _id = a2.getId();
         
         a2.lock();
         a2.update({data:'1'});
         
-        var _id2 = a2.atom._id;
+        var _id2 = a2.getId();
         
         var m1 = new AtomModel( _id );
         var m2 = new AtomModel( _id2 );
@@ -139,10 +170,10 @@ describe('Atoms', function(){
         var _atomId2 = Atoms.insert( new LLMD.Atom('md') );
         var a2 = new AtomModel( _atomId2 );
         
-        a2.atom.meta.lock = true;
+        a2.lock();
         
         a2.on('change.hard', function( atomModel ){
-          this.atom.meta.lock.should.be.false;
+          this.isLocked().should.be.false;
           done();
         });
         
@@ -156,7 +187,7 @@ describe('Atoms', function(){
         var a2 = new AtomModel( _atomId2 );
         
         a2.isLocked().should.be.false;
-        a2.atom.meta.lock = true;
+        a2.lock();
         a2.isLocked().should.be.true;
         
       });
@@ -174,7 +205,7 @@ describe('Atoms', function(){
       
     });
     
-    describe('#getChild()', function(){
+    describe('#getChild', function(){
       
       it('should return the child id', function(){
         
@@ -188,7 +219,7 @@ describe('Atoms', function(){
       
     });
     
-    describe('#exchangeChild()', function(){
+    describe('#exchangeChild', function(){
       
       it('should exchange a child on a given key and pos', function(){
         
@@ -199,14 +230,32 @@ describe('Atoms', function(){
         var a2 = new AtomModel( _atomId2 );
         
         a1.addAfter('data', new LLMD.Atom('md') );
-        var _atomId = a1.atom._id;
+        var _atomId = a1.getId();
         
-        a1.exchangeChild('data',0, a2.atom._id );
+        a1.exchangeChildAt('data',0, a2.getId() );
         
-        a1.atom._id.should.equal( _atomId );
-        a1.getChild('data',0).should.eql( a2.atom._id );
+        a1.getId().should.equal( _atomId );
+        a1.getChild('data',0).should.eql( a2.getId() );
         
       });
+      
+      it('#exchangeChildren should exchange a child _id for another child _id', function(){
+        
+        console.log('\n\n--\n\n--start problem');
+        
+        var _atomId1 = Atoms.insert( new LLMD.Atom('seq') );
+        var a1 = new AtomModel( _atomId1 );
+        
+        var a2 = a1.addAfter('data', new LLMD.Atom('md'));
+        
+        var _atomId = Atoms.insert( new LLMD.Atom('md'));
+        
+        a1.exchangeChildren( a2.getId(), _atomId );
+        
+        a1.getChild( 'data', 0 ).should.equal( _atomId );
+        
+      });
+      
       	
     });
     
@@ -221,8 +270,8 @@ describe('Atoms', function(){
         atom.data = '1';
         var atom2 = a1.addAfter('data', atom );
         
-        a1.atom.data[0].should.be.a('string');
-        atom2.atom.name.should.eql('md'); 
+        a1.get().data[0].should.be.a('string');
+        atom2.get().name.should.eql('md'); 
         
       });
       
@@ -238,7 +287,7 @@ describe('Atoms', function(){
         var atom = new LLMD.Atom('md');
         atom.data = '2';
         var atom2 = a1.addAfter('data', atom, 0 );
-        a1.atom.data[1].should.equal( atom2.atom._id );
+        a1.get().data[1].should.equal( atom2.getId() );
         
       });
       
@@ -261,14 +310,37 @@ describe('Atoms', function(){
     
     describe('#remove', function(){
       
-      it('should remove __key__ and __pos__', function(){
+      it('#remove() should remove the holding atom', function( done ){
         
         var _atomId1 = Atoms.insert( new LLMD.Atom('seq') );
         var a1 = new AtomModel( _atomId1 );
+        var a2 = a1.addAfter('data', new LLMD.Atom('md'));
+        var _id2 = a2.getId();
         
-        a1.addAfter('data', new LLMD.Atom('md'));
-        a1.remove('data',0);
-        a1.atom.data.should.have.length(0);
+        a2.on('remove', function(){
+          
+          _id2.should.not.equal( a1.getChild( 'data', 0 ) );
+          done();
+        })
+        
+        a1.getChild( 'data', 0 ).should.equal( _id2 );
+        a2.remove();
+        
+        
+      });
+      
+      it('#removeAt should remove __key__ and __pos__', function( done ){
+        
+        var _atomId1 = Atoms.insert( new LLMD.Atom('seq') );
+        var a1 = new AtomModel( _atomId1 );
+        var a2 = a1.addAfter('data', new LLMD.Atom('md'));
+        
+        a2.on('remove', function(){
+          a1.get().data.should.have.length(0);
+          done();
+        });
+        
+        a1.removeAt('data',0);
         
       });
       

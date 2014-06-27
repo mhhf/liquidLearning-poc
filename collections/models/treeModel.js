@@ -1,49 +1,50 @@
 TreeModel = function( _id  ){
   
-  var modelMap = {};
+  // var modelMap = {};
   
-  var self = this;
-  var buildTree = function( _id, cb ){
-    
-    // var a = Atoms.findOne({ _id: _id });
-    var a = new AtomModel( _id );
-    modelMap[_id] = a;
-    
-    a.on('add', function( o ){
-      modelMap[o.target.atom._id] = o.target;
-    });
-    
-    if( a.isNested() ) {
-      
-      a.eachNested( function( seq, key ){
-        
-        for( var i in seq ) {
-          var model = buildTree( seq[i] );
-          seq[i] = model;
-          
-          model.on('change.hard', function( o ){
-            delete modelMap[ o._oldId ];
-            a.exchangeChild( key, i, this.atom._id );
-            modelMap[this.atom._id] = this;
-          });
-          
-        }
-        
-      });
-      
-    }  
-    
-    return a;
-    
-  }
+  // var self = this;
+  // var buildTree = function( _id, parent ){
+  //   
+  //   // var a = Atoms.findOne({ _id: _id });
+  //   // var o = {};
+  //   // if( parent ) o = { parent: parent };
+  //   var a = new AtomModel( _id ); 
+  //   // modelMap[_id] = a;
+  //   
+  //   // a.on('add', function( o ){
+  //   //   modelMap[o.target.atom._id] = o.target;
+  //   // });
+  //   
+  //   if( a.isNested() ) {
+  //     
+  //     // a.eachNested( function( seq, key ){
+  //       
+  //       // for( var i in seq ) {
+  //         // var model = buildTree( seq[i] );
+  //         // seq[i] = model;
+  //         // 
+  //         // model.on('change.hard', function( o ){
+  //         //   delete modelMap[ o._oldId ];
+  //         //   modelMap[this.atom._id] = this;
+  //         // });
+  //         // 
+  //       // }
+  //       
+  //     });
+  //     
+  //   }  
+  //   
+  //   return a;
+  //   
+  // }
   
   this.getAtomModel = function( _id ) {
-    return _id in modelMap && modelMap[ _id ];
+    return new AtomModel( _id );
   }
   
-  this.getModelMap = function(){
-    return modelMap;
-  }
+  // this.getModelMap = function(){
+  //   return modelMap;
+  // }
   
   this.export = function(){
     
@@ -104,16 +105,16 @@ TreeModel = function( _id  ){
       
     }
     
-    this.root = buildTree( insertAtoms( ast ) );
+    this.root = new AtomModel( insertAtoms( ast ) );
     
     
   }
   
   
-  var self = this;
+  // var self = this;
   
   if( _id ) {
-    this.root = buildTree( _id );
+    this.root = new AtomModel( _id );
   }
   
 }
