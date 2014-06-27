@@ -17,8 +17,10 @@ TreeModel = function( _id  ){
           var model = buildTree( seq[i] );
           seq[i] = model;
           
-          model.on('change.hard', function(){
+          model.on('change.hard', function( o ){
+            delete modelMap[ o._oldId ];
             a.exchangeChild( key, i, this.atom._id );
+            modelMap[this.atom._id] = this;
           });
         }
         
@@ -31,7 +33,7 @@ TreeModel = function( _id  ){
   }
   
   this.getAtomModel = function( _id ) {
-    return modelMap[ _id ];
+    return _id in modelMap && modelMap[ _id ];
   }
   
   this.getModelMap = function(){
@@ -46,5 +48,5 @@ TreeModel = function( _id  ){
   }
   
 }
-
+ 
 _.extend( TreeModel.prototype, EventEmitter.prototype );

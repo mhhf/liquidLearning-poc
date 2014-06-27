@@ -1,4 +1,11 @@
+var atomModelMap = {};
+
 AtomModel = function( _id ){
+  
+  // singleton
+  if( atomModelMap[ _id ] ) return atomModelMap[ _id ];
+  atomModelMap[_id] = this;
+  
   
   this.atom = Atoms.findOne({ _id: _id });
   if( _id && !this.atom ) throw new Error('no Atom '+_id+' found, maybe its not subscribed to it or is removed.');
@@ -12,6 +19,7 @@ AtomModel = function( _id ){
    */
   this.update = function( atom ){
     
+    
     if( !this.atom.meta.lock ) {
       Atoms.update({ _id: this.atom._id }, { $set: _.omit( atom, '_id' ) });
       this.atom = Atoms.findOne({ _id: this.atom._id });
@@ -19,9 +27,14 @@ AtomModel = function( _id ){
       // trigger soft change
     } else {
       this.atom.meta.lock = false;
+      var _oldId = this.atom._id;
       var _atomId = Atoms.insert( _.omit( _.extend(this.atom, atom), '_id' ) );
       this.atom = Atoms.findOne({ _id: _atomId });
-      this.emit('change.hard', null);
+      atomModelMap[ _atomId ] = this;
+      this.emit('change.hard',{
+        _oldId: _oldId,
+        _newId: _atomId
+      });
       // trigger hard change
     }
     
