@@ -66,12 +66,22 @@ describe("Tree", function() {
     var ifAtom = a1.addAfter('data', new LLMD.Atom('if') );
     ifAtom.addAfter('t', new LLMD.Atom('md') );
     
-    var tree = new TreeModel( a1._id );
+    var tree = new TreeModel( a1.atom._id );
     
     var ast = tree.export();
     
     ast.should.have.deep.property('data[0].t[0].name','md');
     
+  });
+  
+  it('should import ast tree', function(){
+    
+    var tree = new TreeModel();
+    tree.import({"data":[{"c":"true","f":[],"name":"if","t":[{"name":"md","data":""}]}],"name":"seq"});
+    
+    tree.root.atom.should.have.deep.property('data[0].atom.t[0].atom.name','md');
+    tree.root.atom.should.have.property('_id')
+    .and.be.a('string');
     
   });
   
@@ -133,10 +143,27 @@ describe("Tree", function() {
     
   });
   
-  // [TODO] - test tree update map 
+  it('should update modelMap if atom is added', function(){
+    
+    var _a = Atoms.insert( new LLMD.Atom('seq') );
+    var a1 = new AtomModel( _a );
+    
+    var ifModel = a1.addAfter('data', new LLMD.Atom('if'));
+    
+    var tree = new TreeModel( a1.atom._id );
+    
+    var newAtom = ifModel.addAfter('t', new LLMD.Atom('md'));
+    
+    var newAtom2 = tree.getAtomModel( newAtom.getId() );
+    
+    newAtom.should.equal( newAtom2 );
+    
+    
+  });
   
   
-  //
+  
+  
   // should trigger __change.root__ if ___rootId__ has changed
   
   

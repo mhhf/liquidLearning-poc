@@ -31,10 +31,6 @@ describe('Atoms', function(){
   
   describe('Model', function(){
     
-    beforeEach( function(){
-     
-    });
-    
     it('schould hold the atom', function(){
       
       var _atomId1 = Atoms.insert( new LLMD.Atom('seq') );
@@ -58,8 +54,14 @@ describe('Atoms', function(){
       
     });
     
-    
-    
+    it('#getId() should return the id', function(){
+      
+      var _atomId1 = Atoms.insert( new LLMD.Atom('seq') );
+      var a1 = new AtomModel( _atomId1 );
+      
+      a1.getId().should.equal( a1.atom._id );
+      
+    });
     
     describe('#update()', function(){
       	

@@ -10,7 +10,9 @@ AtomModel = function( _id ){
   this.atom = Atoms.findOne({ _id: _id });
   if( _id && !this.atom ) throw new Error('no Atom '+_id+' found, maybe its not subscribed to it or is removed.');
   
-  
+  this.getId = function(){
+    return this.atom._id;
+  }
   
   /**
    * change( <object> )
@@ -68,16 +70,14 @@ AtomModel = function( _id ){
     
     this.update(o);
     
-    return new AtomModel( _atomId );
+    var atomModel = new AtomModel( _atomId );
+    
+    this.emit('add', { target: atomModel });
+    
+    return atomModel;
     
   }
   
-  
-  this.removePos = function( key, pos ){
-    
-    // remove
-    
-  }
   
   // [TODO] - refactor hasChildren
   this.isNested = function(){
@@ -93,6 +93,19 @@ AtomModel = function( _id ){
     if( this.isNested() ) {
       LLMD.eachNested(this.atom, f);
     }
+  }
+  
+  // [TODO] - test
+  this.eachChildren = function( f ){
+    
+    this.eachNested( function( seq, key ){
+      
+      for(var i in seq) {
+        f( seq[i], key, i );
+      }
+      
+    });
+    
   }
   
   this.getChild = function( key, pos ){
