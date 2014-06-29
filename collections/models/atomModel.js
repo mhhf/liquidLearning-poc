@@ -38,6 +38,9 @@ AtomModel = function( _id, o ){
   
   
   var atom = Atoms.findOne({ _id: _id });
+  if( _id && !atom ) throw new Error('no Atom '+_id+' found, maybe its not subscribed to it or is removed.');
+  
+  // [TODO] - refactor nested to atomModelMap call
   var nested;
   var self = this;
   
@@ -64,7 +67,6 @@ AtomModel = function( _id, o ){
   // this.atom = Atoms.findOne({ _id: _id });
   // 
   
-  if( _id && !atom ) throw new Error('no Atom '+_id+' found, maybe its not subscribed to it or is removed.');
   
   
   this.get = function(){
@@ -77,6 +79,10 @@ AtomModel = function( _id, o ){
   
   this.getId = function(){
     return atom._id;
+  }
+  
+  this.getSeed = function(){
+    return atom._seedId;
   }
   
   /**
@@ -97,6 +103,7 @@ AtomModel = function( _id, o ){
       var _oldId = atom._id;
       var _atomId = Atoms.insert( _.omit( _.extend(atom, atomO), '_id' ) );
       atom = Atoms.findOne({ _id: _atomId });
+      delete atomModelMap[ _oldId ];
       atomModelMap[ _atomId ] = this;
       this.emit('change.hard',{
         _oldId: _oldId,
@@ -180,7 +187,7 @@ AtomModel = function( _id, o ){
   
   // [TODO] - refactor hasChildren
   this.isNested = function(k){
-    return !!nested;
+    return LLMD.hasNested( atom );
   }
   
   this.isLocked = function(){
@@ -207,10 +214,16 @@ AtomModel = function( _id, o ){
     
   }
   
-  // @return: AtomModel
   this.getChild = function( key, pos ){
     if( this.isNested() ) {
       return atom[key][pos];
+    }
+  }
+  
+  // @return: AtomModel
+  this.getChildModel = function( key, pos ){
+    if( this.isNested() ) {
+      return new AtomModel( atom[key][pos] );
     }
   }
   
@@ -251,7 +264,9 @@ AtomModel = function( _id, o ){
   }
   
   this.lock = function(){
-    this.update({meta:{lock: true}});
+    if( !atom.meta.lock ) {
+      this.update({meta:{lock: true}});
+    }
   }
   
   this.export = function(){
@@ -267,7 +282,120 @@ AtomModel = function( _id, o ){
     return e;
   }
   
+  // search for the smalest matched index
+  var findFirstMatched = function( as1, as2 ) {
+    
+    for(var m=0; m <= Math.max( as1.length, as2.length ); m++ ) {
+      for( var i=0; i<= Math.min( as2.length, as1.length, m ); i++ ) {
+        var j = m-i;
+        
+        if( i in as1 && j in as2 && as1[i].getSeed() == as2[j].getSeed() ) return { i:i, j:j };
+        
+      }
+    }
+    
+    return { i: as1.length, j: as2.length };
+  }
   
+  var restackElements = function( seq, i, add ){
+    
+    var atoms = seq.splice( 0, i );
+    // var key;
+    
+    atoms.forEach( function( a ){
+      // if ( key = getCommitKey( a, _cId ) ) {
+      //   a.meta.diff = {
+      //     type: 'move',
+      //     key: key
+      //   }
+      // } else {
+      a.lock();
+      a.update({
+        meta: {
+          diff: {
+            type: (add?'add':'remove')
+          },
+          state: 'conflict' 
+        }
+      });
+      /* } */
+    });
+    
+    return _.map(atoms, function(a) { return a.getId(); });
+    
+  }
+  
+  var diffSeq = function( ast1, ast2 ){
+    
+    var ds = []; // final diffed sequence
+    
+    while ( ast1.length + ast2.length > 0 ) {
+      
+      var indexes = findFirstMatched( ast1, ast2 );
+      // console.log( 'intexes:', indexes.i, indexes.j, ast1.length, ast2.length );
+      
+      // take all elements < indexes.i from ast1 and push them to ds with changes
+      if( indexes.i > 0 )
+        ds = ds.concat( restackElements( ast1, indexes.i, false ) );
+      
+      if( indexes.j > 0 )
+        ds = ds.concat( restackElements( ast2, indexes.j, true ) );
+      
+      var a1 = ast1.splice(0, 1)[0];
+      var a2 = ast2.splice(0, 1)[0];
+      
+      // console.log('a',a1,a2);
+      if( a1 && a2 ) {
+        a1.diff(a2);
+        ds = ds.concat([a1.getId()]);
+      }
+      
+    }
+    return ds;
+  }
+  
+  this.diff = function( _id ){
+    var a_ = new AtomModel( _id );
+    var self = this;
+    if( _id === this.getId() ) {
+      return this;
+    } else if( a_ && a_.getSeed() === this.getSeed() ) {
+      
+      var o = { 
+        meta: {
+          diff: {
+            type: 'change',
+            atom: a_.getId()
+          },
+          state: 'conflict'
+        }
+      }
+      
+      if( this.isNested() ) {
+        
+        this.eachNested( function( seq, key ){
+          
+          var seq1 = self.getNested( key );
+          var seq2 = a_.getNested( key );
+          
+          var ds = diffSeq( seq1, seq2 );
+          
+          o[key] = ds;
+          
+        });
+        
+      }
+      
+      this.lock();
+      this.update(o);
+      
+    }
+  }
+  
+  
+}
+AtomModel.prototype.toString = function(){
+  return this.getId();
 }
 
 _.extend( AtomModel.prototype, EventEmitter.prototype );

@@ -126,17 +126,26 @@ describe('Atoms', function(){
         var _atomId2 = Atoms.insert( new LLMD.Atom('md') );
         var a2 = new AtomModel( _atomId2 );
         
-        var _id = a2.getId();
-        
         a2.lock();
         a2.update({data:'1'});
         
         var _id2 = a2.getId();
         
-        var m1 = new AtomModel( _id );
         var m2 = new AtomModel( _id2 );
         
-        m1.should.equal( m2 );
+        a2.should.equal( m2 );
+        
+      });
+      
+      it('should have a model for each _id', function(){
+        
+        var a = new AtomModel( new LLMD.Atom('md') );
+        var _id1 = a.getId();
+        a.lock();
+        a.update({ data: '1' });
+        var b = new AtomModel( _id1 );
+        
+        a.should.not.equal( b );
         
       });
       
@@ -405,6 +414,80 @@ describe('Atoms', function(){
     JSON.stringify( ast2 ).should.equal( JSON.stringify(ast) );
     
   });
+  
+  describe('diff', function(){
+    
+    it('should cause a conflict', function(){
+      
+      var a = new AtomModel( new LLMD.Atom('md') );
+      var _oldId = a.getId();
+      a.lock();
+      a.update({ data: '1' });
+      
+      a.diff( _oldId );
+      a.get().meta.state.should.equal('conflict');
+      
+    }); 
+    
+    it('should hold a changed atom', function(){
+      
+      var a = new AtomModel( new LLMD.Atom('md') );
+      var _oldId = a.getId();
+      a.lock();
+      a.update({ data: '1' });
+      
+      a.diff( _oldId );
+      a.get().meta.diff.type.should.equal('change');
+      a.get().meta.diff.atom.should.be.an('string');
+      
+    });
+    
+    it('should remove an atom', function(){
+      
+      var a = new AtomModel( new LLMD.Atom('seq') );
+      var _oldId = a.getId();
+      a.lock();
+      var b = a.addAfter('data', new LLMD.Atom('md'));
+      
+      a.diff( _oldId );
+      
+      a.get().meta.state.should.equal('conflict');
+      a.get().meta.diff.type.should.equal('change');
+      
+      var removedAtom = a.getChildModel( 'data', 0 );
+      
+      removedAtom.get().meta.state.should.equal('conflict');
+      removedAtom.get().meta.diff.type.should.equal('remove');
+      
+    });
+    
+    
+    it('should add an atom', function(){
+      console.log('--');
+      var a = new AtomModel( new LLMD.Atom('seq') );
+      var _oldId = a.getId();
+      a.lock();
+      a.addAfter('data', new LLMD.Atom('md'));
+      var _newId = a.getId();
+      a = new AtomModel( _oldId );
+      
+      a.getId().should.not.equal( _newId );
+      
+      a.diff( _newId );
+      
+      a.get().meta.state.should.equal('conflict');
+      a.get().meta.diff.type.should.equal('change');
+      
+      var addedAtom = a.getChildModel( 'data', 0 );
+      
+      addedAtom.get().meta.state.should.equal('conflict');
+      addedAtom.get().meta.diff.type.should.equal('add');
+      
+    });
+    
+    	
+  });
+    
   
 });
 
