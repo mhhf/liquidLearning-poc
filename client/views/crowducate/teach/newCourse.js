@@ -1,15 +1,4 @@
-var editor = {
-  dep:	new Deps.Dependency,
-  val: '',
-  get: function(){
-    this.dep.depend();
-    return this.val;
-  },
-  set: function( val ){
-    this.dep.changed();
-    this.val = val;
-  }
-}
+var editorView = {};
 
 var image = {
   dep:	new Deps.Dependency,
@@ -28,6 +17,9 @@ Template.newCourse.helpers({
   editorDep: function(){
     return editor;
   },
+  getBuilder: function(){
+    return editorView;
+  },
   uploadedImage: function(){
     var img = Images.findOne({_id: image.get() });
     return img && img.isUploaded();
@@ -45,8 +37,9 @@ Template.newCourse.events = {
     
     var name = t.find('#name').value;
     var tags = this.newtags || []; 
-    var description = editor.get().getValue();
-    var imgUrl = baseUrl + S3Store.fileKey(Images.findOne(image.get()));
+    var description = editorView.build();
+    var i = Images.findOne(image.get());
+    var imgUrl = baseUrl + i._id + i.name();
     
     console.log('haha');
     Meteor.call('newCourse', {
@@ -89,10 +82,11 @@ Template.newCourse.events = {
     var file = new FS.File(files[0]);
     
     var i = Images.insert(file, function(err, succ){ 
-      // console.log(succ);
+      console.log(err,succ);
     });
     
     image.set(i._id);
+    console.log(image.get());
     
   }
 }

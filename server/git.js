@@ -1,4 +1,3 @@
-var git = Meteor.require('nodegit');
 var fs = Npm.require('fs');
 
 

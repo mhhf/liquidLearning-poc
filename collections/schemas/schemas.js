@@ -57,6 +57,16 @@ Schemas.Courses = [
   Schemas.Common.LLMD
 ];
 
+/*
+ *  {
+ *    _rootId: <_atomId>,
+ *    _seedId: <_seedId>,
+ *    parent: <_commitId>,
+ *    date: <Data>, // auto value
+ *    msg: <String>,
+ *  }
+ */
+
 Schemas.Commit = [
   {
     _rootId: {
@@ -77,7 +87,7 @@ Schemas.Commit = [
       defaultValue: '',
       optional: true
     },
-    _unitId: {
+    _seedId: {
       type: String
     }
   }
