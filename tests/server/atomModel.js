@@ -463,7 +463,6 @@ describe('Atoms', function(){
     
     
     it('should add an atom', function(){
-      console.log('--');
       var a = new AtomModel( new LLMD.Atom('seq') );
       var _oldId = a.getId();
       a.lock();
