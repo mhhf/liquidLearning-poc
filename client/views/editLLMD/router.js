@@ -14,8 +14,8 @@ Router.map( function(){
       var unit = Units.findOne({ _id: this.params.user+this.params.unit });
       var branch = LQTags.findOne({ _id: unit.branch._id });
       var commit = Commits.findOne({ _id: branch._commitId });
-      var rootAtom = Atoms.findOne({ _id: commit._rootId });
-      var tree = new TreeModel( commit._rootId );
+      // var rootAtom = Atoms.findOne({ _id: commit._rootId });
+      // var tree = new TreeModel( commit._rootId );
       
       var editorModel = new EditorModel({
         editable: true,

@@ -58,11 +58,11 @@ describe('CommitModel', function(){
       
       var _cId = c.getCommit()._id;
       
-      c.commit({ msg: 'init' });
+      var c_ = c.commit({ msg: 'init' });
       
       var b = a.addAfter('data', new LLMD.Atom('md') );
       
-      c.getCommit()._id.should.not.equal( _cId );
+      c_.getId().should.not.equal( _cId );
       
       c.commit({ msg: 'md added' });
       

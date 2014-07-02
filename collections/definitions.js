@@ -27,7 +27,9 @@ Commits = new Meteor.Collection( 'commits', {
 // type: ( tag | branch )
 // _unitId: <UnitId>
 //
-LQTags = new Meteor.Collection('lq_tags');
+LQTags = new Meteor.Collection('lq_tags', {
+  schema: new SimpleSchema( Schemas.LQTags )
+});
 
 
 // Dev

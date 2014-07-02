@@ -1,10 +1,18 @@
+var commitMap = {};
 CommitModel = function( _id ){
+  
+  if( commitMap[_id] ) {
+    return commitMap[_id];
+  } else {
+    commitMap[_id] = this;
+  }
   
   if( !_id ) { // insert
     
     var _id = Commits.insert({});
     
   }
+  
   
   var commit = Commits.findOne({ _id: _id });
   var root = new AtomModel( commit._rootId );
@@ -29,8 +37,11 @@ CommitModel = function( _id ){
       _seedId: commit._seedId
     });
     
-    commit = Commits.findOne( { _id: _cId } );
+    // commit = Commits.findOne( { _id: _cId } );
     
+    this.emit('commit', _cId );
+    
+    return new CommitModel( _cId );
   }
   
   this.diff = function( _id ){
@@ -43,6 +54,10 @@ CommitModel = function( _id ){
   
   this.getCommit = function(){
     return commit;
+  }
+  
+  this.getId = function(){
+    return _id;
   }
   
   

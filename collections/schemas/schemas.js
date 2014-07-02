@@ -108,6 +108,37 @@ Schemas.Commit = [
   }
 ];
 
+Schemas.LQTags = [
+  {
+    name: {
+      type: String,
+      defaultValue: 'master'
+    },
+    _commitId: {
+      type: String,
+      autoValue: function(){
+        if( this.isInsert ) {
+          
+          var _cId = Commits.insert({});
+          
+          return _cId;
+        }
+      }
+    },
+    type: {
+      type: String,
+      autoValue: function(){
+        if( !this.isSet ) {
+          return 'tag';
+        } else {
+          return this.value;
+        }
+      }
+    }
+  }
+];
+
+
 Schemas.Units = [
   Schemas.Common.Owner,
   ACLInterface.schema,
