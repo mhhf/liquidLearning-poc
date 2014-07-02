@@ -214,6 +214,15 @@ AtomModel = function( _id, o ){
     
   }
   
+  this.eachDescendant = function( f ){
+    this.eachChildren( function( a, k, p ){
+      if( a.isNested() ) {
+        a.eachDescendant( f );
+      }
+      f(a);
+    });
+  }
+  
   this.getChild = function( key, pos ){
     if( this.isNested() ) {
       return atom[key][pos];

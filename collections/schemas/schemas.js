@@ -70,7 +70,15 @@ Schemas.Courses = [
 Schemas.Commit = [
   {
     _rootId: {
-      type: String
+      type: String,
+      autoValue: function(){
+        if( this.isSet ) {
+          return this.value;
+        } else {
+          var a = Atoms.insert( new LLMD.Atom('seq') );
+          return a;
+        }
+      }
     },
     parent: {
       type: String,
@@ -88,7 +96,14 @@ Schemas.Commit = [
       optional: true
     },
     _seedId: {
-      type: String
+      type: String,
+      autoValue: function(){
+        if( this.isSet ) {
+          return this.value;
+        } else {
+          return CryptoJS.SHA1(Math.random()+''+Math.random()).toString();
+        }
+      }
     }
   }
 ];
