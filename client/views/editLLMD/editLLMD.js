@@ -5,8 +5,11 @@ Template.editLLMD.rendered = function(){
 
 Template.editLLMD.helpers({
   getRoot: function(){
-    var atom = this.editorModel.wrapAtom( this.editorModel.ast, [] );
-    return atom;
+    
+    return this.getRoot();
+    
+    // var atom = this.editorModel.wrapAtom( this.editorModel.ast, [] );
+    // return atom;
   },
 });
 
@@ -182,6 +185,7 @@ Template.editNavBar.helpers({
     return '';
   },
   state: function( name ){
+    console.log(state.get());
     return state.get().match('^'+name);
   },
   getMergeBranches: function(){
@@ -196,7 +200,10 @@ Template.editNavBar.helpers({
     }
   },
   isChanged: function(){
-    return ( !this.root.meta.commit )?'changed':'';
+    // return ( !this.root.meta.commit )?'changed':'';
+  },
+  branchName: function(){
+    return this.getBranch().get().name;
   }
 });
 

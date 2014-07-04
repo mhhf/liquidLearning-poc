@@ -23,6 +23,10 @@ TagModel = function( _id ){
     return c;
   }
   
+  this.get = function(){
+    return t;
+  }
+  
   
 }
 

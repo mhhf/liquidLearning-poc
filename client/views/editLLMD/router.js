@@ -12,29 +12,28 @@ Router.map( function(){
       mediaHandler = new SyncQue();
       
       var unit = Units.findOne({ _id: this.params.user+this.params.unit });
-      var branch = LQTags.findOne({ _id: unit.branch._id });
-      var commit = Commits.findOne({ _id: branch._commitId });
+      // var branch = LQTags.findOne({ _id: unit.branch._id });
+      // var commit = Commits.findOne({ _id: branch._commitId });
       // var rootAtom = Atoms.findOne({ _id: commit._rootId });
       // var tree = new TreeModel( commit._rootId );
       
-      var editorModel = new EditorModel({
+      editorModel = new EditorModel({
         editable: true,
-        commitModel: new CommitModel({ 
-          _branchId: branch._id 
-        }),
-        tree: tree
+        branch: new TagModel( unit.branch._id )
       });
       
-      return {
-        head: commit,
-        user: this.params.user,
-        unit: unit,
-        mediaHandler: mediaHandler,
-        root: rootAtom,
-        editorModel: editorModel,
-        branch: branch,
-        branches: LQTags.find({ _unitId: unit._id })
-      };
+      return editorModel
+      
+      // return {
+      //   head: commit,
+      //   user: this.params.user,
+      //   unit: unit,
+      //   mediaHandler: mediaHandler,
+      //   root: rootAtom,
+      //   editorModel: editorModel,
+      //   branch: branch,
+      //   branches: LQTags.find({ _unitId: unit._id })
+      // };
     }
     
   });

@@ -2,8 +2,10 @@ var atomModelMap = {};
 
 AtomModel = function( _id, o ){
   
+  _.extend( this, new EventEmitter() );
+  
   // inserting
-  if( typeof _id == 'object' ) {
+  if( typeof _id == 'object' && _id != null ) {
     var insertAtoms = function( ast ){
       
       var n = {};
@@ -37,7 +39,12 @@ AtomModel = function( _id, o ){
   if( o && o.parent ) this.parent = o.parent; 
   
   
-  var atom = Atoms.findOne({ _id: _id });
+  if( o && o.tmp ) {
+    var atom = o.tmp;
+  } else {
+    var atom = Atoms.findOne({ _id: _id });
+  }
+  
   if( _id && !atom ) throw new Error('no Atom '+_id+' found, maybe its not subscribed to it or is removed.');
   
   // [TODO] - refactor nested to atomModelMap call
@@ -73,6 +80,7 @@ AtomModel = function( _id, o ){
     return atom;
   }
   
+  // [TODO] - refactor getChildren
   this.getNested = function( k ){
     return nested && nested[k];
   }
@@ -407,4 +415,3 @@ AtomModel.prototype.toString = function(){
   return this.getId();
 }
 
-_.extend( AtomModel.prototype, EventEmitter.prototype );

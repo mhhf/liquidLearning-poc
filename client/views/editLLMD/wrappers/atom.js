@@ -10,32 +10,33 @@ Template.atomWrapper.rendered = function(){
 Template.atomWrapper.helpers({
   editable: function(){
     // console.log(this);
-    return this.editorModel.editable && this.atom.meta.state != 'conflict';
+    return this.editable && this.atom.meta.state != 'conflict';
   },
   editMode: function(){
-    return this.editorModel.get('edit') === this ||this.editorModel.get('add') === this ;
+    return this.get('edit') === this ||this.get('add') === this ;
   },
   editModeClass: function(){
-    if( this.editorModel.get('edit') === this) {
+    
+    if( editorModel.get('edit') === this) {
       return 'edit';
-    } else if( !this.atom.meta.commit ){
+    } else if( !this.isLocked() ){
       return 'changed';
     } else {
       return '';
     }
   },
   getActivateClass: function(){
-    return ( this.atom.meta && this.atom.meta.active )?'':'inactive';
+    return ( this.get().active )?'':'inactive';
   },
   isActive: function(){
-    return ( this.atom.meta && this.atom.meta.active );
+    return ( this.get().active );
   },
   dynamicTemplate: function(){
     
-    var editMode = this.editorModel.get("edit") === this || this.editorModel.get('add') === this;
+    var editMode = editorModel.get("edit") === this || editorModel.get('add') === this;
     var mode = ( editMode )?'edit':'ast';
-    var template = Template['llmd_'+this.atom.name+'_'+mode];
-    if(!template) throw new Error('no teplate for '+this.atom.name+" found!");
+    var template = Template['llmd_'+this.get().name+'_'+mode];
+    if(!template) throw new Error('no teplate for '+this.get().name+" found!");
     return template || null;
   },
   getSmallSpinner: function(){
@@ -58,22 +59,16 @@ Template.atomWrapper.helpers({
       left: '0' // Left position relative to parent 
     };
   },
-  previewable: function(){
-    return this.meta && this.meta.previewable && this.meta.state == "ready";
-  },
   isPending: function(){
-    return this.atom.meta && this.atom.meta.state == "pending";
-  },
-  getParent: function(){
-    return _.last(this.parents);
+    return this.get().meta.state == "pending";
   }
 });
 
 Template.diffWrapper.helpers({
   getDiffedAtom: function(){
-    var otherAtom = Atoms.findOne({ _id: this.atom.meta.diff.atom });
+    var otherAtom = Atoms.findOne({ _id: this.get().meta.diff.atom });
     otherAtom.meta.state = 'conflict';
-    return this.editorModel.wrapAtom( otherAtom, this.parents );
+    return this.wrapAtom( otherAtom, this.parents );
   }
 });
 
@@ -85,12 +80,12 @@ Template.atomWrapper.events = {
     var ele = t.find('.atomContainer');
     $(ele).css('min-height',ele.clientHeight + "px");
     
-    this.editorModel.set( 'edit', this );
+    this.set( 'edit', this );
   },
   "click .remove-btn": function(e,t){
     var self = this;
     $(t.find('.atomContainer')).fadeOut(400, function(){
-      self.editorModel.remove( self.parents.concat( [ self.atom._id ] ));
+      self.remove( self.parents.concat( [ self.atom._id ] ));
       // $(t.find('.atomContainer.')).css('display','block');
     });
   },
@@ -102,20 +97,20 @@ Template.atomWrapper.events = {
       var atom = _.extend( this.atom, this.buildAtom() );
       atom.meta.state = 'pending';
       console.log('onSave');
-      this.editorModel.save( atom, this.parents, this.key );
+      this.save( atom, this.parents, this.key );
     }
     
   },
   "click .dismiss-btn": function(e,t){
     e.preventDefault();
     
-    this.editorModel.dismiss();
+    this.dismiss();
   },
   "click .activate-toggle-btn": function(e,t){
     e.preventDefault();
     var atom = this.atom;
     atom.meta.active = !atom.meta.active;
-    this.editorModel.save( atom, this.parents.concat([ this.atom._id ]) );
+    this.save( atom, this.parents.concat([ this.atom._id ]) );
   }
   
 }
@@ -131,12 +126,12 @@ Template.conflictActions.helpers({
 
 Template.conflictActions.events = {
   "click .left-btn": function(){
-    this.editorModel.diffLeft( this );
+    this.diffLeft( this );
   },
   "click .diff-btn": function(){
     console.log('diff');
   },
   "click .right-btn": function(){
-    this.editorModel.diffRight( this );
+    this.diffRight( this );
   }
 }

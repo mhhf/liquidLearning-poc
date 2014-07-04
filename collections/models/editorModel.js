@@ -2,9 +2,7 @@ EditorModel = function( o ){
   
   this.editable = !!o.editable;
   
-  this.commitModel = o.commitModel;
-  
-  _.extend( this, o.tree );
+  var branch = o.branch;
   
   this.dep =	new Deps.Dependency,
   this.val = null,
@@ -82,31 +80,43 @@ EditorModel = function( o ){
     this.commitModel.remove( ids );
   };
   
-  this.add = function( name, key ){
+  this.add = function( name, key, parent ){
     
-    var atom = new LLMD.Atom( name );
+    var a = new LLMD.Atom( name );
+    var atom = new AtomModel( null, {tmp:a});
     
-    var parents = this.data.parents.concat( this.data.atom._id );
+    // var parents = this.data.parents.concat( this.data.atom._id );
     
-    var wrappedAtom = this.wrapAtom( atom, parents );
-    wrappedAtom.key = key;
+    // var wrappedAtom = this.wrapAtom( atom, parents );
+    // wrappedAtom.key = key;
     
-    this.set('add', wrappedAtom );
+    this.set('add', {
+      atom: atom,
+      key: key,
+      parent: parent
+    });
     
   };
   
-  this.wrapAtom = function( atom, parents ){
-    var wrappedAtom = {
-      atom: atom,
-      editorModel: this,
-      parents: parents
-    };
-    
-    // if( atom.meta.state == 'init' ) {
-    //   this.set( wrappedAtom );
-    // }
-      
-    return wrappedAtom;
-  };
+  // this.wrapAtom = function( atom, parents ){
+  //   var wrappedAtom = {
+  //     atom: atom,
+  //     editorModel: this,
+  //   };
+  //   
+  //   // if( atom.meta.state == 'init' ) {
+  //   //   this.set( wrappedAtom );
+  //   // }
+  //     
+  //   return wrappedAtom;
+  // };
+  
+  this.getRoot = function(){
+    return branch.getCommit().getRoot();
+  }
+  
+  this.getBranch = function(){
+    return branch;
+  }
   
 }

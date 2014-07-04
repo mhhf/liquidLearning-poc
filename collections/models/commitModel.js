@@ -1,5 +1,6 @@
 var commitMap = {};
 CommitModel = function( _id ){
+  _.extend( this, new EventEmitter() );
   
   if( commitMap[_id] ) {
     return commitMap[_id];
@@ -16,6 +17,7 @@ CommitModel = function( _id ){
   
   var commit = Commits.findOne({ _id: _id });
   var root = new AtomModel( commit._rootId );
+  console.log(_id, commit);
   
   root.on('change.hard', function( o ){
     Commits.update({ _id: commit._id }, { _rootId: o._newId });
@@ -65,4 +67,3 @@ CommitModel = function( _id ){
   
   
 }
-_.extend( CommitModel.prototype, EventEmitter.prototype );
