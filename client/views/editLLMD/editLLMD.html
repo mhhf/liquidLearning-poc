@@ -7,30 +7,7 @@
 
 </template>
 
-<template name="addNewAtomBtn">
 
-<div class="addNewAtomWrapper">
-  
-  {{#if isChoosing}}
-    
-    <div class="selectWrapper">
-      {{> selectLLMDTypes}}
-    </div>
-    
-  {{else}}
-  
-    {{#if isAdding}}
-      {{> atomWrapper tmpAtom}}
-    {{else}}
-      {{#if editable}}
-      <a href='#' class="add-btn"> <i class="fa fa-plus"></i></a>
-      {{/if}}
-    {{/if}}
-  
-  {{/if}}
-  
-</div>
-</template>
 
 <template name="selectLLMDTypes">
 <select id="newAtom" name="name">

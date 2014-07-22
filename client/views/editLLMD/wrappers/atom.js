@@ -2,18 +2,18 @@
 
 
 Template.atomWrapper.rendered = function(){
-  
+  console.log(this.data); 
 }
 
 
 
 Template.atomWrapper.helpers({
   editable: function(){
-    // console.log(this);
-    return this.editable && this.atom.meta.state != 'conflict';
+    return editorModel.editable && this.atom.meta.state != 'conflict';
   },
   editMode: function(){
-    return this.get('edit') === this ||this.get('add') === this ;
+    var edit = editorModel.get('edit') || editorModel.get('add');
+    return edit && edit.atom === this ;
   },
   editModeClass: function(){
     
@@ -26,14 +26,14 @@ Template.atomWrapper.helpers({
     }
   },
   getActivateClass: function(){
-    return ( this.get().active )?'':'inactive';
+    return ( this.get().meta.active )?'':'inactive';
   },
   isActive: function(){
-    return ( this.get().active );
+    return ( this.get().meta.active );
   },
   dynamicTemplate: function(){
-    
-    var editMode = editorModel.get("edit") === this || editorModel.get('add') === this;
+    var edit = editorModel.get("edit") || editorModel.get('add');
+    var editMode =  edit && edit.atom === this;
     var mode = ( editMode )?'edit':'ast';
     var template = Template['llmd_'+this.get().name+'_'+mode];
     if(!template) throw new Error('no teplate for '+this.get().name+" found!");
@@ -90,15 +90,9 @@ Template.atomWrapper.events = {
     });
   },
   "click .save-btn": function(e,t){
-    console.log( _.last(this.parents) , e.currentTarget.dataset.target, e);
     e.preventDefault();
-    
-    if( _.last(this.parents) == e.currentTarget.dataset.target) {
-      var atom = _.extend( this.atom, this.buildAtom() );
-      atom.meta.state = 'pending';
-      console.log('onSave');
-      this.save( atom, this.parents, this.key );
-    }
+    var atom = this.buildAtom();
+    editorModel.save( _.extend( atom, { meta: { state: 'pending' } } ) );
     
   },
   "click .dismiss-btn": function(e,t){

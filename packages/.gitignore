@@ -82,3 +82,5 @@ bootboxjs
 /mathjax
 /module-loader
 /mocha-web
+/bootboxjs
+/blocking

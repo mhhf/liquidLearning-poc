@@ -56,8 +56,8 @@ Template.selectLLMDTypes.rendered = function(){
 
 
 
-addAtom = function( name ){
-
-  this.add( new LLMD.Atom( name ), parents );
-
-}
+// addAtom = function( name ){
+// 
+//   this.add( new LLMD.Atom( name ), parents );
+// 
+// }

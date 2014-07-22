@@ -1,7 +1,7 @@
 <template name="atomWrapper">
 
 <div class="atomContainer {{editModeClass}} {{getActivateClass}} {{atom.name}}Wrapper" data-index="{{index}}">
-  <label>{{atom.name}}</label> {{atom._id}}
+  <label>{{atom.name}}</label> {{getId}}
   <div class="{{name}} atomWrapper">
     {{> dynamicTemplate}}
   </div>

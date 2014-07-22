@@ -22,14 +22,13 @@ EditorModel = function( o ){
     this.data = data;
   };
   
-  this.save = function( atom, ids, key ){
+  this.save = function( atom ){
+    var edit = this.get('add') || this.get('edit');
+    edit.atom.update( atom );
     
-    if( !atom._id ) { // tmp atom
-      this.commitModel.add(atom, ids, key);
-    } else {
-      // todo: key?
-      // why concat?
-      this.commitModel.change( atom, ids.concat(atom._id) );
+    if( this.val == 'add' ) {
+      var _id = edit.atom.getId();
+      edit.parent.addAfter( edit.key, _id );
     }
     
     this.set(null);
@@ -83,7 +82,8 @@ EditorModel = function( o ){
   this.add = function( name, key, parent ){
     
     var a = new LLMD.Atom( name );
-    var atom = new AtomModel( null, {tmp:a});
+    a.meta.state = 'tmp';
+    var atom = new AtomModel( a, {parent:parent} );
     
     // var parents = this.data.parents.concat( this.data.atom._id );
     

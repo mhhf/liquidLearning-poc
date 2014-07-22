@@ -41,6 +41,7 @@ Meteor.methods({
   },
   "atom.compile": function( _id ){
     var atom = Atoms.findOne({ _id: _id});
+    console.log('c', _id);
     
     if( LLMD.Package( atom.name ) && LLMD.Package( atom.name ).preprocess ) {
       var syncPreprocess = Meteor._wrapAsync( LLMD.Package( atom.name ).preprocess );

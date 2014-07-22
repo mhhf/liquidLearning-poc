@@ -1,11 +1,40 @@
 var atomModelMap = {};
 
-AtomModel = function( _id, o ){
+
+/**
+ * @param {(string|object)} - Atom _id or an Atom Object which will be inserted
+ * 
+ */
+AtomModel = function( o, params ){
   
   _.extend( this, new EventEmitter() );
   
+  var _id;
+  var deps = new Deps.Dependency;
+  var nested;
+  var self = this;
+  
+  
+  var computeNested = function() {
+    if( LLMD.Package(atom.name).nested ) {
+      nested = {};
+      
+      LLMD.eachNested( atom, function(seq, key){
+        nested[key] = [];
+        
+        for( var i in seq ){
+          var child = new AtomModel(seq[i], {
+            parent: self
+          });
+          nested[key][i] = child;
+        }
+        
+      });
+    }
+  }
+  
   // inserting
-  if( typeof _id == 'object' && _id != null ) {
+  if( typeof o == 'object' && o != null ) {
     var insertAtoms = function( ast ){
       
       var n = {};
@@ -28,47 +57,43 @@ AtomModel = function( _id, o ){
       
     }
     
-    _id = insertAtoms( _id );
+    if( o.meta.state != 'tmp' ) {
+      _id = insertAtoms( o );
+    } else {
+      _id = 'tmp';
+    }
+    
+  } else if( typeof o == 'string' ) {
+    _id = o;
+    
+    // singleton
+    if( atomModelMap[ _id ] ) return atomModelMap[ _id ];
+    atomModelMap[_id] = this;
     
   }
   
-  // singleton
-  if( atomModelMap[ _id ] ) return atomModelMap[ _id ];
-  atomModelMap[_id] = this;
-  
-  if( o && o.parent ) this.parent = o.parent; 
-  
-  
-  if( o && o.tmp ) {
-    var atom = o.tmp;
+  if( _id === 'tmp' ) {
+    var atom = o;
+    this.atom = atom;
   } else {
-    var atom = Atoms.findOne({ _id: _id });
+    var atom;
+    
+    var atomWatcher = Deps.autorun( function(){
+      console.log('ar');
+      atom = Atoms.findOne({ _id: _id });
+      self.atom = atom;
+      deps.changed();
+      computeNested();
+    });
   }
+  
+  
+  if( params && params.parent ) this.parent = params.parent; 
   
   if( _id && !atom ) throw new Error('no Atom '+_id+' found, maybe its not subscribed to it or is removed.');
   
   // [TODO] - refactor nested to atomModelMap call
-  var nested;
-  var self = this;
   
-  var computeNested = function() {
-    if( LLMD.Package(atom.name).nested ) {
-      nested = {};
-      
-      LLMD.eachNested( atom, function(seq, key){
-        nested[key] = [];
-        
-        for( var i in seq ){
-          var child = new AtomModel(seq[i], {
-            parent: self
-          });
-          nested[key][i] = child;
-        }
-        
-      });
-    }
-  }
-  computeNested();
   
   
   // this.atom = Atoms.findOne({ _id: _id });
@@ -77,20 +102,22 @@ AtomModel = function( _id, o ){
   
   
   this.get = function(){
+    deps.depend();
     return atom;
   }
   
   // [TODO] - refactor getChildren
   this.getNested = function( k ){
+    deps.depend();
     return nested && nested[k];
   }
   
   this.getId = function(){
-    return atom._id;
+    return this.get()._id;
   }
   
   this.getSeed = function(){
-    return atom._seedId;
+    return this.get()._seedId;
   }
   
   /**
@@ -100,30 +127,41 @@ AtomModel = function( _id, o ){
    */
   this.update = function( atomO ){
     
-    
-    if( !atom.meta.lock ) {
+    if( !atom.meta.lock && atom.meta.state != 'tmp' ) {
       Atoms.update({ _id: atom._id }, { $set: _.omit( atomO, '_id' ) });
-      atom = Atoms.findOne({ _id: atom._id });
+      // atom = Atoms.findOne({ _id: atom._id });
       this.emit('change.soft', null);
       // trigger soft change
     } else {
+      console.log('inserting', atom, atomO);
+      
       atom.meta.lock = false;
       var _oldId = atom._id;
-      var _atomId = Atoms.insert( _.omit( _.extend(atom, atomO), '_id' ) );
-      atom = Atoms.findOne({ _id: _atomId });
+      // BUG: _.extend not extends deep, overvrites object propertys
+      atom.meta = _.extend( atom.meta, atomO.meta );
+      var _atomId = Atoms.insert( _.omit( _.extend( atom, _.omit(atomO,'meta') ), '_id' ) );
+      
+      atomWatcher && atomWatcher.stop();
+      atomWatcher = Deps.autorun( function(){
+        atom = Atoms.findOne({ _id: _atomId });
+        computeNested();
+        deps.changed();
+      });
+      
       delete atomModelMap[ _oldId ];
       atomModelMap[ _atomId ] = this;
+       
+      // trigger hard change
       this.emit('change.hard',{
         _oldId: _oldId,
         _newId: _atomId
       });
       
       this.parent && this.parent.exchangeChildren( _oldId, _atomId );
-      // trigger hard change
     }
     
-    this.emit('change', null);
-    computeNested();
+    // [TODO] - maybe refactor out of the model
+    Meteor.call( 'atom.compile', this.getId() );
     
   }
   
@@ -165,13 +203,17 @@ AtomModel = function( _id, o ){
    * 
    * @return: AtomModel
    */
-  this.addAfter = function( key, atomO, pos ){
+  this.addAfter = function( key, child, pos ){
     
     if( !( this.isNested() ) ) {
       throw new Error( 'atom '+atom.name+ ' is not nested or nested key isn\'t '+key);
     }
     
-    var _atomId = Atoms.insert( atomO );
+    if( typeof child == 'string' ) {
+      var _atomId = child;
+    } else {
+      var _atomId = Atoms.insert( child );
+    }
     
     if( !( pos && pos >= 0 && pos in atom[key] ) ) {
       pos = atom[key].length;
@@ -199,7 +241,7 @@ AtomModel = function( _id, o ){
   }
   
   this.isLocked = function(){
-    return atom.meta.lock;
+    return this.get().meta.lock;
   }
   
   // [TODO] - refactor: eachChildren
