@@ -13,7 +13,7 @@ Template.atomWrapper.helpers({
   },
   editMode: function(){
     var edit = editorModel.get('edit') || editorModel.get('add');
-    return edit && edit.atom === this ;
+    return edit === this ;
   },
   editModeClass: function(){
     
@@ -33,7 +33,8 @@ Template.atomWrapper.helpers({
   },
   dynamicTemplate: function(){
     var edit = editorModel.get("edit") || editorModel.get('add');
-    var editMode =  edit && edit.atom === this;
+    var editMode =  edit === this;
+    console.log('aahhaha', editMode);
     var mode = ( editMode )?'edit':'ast';
     var template = Template['llmd_'+this.get().name+'_'+mode];
     if(!template) throw new Error('no teplate for '+this.get().name+" found!");
@@ -79,8 +80,9 @@ Template.atomWrapper.events = {
     // perserve height
     var ele = t.find('.atomContainer');
     $(ele).css('min-height',ele.clientHeight + "px");
+    console.log(this);
     
-    this.set( 'edit', this );
+    editorModel.set( 'edit', this );
   },
   "click .remove-btn": function(e,t){
     var self = this;
