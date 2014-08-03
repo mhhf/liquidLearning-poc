@@ -18,24 +18,25 @@ var tags = [];
 Template.llmd_redisc_edit.rendered = function(){
   
   var self = this;
+  console.log(this);
   
   var data = ( this.data.atom && this.data.atom.data ) || ''; 
-  var code = ( this.data.atom && this.data.atom.code ) || ''; 
+  // var code = ( this.data.atom && this.data.atom.code ) || ''; 
   
-  var dataEditor = CodeMirror(this.find('.dataEditor'),{
+  var dataEditor = CodeMirror(this.find('#editor'),{
     value: data,
     mode:  "markdown",
     lineNumbers: true,
     lines: 10
   });
   
-  var codeEditor = CodeMirror(this.find('.codeEditor'),{
-    value: code,
-    mode:  "javascript",
-    theme: "monokai",
-    lineNumbers: true,
-    lines: 10
-  });
+  // var codeEditor = CodeMirror(this.find('.codeEditor'),{
+  //   value: code,
+  //   mode:  "javascript",
+  //   theme: "monokai",
+  //   lineNumbers: true,
+  //   lines: 10
+  // });
   
   $('select').selectize({
     create: true, 
@@ -49,7 +50,7 @@ Template.llmd_redisc_edit.rendered = function(){
     
     return {
       data: dataEditor.getValue(),
-      code: codeEditor.getValue(),
+      // code: codeEditor.getValue(),
       tags: tags,
       title: title
     }

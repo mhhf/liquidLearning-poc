@@ -35,7 +35,7 @@ Template.llmd.rendered = function(){
 
 Template.llmd.helpers({
   getData: function(){
-    var text = this.get().data;
+    var text = this.atom.data;
     
     
     var dot = text.match(/\{\{#dot\}\}((.|\n)*?)\{\{\/dot\}\}/);

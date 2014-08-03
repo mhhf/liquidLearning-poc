@@ -65,7 +65,7 @@ Template.newCourse.events = {
     e.stopPropagation();
     e.preventDefault(); 
     
-    $('#dropzone').removeClass('hover');
+    // $('#dropzone').removeClass('hover');
   },
   "dragover #dropzone": function(e,t){
     e.stopPropagation();

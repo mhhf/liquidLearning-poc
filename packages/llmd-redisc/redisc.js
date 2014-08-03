@@ -8,9 +8,8 @@ LLMD.registerPackage("redisc", {
     this.downvotes = [];
     this.score = 0;
     
-    var seq = new LLMD.Atom('seq');
-    var _seqId = Atoms.insert( seq );
-    this.nested = _seqId;
+    // [TODO] - refactor nested to children
+    this.nested = [];
     this.comments = 0;
     
     this.tags = [];
@@ -21,6 +20,7 @@ LLMD.registerPackage("redisc", {
     this.updatedOn = new Date();
     
   },
+  nested: ['nested'],
   // [TODO] - is it really nessesery?
   // dataFilter: function( params, rawData ){
   //   var data = "";
